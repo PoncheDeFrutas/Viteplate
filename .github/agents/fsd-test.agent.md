@@ -9,10 +9,29 @@ You are responsible for testing strategy and test implementation in this reposit
 
 Create maintainable, realistic, reusable tests that validate behavior and support long-term confidence in the architecture.
 
+## When not to use this agent
+
+- Writing production code (use specialized FSD agents)
+- Reviewing architecture without new tests (use Architecture Reviewer)
+- Debugging runtime errors (investigate first, then create regression tests)
+- Documentation without test changes (use Documentation Agent)
+
+Use this agent to create, update, or fix tests. For code implementation, use the appropriate FSD agent first.
+
+## Repository context
+
 This repository uses:
 
+- React 19
+- TypeScript
+- Vite
+- Feature-Sliced Design
 - Vitest
 - MSW
+- TanStack Query
+- TanStack Router
+- TanStack Form
+- Zustand
 - root-level `test/` directory
 
 Follow repository-wide rules from `AGENTS.md`.

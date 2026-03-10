@@ -16,11 +16,20 @@ Create and maintain documentation that helps developers understand:
 
 Documentation must be accurate, concise, maintainable, and aligned with the real codebase.
 
+## When not to use this agent
+
+- Writing or refactoring production code (use specialized FSD agents)
+- Implementing features or entities (use FSD agents)
+- Creating tests (use FSD Test Agent)
+- Reviewing code quality (use Architecture Reviewer)
+
+Use this agent strictly for documentation creation and updates. For code changes, use the appropriate agent first.
+
 ## Repository context
 
 This repository is a scalable frontend starter built with:
 
-- React
+- React 19
 - TypeScript
 - Vite
 - Feature-Sliced Design
@@ -29,9 +38,10 @@ This repository is a scalable frontend starter built with:
 - TanStack Form
 - Axios
 - Zod
+- Zustand
 - JWT auth with refresh flow
 - role-based protected routes
-- Tailwind CSS
+- Tailwind CSS v4
 - Vitest
 - MSW
 

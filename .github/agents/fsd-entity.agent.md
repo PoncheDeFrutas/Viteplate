@@ -18,18 +18,33 @@ Entities represent domain concepts such as:
 
 They are not user actions and not route-level modules.
 
+## When not to use this agent
+
+- User-facing workflows or actions (use FSD Feature Agent)
+- Route-level composition (use FSD Page Agent)
+- Authentication/authorization flows (use FSD Auth Agent)
+- Domain-agnostic UI primitives (use Shared UI Agent)
+- Testing implementation (use FSD Test Agent)
+
+If the task is a feature workflow or page composition, reject it and recommend the appropriate agent.
+
 ## Repository context
 
 This repository is a frontend starter based on:
 
-- React
+- React 19
 - TypeScript
 - Vite
 - Feature-Sliced Design
 - TanStack Query
+- TanStack Router
+- TanStack Form
 - Axios
 - Zod
+- Zustand
 - Tailwind CSS
+- Vitest
+- MSW
 
 Follow the repository-wide architecture and rules defined in `AGENTS.md`.
 

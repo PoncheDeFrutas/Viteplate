@@ -11,12 +11,12 @@ This repository is a scalable frontend starter (Viteplate) based on React 19, Ty
 
 ## Core Rules
 
-- **FSD Boundaries:** Respect layers (`app > pages > widgets > features > entities > shared`).
+- **FSD Boundaries:** Respect layers (`app -> pages -> widgets -> features -> entities -> shared`).
 - **Encapsulation:** For cross-slice imports, use the slice public API (`index.ts`). Direct deep imports across slices are forbidden.
 - **Type Safety:** Strict TypeScript. Zero `any` policy. Use `Zod` for runtime validation.
 - **Thin Pages:** Pages only compose; logic goes into features/entities.
 - **Auth Flow:** Preserve JWT refresh flow and role-based access (see `src/app/guards`).
-- **UI:** Use CVA (Class Variance Authority) for variants and `cn()` utility for merging.
+- **UI:** Use `cn()` utility (wrapper over clsx + tailwind-merge) for class merging. Use CVA for variants.
 
 ## Testing & Validation
 

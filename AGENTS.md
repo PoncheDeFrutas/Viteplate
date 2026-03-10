@@ -204,7 +204,8 @@ Rules:
     - layout
     - navigation
 - Prefer composition and explicit variants over large all-purpose components.
-- Use Tailwind CSS, CVA, clsx, and tailwind-merge consistently.
+- Use `cn()` utility (wrapper over clsx + tailwind-merge) for class merging.
+- Use CVA (class-variance-authority) for component variants.
 - Prioritize accessibility, reusability, and predictable APIs.
 - Do not place business workflows inside shared UI primitives.
 
@@ -252,6 +253,17 @@ Rules:
 - Protected route behavior and role-based access rules should be testable.
 - Critical business logic changes should include or update tests.
 - Test utilities and fixtures should remain reusable and maintainable.
+
+## Token lifecycle and security hardening
+
+When implementing or modifying authentication flows:
+
+- Implement single-flight refresh (prevent concurrent duplicate refresh requests).
+- Set maximum retry limits for failed refresh attempts.
+- Fall back to logout and session clearing on persistent refresh failures.
+- Centralize session state cleanup to avoid partial state leaks.
+- Handle token expiration gracefully with user-facing feedback when appropriate.
+- Avoid exposing tokens in logs, console, or error messages.
 
 ---
 

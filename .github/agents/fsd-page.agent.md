@@ -11,9 +11,32 @@ Create thin, route-level page modules that compose widgets, features, entities, 
 
 Pages are route-facing modules. Their main purpose is composition.
 
+## When not to use this agent
+
+- Business feature implementation (use FSD Feature Agent)
+- Domain entity modeling (use FSD Entity Agent)
+- Auth/authorization flows (use FSD Auth Agent)
+- Reusable UI primitives (use Shared UI Agent)
+- Testing (use FSD Test Agent)
+
+If the task involves feature logic or entity definition, reject it and recommend the appropriate agent.
+
 ## Repository context
 
-This repository follows Feature-Sliced Design and uses TanStack Router for route management.
+This repository follows Feature-Sliced Design and uses:
+
+- React 19
+- TypeScript
+- Vite
+- TanStack Router
+- TanStack Query
+- TanStack Form
+- Axios
+- Zod
+- Zustand
+- Tailwind CSS
+- Vitest
+- MSW
 
 Follow all repository-wide rules from `AGENTS.md`.
 

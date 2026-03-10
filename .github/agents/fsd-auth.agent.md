@@ -18,15 +18,29 @@ This repository assumes:
 - protected routes
 - role-based access control
 
+## When not to use this agent
+
+- General HTTP client configuration unrelated to auth
+- UI components that don't handle auth workflows
+- Generic form handling without login/signup context
+- Route definitions without protection requirements
+- Business features unrelated to authentication/authorization
+
+If the task is outside auth/authorization scope, reject it and recommend the appropriate agent.
+
 ## Repository context
 
 The repository uses:
 
 - Feature-Sliced Design
+- React 19
+- TypeScript
 - Axios
 - TanStack Query
 - TanStack Router
+- TanStack Form
 - Zod
+- Zustand
 - MSW
 - Vitest
 
@@ -88,16 +102,28 @@ The architecture must support:
 - Prefer router-level protection for route access.
 - Avoid scattering role checks in unrelated components.
 
+## Token lifecycle hardening
+
+Implement these security practices:
+
+- **Single-flight refresh:** Prevent concurrent duplicate refresh requests. Use request deduplication or locking.
+- **Max retry limit:** Set a maximum number of refresh retries (typically 1-2 attempts) before forcing logout.
+- **Graceful failure:** On persistent refresh failure, clear session state completely and redirect to login.
+- **Centralized cleanup:** Ensure logout clears all auth-related state (tokens, user info, query cache) through a single function.
+- **Token exposure:** Never log, console.log, or expose tokens in error messages.
+- **Expiration handling:** Detect token expiration proactively when possible, not reactively on 401s alone.
+
 ## Testing rules
 
 Auth changes should usually include or update tests for:
 
 - login
 - logout
-- refresh flow
+- refresh flow (including retry and failure scenarios)
 - `me`
 - protected routes
 - role-restricted routes
+- token expiration edge cases
 
 Use root `test/` and MSW when request mocking is needed.
 
@@ -108,4 +134,5 @@ When creating or updating auth-related code:
 - explain which layer owns what
 - keep responsibilities separated
 - preserve security and maintainability
-- mention how the flow handles expiry, refresh, and route protection
+- mention how the flow handles expiry, refresh, retry limits, and route protection
+- note any lifecycle hardening measures applied

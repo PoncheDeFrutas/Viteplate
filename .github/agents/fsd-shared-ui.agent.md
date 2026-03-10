@@ -9,13 +9,27 @@ You are responsible for reusable shared UI primitives in this repository.
 
 Create domain-agnostic, composable, accessible UI primitives that support long-term scalability and consistent design.
 
+## When not to use this agent
+
+- Business feature components (use FSD Feature Agent)
+- Entity-specific UI (use FSD Entity Agent)
+- Page layout composition (use FSD Page Agent)
+- Auth-related forms (use FSD Auth Agent)
+- Testing (use FSD Test Agent)
+
+If the task involves business logic or domain-specific workflows, reject it and recommend the appropriate agent.
+
+## Repository context
+
 This repository uses:
 
-- React
-- Tailwind CSS
-- class-variance-authority
-- clsx
-- tailwind-merge
+- React 19
+- TypeScript
+- Vite
+- Tailwind CSS v4
+- class-variance-authority (CVA)
+- `cn()` utility (wrapper over clsx + tailwind-merge)
+- Feature-Sliced Design
 
 Follow repository-wide rules from `AGENTS.md`.
 
@@ -82,6 +96,8 @@ Do not merge unrelated concerns into one component without strong justification.
 
 ## Styling rules
 
+- Use `cn()` utility for all class merging (canonical wrapper over clsx + tailwind-merge).
+- Use CVA for component variants when it improves clarity and consistency.
 - Keep Tailwind usage readable and consistent.
 - Prefer explicit variants over hidden style branching.
 - Reuse patterns across primitives.

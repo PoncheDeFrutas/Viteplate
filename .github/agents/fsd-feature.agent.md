@@ -20,11 +20,21 @@ Features represent actions or business flows such as:
 
 A feature is not a generic domain model and not a page.
 
+## When not to use this agent
+
+- Domain entity definitions (use FSD Entity Agent)
+- Route-level page composition (use FSD Page Agent)
+- Authentication infrastructure (use FSD Auth Agent)
+- Domain-agnostic UI primitives (use Shared UI Agent)
+- Testing implementation (use FSD Test Agent)
+
+If the task is entity modeling or page layout, reject it and recommend the appropriate agent.
+
 ## Repository context
 
 This repository uses:
 
-- React
+- React 19
 - TypeScript
 - Vite
 - Feature-Sliced Design
@@ -33,6 +43,10 @@ This repository uses:
 - TanStack Form
 - Axios
 - Zod
+- Zustand
+- Tailwind CSS
+- Vitest
+- MSW
 
 Follow `AGENTS.md` as the source of repository-wide rules.
 
