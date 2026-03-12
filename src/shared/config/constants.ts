@@ -13,6 +13,10 @@ export const DEBUG_CONFIG = {
     enabled: env.enableDebug,
 } as const;
 
+export const AUTH_ENDPOINTS = {
+    refresh: '/auth/refresh',
+} as const;
+
 export const STORAGE_KEYS = {
     session: 'viteplate.session',
 } as const;
