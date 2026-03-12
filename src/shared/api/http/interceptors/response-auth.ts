@@ -1,16 +1,20 @@
-import { API_CONFIG, AUTH_ENDPOINTS } from '@shared/config';
+import { AUTH_ENDPOINTS } from '@shared/config';
+import { parseWithSchema } from '@shared/lib/parse-with-schema';
 import { AxiosHeaders } from 'axios';
-import type { AxiosError, AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
+import type { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
 import axios from 'axios';
+import { z } from 'zod';
 import { normalizeApiError } from '../error/normalize-api-error';
+import type { HttpRequestConfig, InternalHttpRequestConfig } from '../http-config';
 import { handleUnauthorized } from '../refresh-controller';
-import { getSessionAdapter } from '../session-adapter';
+import { clearSession, getSessionAdapter } from '../session-adapter';
 
-interface RetryableRequestConfig extends InternalAxiosRequestConfig {
-    _retry?: boolean;
-}
+const refreshTokenResponseSchema = z.object({
+    accessToken: z.string().min(1),
+    refreshToken: z.string().min(1),
+});
 
-function isRefreshRequest(config: InternalAxiosRequestConfig | undefined): boolean {
+function isRefreshRequest(config: InternalHttpRequestConfig | undefined): boolean {
     return config?.url?.includes(AUTH_ENDPOINTS.refresh) ?? false;
 }
 
@@ -22,7 +26,7 @@ export function createResponseAuthInterceptor(
             return Promise.reject(error);
         }
 
-        const originalConfig = error.config as RetryableRequestConfig | undefined;
+        const originalConfig = error.config as InternalHttpRequestConfig | undefined;
 
         if (!originalConfig || isRefreshRequest(originalConfig)) {
             return Promise.reject(normalizeApiError(error));
@@ -32,16 +36,22 @@ export function createResponseAuthInterceptor(
             return Promise.reject(normalizeApiError(error));
         }
 
+        const refreshToken = getSessionAdapter().getRefreshToken();
+
+        if (!refreshToken) {
+            clearSession('missing_refresh_token');
+            return Promise.reject(normalizeApiError(error));
+        }
+
         try {
             const newToken = await handleUnauthorized(() => {
-                const refreshToken = getSessionAdapter().getRefreshToken();
+                const refreshConfig: HttpRequestConfig = {
+                    skipAuth: true,
+                };
 
-                return axios
-                    .post<{
-                        accessToken: string;
-                        refreshToken: string;
-                    }>(`${API_CONFIG.baseUrl}${AUTH_ENDPOINTS.refresh}`, { refreshToken })
-                    .then((res) => res.data);
+                return httpClient
+                    .post<unknown>(AUTH_ENDPOINTS.refresh, { refreshToken }, refreshConfig)
+                    .then((res) => parseWithSchema(refreshTokenResponseSchema, res.data));
             });
 
             originalConfig._retry = true;

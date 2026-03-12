@@ -1,10 +1,10 @@
-import type { AxiosRequestConfig } from 'axios';
 import type { ZodSchema } from 'zod';
 import { parseWithSchema } from '@shared/lib/parse-with-schema';
 import { httpClient } from './client';
+import type { HttpRequestConfig } from './http-config';
 
 interface ApiRequestOptions<T> {
-    config?: AxiosRequestConfig;
+    config?: HttpRequestConfig;
     schema: ZodSchema<T>;
 }
 

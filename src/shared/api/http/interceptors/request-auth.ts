@@ -1,10 +1,14 @@
 import { AxiosHeaders } from 'axios';
-import type { InternalAxiosRequestConfig } from 'axios';
 import { getSessionAdapter } from '../session-adapter';
+import type { InternalHttpRequestConfig } from '../http-config';
 
 export function requestAuthInterceptor(
-    config: InternalAxiosRequestConfig,
-): InternalAxiosRequestConfig {
+    config: InternalHttpRequestConfig,
+): InternalHttpRequestConfig {
+    if (config.skipAuth) {
+        return config;
+    }
+
     const token = getSessionAdapter().getAccessToken();
 
     if (token) {

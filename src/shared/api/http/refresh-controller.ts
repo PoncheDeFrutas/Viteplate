@@ -1,4 +1,4 @@
-import { getSessionAdapter } from './session-adapter';
+import { clearSession, getSessionAdapter } from './session-adapter';
 
 const MAX_REFRESH_ATTEMPTS = 2;
 
@@ -40,7 +40,7 @@ function rejectRefresh(error: unknown): void {
 
     if (refreshAttempts >= MAX_REFRESH_ATTEMPTS) {
         try {
-            getSessionAdapter().clearTokens();
+            clearSession('refresh_failed');
         } catch (clearError: unknown) {
             rejectionError = clearError;
         } finally {
@@ -59,7 +59,7 @@ export function handleUnauthorized(refreshFn: RefreshFn): Promise<string> {
     }
 
     if (refreshAttempts >= MAX_REFRESH_ATTEMPTS) {
-        getSessionAdapter().clearTokens();
+        clearSession('refresh_failed');
         resetRefreshState();
         return Promise.reject(new Error('Max refresh attempts reached. Session cleared.'));
     }
