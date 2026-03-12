@@ -2,296 +2,144 @@
 
 ## Repository purpose
 
-This repository is a frontend starter template for scalable React applications using Feature-Sliced Design (FSD). It provides a structured foundation for building complex applications while maintaining modularity and separation of concerns.
+Viteplate is a frontend starter template for scalable React 19 applications using Feature-Sliced Design (FSD). It serves as both a reusable production foundation and a living architectural reference. Every change must preserve that role.
 
-It is designed to serve as both:
+## Stack
 
-- A reusable production-ready frontend foundation
-- A living architectural reference for a scalable, typed, secure, and maintainable applications
+React 19, TypeScript (~5.9), Vite 7, Tailwind CSS v4, Tanstack Query/Router/Form, Axios, Zod 4, Zustand, class-variance-authority, clsx + tailwind-merge. Testing: Vitest 4, MSW 2, jsdom. Linting: ESLint 9, Prettier 3.8. Package manager: **pnpm** (v10).
 
-Every change must preserve the repository's role as a reusable template and architecture guide.
+## Build, lint, and test commands
 
----
+```bash
+pnpm dev              # Start Vite dev server
+pnpm build            # Type-check (tsc -b) then Vite build
+pnpm check-types      # Type-check only (tsc -b --pretty false)
+pnpm lint             # ESLint on entire project
+pnpm format           # Prettier --write on entire project
+pnpm test             # Run all tests via Vitest (watch mode)
+pnpm test -- --run    # Run all tests once (no watch)
+pnpm test -- --run test/unit/shared/api/http/client.test.ts   # Run a single test file
+pnpm test -- --run -t "test name pattern"                     # Run tests matching a name
+pnpm test:coverage    # Run tests with coverage report
+```
 
-## Official stack
+**Validation checklist** (run before finishing any meaningful change):
 
-- React 19
-- TypeScript
-- Vite
-- Tailwind CSS v4
-- Tanstack Query
-- Tanstack Router
-- Tanstack Form
-- Axios
-- Zod
-- Zustand
-- Vitest
-- MSW
-- ESLint
-- Prettier
-- Husky
+1. `pnpm lint`
+2. `pnpm check-types`
+3. `pnpm build`
+4. `pnpm test -- --run`
 
-Package manager: `pnpm`
+## Architecture: Feature-Sliced Design
 
----
+Dependency direction (import only downward, never upward):
 
-## Core architectural model
+```
+app → pages → widgets → features → entities → shared
+```
 
-This project follows Feature-Sliced Design (FSD).
+- Cross-slice imports **must** go through the slice's `index.ts` public API.
+- Never bypass a slice's public API with deep imports.
+- Do not create barrel `index.ts` files that add no architectural value.
+- **app**: bootstrap, providers, router, guards, global error handling. No business logic.
+- **pages**: thin route-level composition. No direct HTTP calls or complex logic.
+- **widgets**: reusable compositions of features/entities/shared UI.
+- **features**: business use cases (login, search, toggle-theme). May contain api/model/ui/lib.
+- **entities**: domain concepts (user, session). May contain api/model/ui.
+- **shared**: domain-agnostic infrastructure (HTTP client, config, lib, types, UI primitives).
 
-Dependency direction must always be respected:
+## Path aliases
 
-`app -> pages -> widgets -> features -> entities -> shared`
+Defined in `tsconfig.app.json` and mirrored in `vite.config.ts`:
 
-Rules:
+| Alias         | Path             |
+| ------------- | ---------------- |
+| `@app/*`      | `src/app/*`      |
+| `@pages/*`    | `src/pages/*`    |
+| `@widgets/*`  | `src/widgets/*`  |
+| `@features/*` | `src/features/*` |
+| `@entities/*` | `src/entities/*` |
+| `@shared/*`   | `src/shared/*`   |
 
-- Import only downward in the dependency graph.
-- Never import upward.
-- Never bypass another slice's public API for cross-slice imports.
-- Use `index.ts` as the public API entrypoint for imports that cross slice boundaries.
-- Do not create or keep `index.ts` files that add no architectural value.
-- Keep responsibilities explicit and local to the proper layer.
-- Prefer scalable composition over ad hoc coupling.
+## Import conventions
 
----
+- **Cross-module/cross-slice**: use `@layer/*` aliases (e.g., `import { httpClient } from '@shared/api'`).
+- **Within the same module**: use relative paths (`./`, `../`).
+- **Type-only imports**: always use `import type { ... }` — enforced by `verbatimModuleSyntax: true`.
+- **Barrel exports**: separate value and type re-exports (`export { X }` and `export type { Y }`).
+- **Order**: third-party → alias imports → relative imports. Types after values in each group.
+- **No default exports**. All exports must be named.
 
-## Layer responsibilities
+## Naming conventions
 
-### app
+- **Files**: `kebab-case.ts` for logic, `PascalCase.tsx` for React components.
+- **Directories**: `kebab-case`, singular nouns for FSD layers.
+- **Types/Interfaces**: `PascalCase` (e.g., `ApiError`, `SessionAdapter`).
+- **Functions**: `camelCase` with action prefixes (`create*`, `get*`, `set*`, `clear*`, `reset*`, `parse*`, `normalize*`, `handle*`, `is*`).
+- **Constants**: `UPPER_SNAKE_CASE` for top-level constant objects (e.g., `API_CONFIG`, `AUTH_ENDPOINTS`).
+- **React components**: `PascalCase` function names matching file name.
 
-Contains the application bootstrap and global integration only:
+## Formatting (Prettier)
 
-- providers
-- router setup
-- router guards
-- app-wide initialization
-- global error handling
+4-space indentation, single quotes, semicolons, trailing commas (`all`), 100-char print width, LF line endings, always parenthesize arrow params. Tailwind class sorting via `prettier-plugin-tailwindcss`. Pre-commit hook runs `pnpm format` automatically.
 
-Must not contain business domain logic, UI components, or feature-specific code.
+## TypeScript rules
 
-### pages
+Strict mode is fully enabled: `strict`, `noUnusedLocals`, `noUnusedParameters`, `noImplicitAny`, `strictNullChecks`, `noFallthroughCasesInSwitch`, `noUncheckedSideEffectImports`, `erasableSyntaxOnly`. Target: ES2022, module: ESNext, bundler resolution.
 
-Contains route-level UI composition.
-
-Pages should:
-
-- assemble widgets, features, entities, and shared UI
-- define layout and route-facing composition
-- stay thin
-
-Pages must not:
-
-- perform direct HTTP calls
-- implement auth rules directly when route guards can be handled them
-- contain complex business logic that belongs in features or entities
-
-### widgets
-
-Contains reusable compositions of features, entities, and shared UI.
-Widgets orchestrate UI, but should not own core domain rules.
-
-### Features
-
-Contains business use cases and user actions.
-
-Examples:
-
-- login
-- logout
-- refresh-session
-- search
-- toggle-theme
-
-A feature may include:
-
-- api
-- model
-- ui
-- lib
-
-### Entities
-
-Contains domain concepts and reusable domain logic.
-
-Examples:
-
-- user
-- session
-
-An entity may include:
-
-- api
-- model
-- ui
-
-Only include layers that are actually needed.
-
-### Shared
-
-Contains domain-agnostic reusable infrastructure:
-
-- HTTP client
-- API utilities
-- generic hooks
-- reusable UI components (buttons, inputs, etc.)
-- config
-- utility functions
-
-Shared must remain domain-agnostic.
-
----
-
-## Authentication and authorization rules
-
-This template assumes JWT-based authentication and role-based authorization.
-
-The architecture must support:
-
-- login
-- logout
-- refresh token flow
-- current user retrieval through a `me` endpoint
-- protected routes
-- role-based access control
-- token expiration handling
-
-Rules:
-
-- Access tokens must be treated as expirable.
-- Refresh flow must be considered part of the official auth lifecycle.
-- The HTTP client must support authenticated requests and token lifecycle handling.
-- Role-based authorization must be enforced consistently.
-- A user without the required role must not be able to access protected pages or privileged UI flows.
-- Auth logic must not be scattered arbitrarily across the codebase.
-- Logout must clear auth-related state safely.
-- Avoid insecure token handling patterns.
-
-When implementing auth-related changes:
-
-- keep transport concerns separate from domain/session concerns
-- keep route protection logic explicit
-- keep role checks maintainable and testable
-
----
-
-## API and HTTP client rules
-
-- Use the established Axios client abstraction.
-- Do not create ad hoc HTTP clients without strong justification.
-- API contracts must be typed.
-- Use Zod where runtime validation is needed.
-- Keep DTOs separate from domain models when both concepts exist.
-- Prefer explicit mapping over leaking raw transport shapes into UI.
-- Avoid duplicating auth header logic across calls.
-- Centralize token-aware request behavior in the HTTP client layer or approved abstractions.
-- Query logic must align with TanStack Query best practices.
-
----
-
-## UI architecture rules
-
-Reusable UI must be structured intentionally.
-
-Rules:
-
-- Shared UI must remain domain-agnostic.
-- Reusable UI should be grouped by responsibility.
-- Prefer separating primitives by kind, such as:
-    - input
-    - display
-    - feedback
-    - overlay
-    - layout
-    - navigation
-- Prefer composition and explicit variants over large all-purpose components.
-- Use `cn()` utility (wrapper over clsx + tailwind-merge) for class merging.
-- Use CVA (class-variance-authority) for component variants.
-- Prioritize accessibility, reusability, and predictable APIs.
-- Do not place business workflows inside shared UI primitives.
-
----
-
-## Coding standards
-
-- Use strict TypeScript.
-- Do not use explicit `any`.
-- Prefer `unknown` over `any` where needed.
-- Avoid unsafe assertions unless clearly justified.
-- Keep functions and components small and cohesive.
-- Follow repository naming conventions.
+- **Never** use explicit `any`. Use `unknown` and narrow with type guards or Zod.
+- Avoid unsafe type assertions unless clearly justified.
 - Prefer explicit, narrow, validated types.
-- Do not introduce architectural shortcuts that reduce long-term maintainability.
+- Use Zod for runtime validation of API responses and environment variables.
 
----
+## Error handling
+
+- All API errors are normalized to the `ApiError` interface via `normalizeApiError()` in `@shared/api`.
+- Error codes: `UNAUTHORIZED`, `TIMEOUT`, `FORBIDDEN`, `NOT_FOUND`, `NETWORK_ERROR`, `RATE_LIMITED`, `REQUEST_CANCELED`, `CONFLICT`, `VALIDATION_ERROR`, `SERVER_ERROR`, `UNKNOWN_ERROR`.
+- Errors include `isRetryable` flag, `traceId`, `timestamp`, structured `details`.
+- Zod validation uses `parseWithSchema()` which throws `ZodError` on failure.
+- Environment config uses `safeParse` with graceful fallbacks (never throws).
+
+## Auth model
+
+JWT-based auth with role-based access control. Key infrastructure in `@shared/api/http/`:
+
+- `session-adapter.ts`: pluggable token access (get/set/clear).
+- `refresh-controller.ts`: single-flight refresh with max 2 retries, then forced logout.
+- `request-auth.ts`: attaches Bearer token to outgoing requests.
+- `response-auth.ts`: intercepts 401s, triggers refresh, replays queued requests.
+
+Rules: access tokens are expirable, refresh is part of the auth lifecycle, logout clears all session state, tokens must never appear in logs.
+
+## UI rules
+
+- Shared UI in `src/shared/ui/` grouped by kind: `input/`, `display/`, `feedback/`, `overlay/`, `layout/`, `navigation/`.
+- Use `cn()` (clsx + tailwind-merge) for class merging.
+- Use CVA (class-variance-authority) for component variants.
+- Shared UI must remain domain-agnostic. No business logic in UI primitives.
+
+## Testing
+
+- All tests live under root `test/` directory, mirroring `src/` structure.
+- Unit tests: `test/unit/`, integration tests: `test/integration/`.
+- MSW handlers in `test/msw/handlers/`, fixtures in `test/msw/fixtures/`.
+- Test setup (`test/setup.ts`) starts MSW server with `onUnhandledRequest: 'error'`.
+- Vitest config: `globals: true`, `environment: 'jsdom'`.
+- MSW is the default API mocking strategy.
+- Critical logic changes must include or update tests.
 
 ## Dependency policy
 
-- Do not add new dependencies unless clearly necessary.
-- Prefer the existing stack and utilities.
-- Dependency changes must be justified by architectural value and maintenance cost.
-- Do not replace core technologies unless explicitly requested.
+Do not add dependencies without clear justification. Prefer the existing stack. Dependency changes must be justified by architectural value and maintenance cost.
 
----
+## Copilot instructions
 
-## Testing strategy
+See `.github/copilot-instructions.md` and `.github/agents/*.agent.md` for specialized agent roles (auth, feature, entity, page, shared-ui, test, reviewer, docs).
 
-This repository uses a root-level testing structure.
+## Agent behavior expectations
 
-Tests must live under the root `test/` directory.
-
-The official testing approach includes:
-
-- unit tests
-- integration tests where appropriate
-- MSW-based API mocking
-- auth and protected-route coverage when relevant
-
-Rules:
-
-- MSW is the default strategy for request mocking in tests and development scenarios where appropriate.
-- Auth flows such as login, logout, refresh, and `me` should be testable.
-- Protected route behavior and role-based access rules should be testable.
-- Critical business logic changes should include or update tests.
-- Test utilities and fixtures should remain reusable and maintainable.
-
-## Token lifecycle and security hardening
-
-When implementing or modifying authentication flows:
-
-- Implement single-flight refresh (prevent concurrent duplicate refresh requests).
-- Set maximum retry limits for failed refresh attempts.
-- Fall back to logout and session clearing on persistent refresh failures.
-- Centralize session state cleanup to avoid partial state leaks.
-- Handle token expiration gracefully with user-facing feedback when appropriate.
-- Avoid exposing tokens in logs, console, or error messages.
-
----
-
-## Validation requirements
-
-When relevant, validate changes with:
-
-- `pnpm lint`
-- `pnpm check-types`
-- `pnpm build`
-- `pnpm test`
-
-If a meaningful logic change is made without adding or updating tests, the reason must be stated explicitly.
-
----
-
-## Expected behavior for AI agents
-
-All AI agents working in this repository must:
-
-- preserve FSD boundaries
-- respect the public API of slices
-- avoid unnecessary refactors
-- avoid adding dependencies unless explicitly justified
-- avoid explicit `any`
-- preserve the repository's auth and role-based access model
-- keep changes minimal, reviewable, and scalable
-- align with the repository's long-term growth strategy
-- follow secure and maintainable patterns by default
-
-If a request conflicts with the repository architecture, security model, or auth model, prefer the established rules unless explicitly instructed otherwise.
+- Preserve FSD boundaries and slice public APIs.
+- Avoid unnecessary refactors and new dependencies.
+- Never use `any`. Follow established naming and import patterns.
+- Keep changes minimal, reviewable, and scalable.
+- When a request conflicts with the architecture or security model, prefer the established rules unless explicitly overridden.

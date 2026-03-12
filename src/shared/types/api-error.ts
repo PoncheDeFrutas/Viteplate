@@ -27,9 +27,9 @@ export interface ApiError {
     message: string;
     status?: number;
     traceId?: string;
-    timestamp?: string;
+    timestamp: string;
     path?: string;
     method?: string;
-    isRetryable?: boolean;
+    isRetryable: boolean;
     details?: ApiErrorDetails;
 }

@@ -33,6 +33,12 @@ export function resetRefreshState(): void {
 
 export type RefreshFn = () => Promise<{ accessToken: string; refreshToken: string }>;
 
+/**
+ * Handles a failed refresh attempt. If the max retry limit has been reached,
+ * clears the session and resets state. This is the single place where
+ * max-attempts-reached logic lives — `handleUnauthorized` delegates here
+ * to avoid duplicating the cleanup path.
+ */
 function rejectRefresh(error: unknown): void {
     isRefreshing = false;
 
@@ -43,26 +49,27 @@ function rejectRefresh(error: unknown): void {
             clearSession('refresh_failed');
         } catch (clearError: unknown) {
             rejectionError = clearError;
-        } finally {
-            refreshAttempts = 0;
         }
+        refreshAttempts = 0;
     }
 
     rejectQueue(rejectionError);
 }
 
 export function handleUnauthorized(refreshFn: RefreshFn): Promise<string> {
+    // If a refresh is already in flight, queue this caller behind it.
     if (isRefreshing) {
         return new Promise<string>((resolve, reject) => {
             pendingQueue.push({ resolve, reject });
         });
     }
 
-    if (refreshAttempts >= MAX_REFRESH_ATTEMPTS) {
-        clearSession('refresh_failed');
-        resetRefreshState();
-        return Promise.reject(new Error('Max refresh attempts reached. Session cleared.'));
-    }
+    // A fresh 401 cycle (isRefreshing was false) means the previous cycle
+    // either succeeded (which resets attempts to 0) or the caller is hitting
+    // a new 401 after some time. Reset the counter so this cycle gets a full
+    // MAX_REFRESH_ATTEMPTS budget rather than inheriting stale state from a
+    // prior partial failure.
+    refreshAttempts = 0;
 
     isRefreshing = true;
     refreshAttempts++;

@@ -1,5 +1,6 @@
 import type { AxiosError } from 'axios';
 import type { ApiError, ApiErrorCode, FieldError } from '@shared/types/api-error';
+import type { ZodError } from 'zod';
 
 interface BackendErrorBody {
     message?: string;
@@ -99,6 +100,38 @@ function resolveCode(status: number | undefined, backendCode: string | undefined
     if (backendCode && isKnownCode(backendCode)) return backendCode;
     if (status !== undefined) return STATUS_TO_CODE[status] ?? 'UNKNOWN_ERROR';
     return 'UNKNOWN_ERROR';
+}
+
+export function createUnknownApiError(error: unknown): ApiError {
+    const message = error instanceof Error ? error.message : defaultMessageForCode('UNKNOWN_ERROR');
+
+    return {
+        code: 'UNKNOWN_ERROR',
+        message,
+        isRetryable: false,
+        timestamp: new Date().toISOString(),
+    };
+}
+
+export function createSchemaValidationError(
+    error: ZodError,
+    url?: string,
+    method?: string,
+): ApiError {
+    const fields: FieldError[] = error.issues.map((issue) => ({
+        field: issue.path.join('.'),
+        message: issue.message,
+    }));
+
+    return {
+        code: 'VALIDATION_ERROR',
+        message: 'Response validation failed. The server returned an unexpected shape.',
+        path: url,
+        method: method?.toUpperCase(),
+        isRetryable: false,
+        timestamp: new Date().toISOString(),
+        details: fields.length > 0 ? { fields, reason: 'schema_validation' } : undefined,
+    };
 }
 
 export function normalizeApiError(error: AxiosError): ApiError {

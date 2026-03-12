@@ -4,7 +4,7 @@ import { AxiosHeaders } from 'axios';
 import type { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
 import axios from 'axios';
 import { z } from 'zod';
-import { normalizeApiError } from '../error/normalize-api-error';
+import { normalizeApiError, createUnknownApiError } from '../error/normalize-api-error';
 import type { HttpRequestConfig, InternalHttpRequestConfig } from '../http-config';
 import { handleUnauthorized } from '../refresh-controller';
 import { clearSession, getSessionAdapter } from '../session-adapter';
@@ -23,7 +23,7 @@ export function createResponseAuthInterceptor(
 ): (error: AxiosError) => Promise<AxiosResponse> {
     return async (error: AxiosError): Promise<AxiosResponse> => {
         if (!axios.isAxiosError(error)) {
-            return Promise.reject(error);
+            return Promise.reject(createUnknownApiError(error));
         }
 
         const originalConfig = error.config as InternalHttpRequestConfig | undefined;
@@ -62,7 +62,7 @@ export function createResponseAuthInterceptor(
             if (axios.isAxiosError(refreshError)) {
                 return Promise.reject(normalizeApiError(refreshError));
             }
-            return Promise.reject(refreshError);
+            return Promise.reject(createUnknownApiError(refreshError));
         }
     };
 }
