@@ -67,6 +67,7 @@ const paginationButtonVariants = cva(
                 sm: 'h-8 w-8',
                 md: 'h-9 w-9',
                 lg: 'h-10 w-10',
+                nav: 'h-9 w-auto shrink-0 gap-1.5 px-3 whitespace-nowrap',
             },
             isActive: {
                 true: 'border border-input bg-accent text-accent-foreground',
@@ -113,17 +114,24 @@ type PaginationNavButtonProps = ButtonHTMLAttributes<HTMLButtonElement>;
 
 export function PaginationPrevious({ className, ...props }: PaginationNavButtonProps) {
     return (
-        <PaginationButton className={cn('gap-1 pl-2.5', className)} {...props}>
+        <PaginationButton
+            size="nav"
+            aria-label="Go to previous page"
+            className={className}
+            {...props}
+        >
             <ChevronLeft className="h-4 w-4" />
-            <span>Previous</span>
+            <span className="hidden sm:inline">Previous</span>
+            <span className="sr-only sm:hidden">Previous</span>
         </PaginationButton>
     );
 }
 
 export function PaginationNext({ className, ...props }: PaginationNavButtonProps) {
     return (
-        <PaginationButton className={cn('gap-1 pr-2.5', className)} {...props}>
-            <span>Next</span>
+        <PaginationButton size="nav" aria-label="Go to next page" className={className} {...props}>
+            <span className="hidden sm:inline">Next</span>
+            <span className="sr-only sm:hidden">Next</span>
             <ChevronRight className="h-4 w-4" />
         </PaginationButton>
     );
