@@ -2,6 +2,7 @@ export {
     MOCK_CREDENTIALS,
     MOCK_ADMIN_USER,
     MOCK_REGULAR_USER,
+    MOCK_VIEWER_USER,
     findUserByEmail,
     generateMockAccessToken,
     generateMockRefreshToken,

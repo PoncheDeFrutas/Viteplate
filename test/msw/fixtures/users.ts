@@ -7,6 +7,7 @@ import type { UserMeResponseDto } from '@entities/user';
 export const MOCK_CREDENTIALS: Record<string, string> = {
     'admin@viteplate.dev': 'admin123',
     'user@viteplate.dev': 'user123',
+    'viewer@viteplate.dev': 'viewer123',
 };
 
 // ---------------------------------------------------------------------------
@@ -33,6 +34,15 @@ export const MOCK_REGULAR_USER: UserMeResponseDto = {
     updated_at: now,
 };
 
+export const MOCK_VIEWER_USER: UserMeResponseDto = {
+    id: '3',
+    email: 'viewer@viteplate.dev',
+    name: 'Carol Viewer',
+    role: 'viewer',
+    created_at: now,
+    updated_at: now,
+};
+
 // ---------------------------------------------------------------------------
 // Lookup by email
 // ---------------------------------------------------------------------------
@@ -40,6 +50,7 @@ export const MOCK_REGULAR_USER: UserMeResponseDto = {
 const USERS_BY_EMAIL: Record<string, UserMeResponseDto> = {
     [MOCK_ADMIN_USER.email]: MOCK_ADMIN_USER,
     [MOCK_REGULAR_USER.email]: MOCK_REGULAR_USER,
+    [MOCK_VIEWER_USER.email]: MOCK_VIEWER_USER,
 };
 
 export function findUserByEmail(email: string): UserMeResponseDto | undefined {

@@ -2,7 +2,7 @@ import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { sessionStore } from '@entities/session';
 import { renderApp, resetAuthState } from '../../utils';
-import { MOCK_ADMIN_USER } from '../../msw/fixtures';
+import { MOCK_ADMIN_USER, MOCK_REGULAR_USER, MOCK_VIEWER_USER } from '../../msw/fixtures';
 
 beforeEach(() => {
     resetAuthState();
@@ -21,8 +21,23 @@ describe('Auth guard', () => {
             expect(screen.getByRole('heading', { name: /sign in/i })).toBeInTheDocument();
         });
 
-        // Dashboard heading should NOT be present
         expect(screen.queryByRole('heading', { name: /dashboard/i })).not.toBeInTheDocument();
+    });
+
+    it('redirects unauthenticated users from /admin to /login', async () => {
+        renderApp({ initialPath: '/admin' });
+
+        await waitFor(() => {
+            expect(screen.getByRole('heading', { name: /sign in/i })).toBeInTheDocument();
+        });
+    });
+
+    it('redirects unauthenticated users from /overview to /login', async () => {
+        renderApp({ initialPath: '/overview' });
+
+        await waitFor(() => {
+            expect(screen.getByRole('heading', { name: /sign in/i })).toBeInTheDocument();
+        });
     });
 });
 
@@ -31,8 +46,7 @@ describe('Auth guard', () => {
 // ---------------------------------------------------------------------------
 
 describe('Guest guard', () => {
-    it('redirects authenticated users from /login to /dashboard', async () => {
-        // Pre-populate session to simulate an already-authenticated user
+    it('redirects authenticated admin from /login to /admin', async () => {
         sessionStore.getState().setAccessToken('mock-access-token-1-1');
         sessionStore.getState().setUser({
             id: MOCK_ADMIN_USER.id,
@@ -46,13 +60,93 @@ describe('Guest guard', () => {
             context: { isAuthenticated: true, role: 'admin' },
         });
 
-        // Should be redirected to dashboard since the user is authenticated
         await waitFor(() => {
-            expect(screen.getByRole('heading', { name: /dashboard/i })).toBeInTheDocument();
+            expect(screen.getByRole('heading', { name: /admin dashboard/i })).toBeInTheDocument();
         });
 
-        // Login form should NOT be present
         expect(screen.queryByRole('heading', { name: /sign in/i })).not.toBeInTheDocument();
+    });
+
+    it('redirects authenticated regular user from /login to /dashboard', async () => {
+        sessionStore.getState().setAccessToken('mock-access-token-2-1');
+        sessionStore.getState().setUser({
+            id: MOCK_REGULAR_USER.id,
+            email: MOCK_REGULAR_USER.email,
+            name: MOCK_REGULAR_USER.name,
+            role: MOCK_REGULAR_USER.role,
+        });
+
+        renderApp({
+            initialPath: '/login',
+            context: { isAuthenticated: true, role: 'user' },
+        });
+
+        await waitFor(() => {
+            expect(screen.getByRole('heading', { name: /^dashboard$/i })).toBeInTheDocument();
+        });
+    });
+
+    it('redirects authenticated viewer from /login to /overview', async () => {
+        sessionStore.getState().setAccessToken('mock-access-token-3-1');
+        sessionStore.getState().setUser({
+            id: MOCK_VIEWER_USER.id,
+            email: MOCK_VIEWER_USER.email,
+            name: MOCK_VIEWER_USER.name,
+            role: MOCK_VIEWER_USER.role,
+        });
+
+        renderApp({
+            initialPath: '/login',
+            context: { isAuthenticated: true, role: 'viewer' },
+        });
+
+        await waitFor(() => {
+            expect(screen.getByRole('heading', { name: /overview/i })).toBeInTheDocument();
+        });
+    });
+});
+
+// ---------------------------------------------------------------------------
+// Role guard
+// ---------------------------------------------------------------------------
+
+describe('Role guard', () => {
+    it('redirects a regular user from /admin to /unauthorized', async () => {
+        sessionStore.getState().setAccessToken('mock-access-token-2-1');
+        sessionStore.getState().setUser({
+            id: MOCK_REGULAR_USER.id,
+            email: MOCK_REGULAR_USER.email,
+            name: MOCK_REGULAR_USER.name,
+            role: MOCK_REGULAR_USER.role,
+        });
+
+        renderApp({
+            initialPath: '/admin',
+            context: { isAuthenticated: true, role: 'user' },
+        });
+
+        await waitFor(() => {
+            expect(screen.getByRole('heading', { name: /unauthorized/i })).toBeInTheDocument();
+        });
+    });
+
+    it('redirects a viewer from /dashboard to /unauthorized', async () => {
+        sessionStore.getState().setAccessToken('mock-access-token-3-1');
+        sessionStore.getState().setUser({
+            id: MOCK_VIEWER_USER.id,
+            email: MOCK_VIEWER_USER.email,
+            name: MOCK_VIEWER_USER.name,
+            role: MOCK_VIEWER_USER.role,
+        });
+
+        renderApp({
+            initialPath: '/dashboard',
+            context: { isAuthenticated: true, role: 'viewer' },
+        });
+
+        await waitFor(() => {
+            expect(screen.getByRole('heading', { name: /unauthorized/i })).toBeInTheDocument();
+        });
     });
 });
 
@@ -61,15 +155,15 @@ describe('Guest guard', () => {
 // ---------------------------------------------------------------------------
 
 describe('Home route (/)', () => {
-    it('redirects unauthenticated users to /login', async () => {
+    it('shows the home page for unauthenticated users', async () => {
         renderApp({ initialPath: '/' });
 
         await waitFor(() => {
-            expect(screen.getByRole('heading', { name: /sign in/i })).toBeInTheDocument();
+            expect(screen.getByRole('heading', { name: /viteplate/i })).toBeInTheDocument();
         });
     });
 
-    it('redirects authenticated users to /dashboard', async () => {
+    it('redirects authenticated admin to /admin', async () => {
         sessionStore.getState().setAccessToken('mock-access-token-1-1');
         sessionStore.getState().setUser({
             id: MOCK_ADMIN_USER.id,
@@ -84,7 +178,45 @@ describe('Home route (/)', () => {
         });
 
         await waitFor(() => {
-            expect(screen.getByRole('heading', { name: /dashboard/i })).toBeInTheDocument();
+            expect(screen.getByRole('heading', { name: /admin dashboard/i })).toBeInTheDocument();
+        });
+    });
+
+    it('redirects authenticated regular user to /dashboard', async () => {
+        sessionStore.getState().setAccessToken('mock-access-token-2-1');
+        sessionStore.getState().setUser({
+            id: MOCK_REGULAR_USER.id,
+            email: MOCK_REGULAR_USER.email,
+            name: MOCK_REGULAR_USER.name,
+            role: MOCK_REGULAR_USER.role,
+        });
+
+        renderApp({
+            initialPath: '/',
+            context: { isAuthenticated: true, role: 'user' },
+        });
+
+        await waitFor(() => {
+            expect(screen.getByRole('heading', { name: /^dashboard$/i })).toBeInTheDocument();
+        });
+    });
+
+    it('redirects authenticated viewer to /overview', async () => {
+        sessionStore.getState().setAccessToken('mock-access-token-3-1');
+        sessionStore.getState().setUser({
+            id: MOCK_VIEWER_USER.id,
+            email: MOCK_VIEWER_USER.email,
+            name: MOCK_VIEWER_USER.name,
+            role: MOCK_VIEWER_USER.role,
+        });
+
+        renderApp({
+            initialPath: '/',
+            context: { isAuthenticated: true, role: 'viewer' },
+        });
+
+        await waitFor(() => {
+            expect(screen.getByRole('heading', { name: /overview/i })).toBeInTheDocument();
         });
     });
 });
@@ -94,7 +226,7 @@ describe('Home route (/)', () => {
 // ---------------------------------------------------------------------------
 
 describe('Guard enforcement after login', () => {
-    it('prevents navigating to /login after successful login', async () => {
+    it('prevents navigating to /login after successful admin login', async () => {
         const user = userEvent.setup();
         const { router } = renderApp({ initialPath: '/login' });
 
@@ -107,15 +239,15 @@ describe('Guard enforcement after login', () => {
         await user.click(screen.getByRole('button', { name: /sign in/i }));
 
         await waitFor(() => {
-            expect(screen.getByRole('heading', { name: /dashboard/i })).toBeInTheDocument();
+            expect(screen.getByRole('heading', { name: /admin dashboard/i })).toBeInTheDocument();
         });
 
         // Try navigating to /login programmatically
         void router.navigate({ to: '/login' });
 
-        // Guest guard should redirect back to dashboard
+        // Guest guard should redirect back to admin dashboard
         await waitFor(() => {
-            expect(screen.getByRole('heading', { name: /dashboard/i })).toBeInTheDocument();
+            expect(screen.getByRole('heading', { name: /admin dashboard/i })).toBeInTheDocument();
         });
 
         expect(screen.queryByRole('heading', { name: /sign in/i })).not.toBeInTheDocument();

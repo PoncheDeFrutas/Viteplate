@@ -11,7 +11,7 @@ describe('Logout', () => {
     it('clears the session and redirects to the login page', async () => {
         const user = userEvent.setup();
 
-        // Start by logging in
+        // Start by logging in as admin
         renderApp({ initialPath: '/login' });
 
         await waitFor(() => {
@@ -22,16 +22,16 @@ describe('Logout', () => {
         await user.type(screen.getByLabelText(/password/i), 'admin123');
         await user.click(screen.getByRole('button', { name: /sign in/i }));
 
-        // Wait for dashboard to load
+        // Wait for admin dashboard to load
         await waitFor(() => {
-            expect(screen.getByRole('heading', { name: /dashboard/i })).toBeInTheDocument();
+            expect(screen.getByRole('heading', { name: /admin dashboard/i })).toBeInTheDocument();
         });
 
         // Verify session is populated before logout
         expect(sessionStore.getState().accessToken).not.toBeNull();
         expect(sessionStore.getState().user?.name).toBe('Alice Admin');
 
-        // Click the sign out button in the ProtectedLayout header
+        // Click the sign out button in the AuthNavbar
         await user.click(screen.getByRole('button', { name: /sign out/i }));
 
         // Should redirect to login page
