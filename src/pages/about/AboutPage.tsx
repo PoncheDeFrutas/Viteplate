@@ -129,22 +129,61 @@ const ANTI_PATTERNS: string[] = [
     'Creating barrel files that add no architectural value',
 ];
 
+const SUMMARY_STATS = [
+    { label: 'Layers enforced', value: '6 FSD' },
+    { label: 'UI components', value: '35+' },
+    { label: 'Auth model', value: 'JWT + RBAC' },
+] as const;
+
+const ABOUT_FSD_LAYERS = [
+    { name: 'app', detail: 'Providers, router, guards, bootstrap' },
+    { name: 'pages', detail: 'Route composition only' },
+    { name: 'widgets', detail: 'Feature/entity compositions' },
+    { name: 'features', detail: 'Business use cases' },
+    { name: 'entities', detail: 'Domain models and state' },
+    { name: 'shared', detail: 'UI primitives and infrastructure' },
+] as const;
+
 // ---------------------------------------------------------------------------
 // Component
 // ---------------------------------------------------------------------------
 
 export function AboutPage() {
     return (
-        <Container maxWidth="2xl" className="space-y-16 py-24">
+        <Container maxWidth="2xl" className="relative space-y-16 py-20 sm:py-24">
+            <div
+                aria-hidden="true"
+                className="pointer-events-none absolute top-8 left-[-7rem] h-56 w-56 rounded-full bg-foreground/5 blur-3xl"
+            />
+
             {/* ─── Header ─── */}
-            <motion.header {...FADE_UP} className="space-y-4 text-center">
-                <h1 className="text-3xl font-bold tracking-tight text-foreground">
+            <motion.header
+                {...FADE_UP}
+                className="space-y-5 rounded-2xl border border-border/80 bg-card/70 px-6 py-12 text-center shadow-sm sm:px-10"
+            >
+                <p className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+                    Why Viteplate
+                </p>
+                <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
                     About Viteplate
                 </h1>
-                <p className="mx-auto max-w-lg text-muted-foreground">
+                <p className="mx-auto max-w-2xl text-muted-foreground">
                     A production-ready starter template and living architectural reference for
                     scalable React applications. Every design decision is intentional.
                 </p>
+
+                <div className="mx-auto grid max-w-2xl gap-3 pt-2 sm:grid-cols-3">
+                    {SUMMARY_STATS.map((item) => (
+                        <Card key={item.label} padding="sm" className="bg-background/70 text-left">
+                            <p className="text-xs uppercase tracking-wide text-muted-foreground">
+                                {item.label}
+                            </p>
+                            <p className="mt-1 text-sm font-semibold text-foreground">
+                                {item.value}
+                            </p>
+                        </Card>
+                    ))}
+                </div>
             </motion.header>
 
             <Separator />
@@ -179,7 +218,7 @@ export function AboutPage() {
                         },
                     ].map((goal, i) => (
                         <motion.div key={goal.title} {...stagger(i)}>
-                            <Card padding="sm" className="h-full">
+                            <Card padding="sm" className="h-full border-border/80 bg-card/80">
                                 <p className="text-sm font-medium text-foreground">{goal.title}</p>
                                 <p className="mt-1 text-sm text-muted-foreground">{goal.text}</p>
                             </Card>
@@ -208,8 +247,8 @@ export function AboutPage() {
                 <div className="space-y-3">
                     {PHASES.map((phase, i) => (
                         <motion.div key={phase.number} {...stagger(i)}>
-                            <Card padding="sm">
-                                <div className="flex items-start gap-3">
+                            <Card padding="sm" className="border-border/80 bg-card/80">
+                                <div className="flex items-start gap-3 border-l-2 border-border pl-3">
                                     <Badge variant="secondary" className="mt-0.5 shrink-0">
                                         {phase.number}
                                     </Badge>
@@ -250,7 +289,7 @@ export function AboutPage() {
                         const Icon = step.icon;
                         return (
                             <motion.div key={step.title} {...stagger(i)}>
-                                <Card padding="sm" className="h-full">
+                                <Card padding="sm" className="h-full border-border/80 bg-card/80">
                                     <div className="flex items-start gap-3">
                                         <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-muted text-foreground">
                                             <Icon className="h-4 w-4" />
@@ -283,16 +322,35 @@ export function AboutPage() {
                     <Layers className="h-5 w-5 text-foreground" />
                     <h2 className="text-xl font-bold text-foreground">FSD at a Glance</h2>
                 </div>
-                <Card padding="md">
-                    <code className="block text-center text-sm leading-relaxed text-muted-foreground">
-                        app &rarr; pages &rarr; widgets &rarr; features &rarr; entities &rarr;
-                        shared
-                    </code>
-                    <p className="mt-3 text-center text-sm text-muted-foreground">
-                        Every layer may only import from the layers below it. Cross-slice
-                        communication flows through public barrel APIs, keeping coupling minimal and
-                        the dependency graph predictable.
-                    </p>
+                <Card padding="md" className="relative border-border/80 bg-card/80">
+                    <div
+                        aria-hidden="true"
+                        className="pointer-events-none absolute inset-x-8 top-10 h-px bg-linear-to-r from-transparent via-border to-transparent"
+                    />
+
+                    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                        {ABOUT_FSD_LAYERS.map((layer, index) => (
+                            <motion.div key={layer.name} {...stagger(index, 0.08, 0.1)}>
+                                <div className="relative rounded-xl border border-border/80 bg-background/70 p-4 backdrop-blur">
+                                    <span className="absolute top-[-0.6rem] left-4 rounded-full border border-border bg-background px-2 py-0.5 text-[10px] font-semibold tracking-wide text-muted-foreground uppercase">
+                                        L{index + 1}
+                                    </span>
+                                    <p className="text-sm font-semibold text-foreground">
+                                        {layer.name}
+                                    </p>
+                                    <p className="mt-1 text-xs text-muted-foreground">
+                                        {layer.detail}
+                                    </p>
+                                </div>
+                            </motion.div>
+                        ))}
+                    </div>
+
+                    <div className="mt-4 flex items-center justify-center gap-2 text-xs text-muted-foreground">
+                        <span>Imports only move downward</span>
+                        <ArrowRight className="h-3.5 w-3.5" />
+                        <span>cross-slice access via public APIs</span>
+                    </div>
                 </Card>
             </motion.section>
 
@@ -309,7 +367,7 @@ export function AboutPage() {
                     <h2 className="text-xl font-bold text-foreground">Anti-Patterns to Avoid</h2>
                 </div>
 
-                <Card padding="md">
+                <Card padding="md" className="border-warning/20 bg-warning/5">
                     <ul className="space-y-2">
                         {ANTI_PATTERNS.map((ap, i) => (
                             <motion.li

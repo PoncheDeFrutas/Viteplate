@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link } from '@tanstack/react-router';
 import { motion } from 'motion/react';
 import {
@@ -18,7 +19,17 @@ import {
 } from 'lucide-react';
 import { ROUTE_PATHS } from '@shared/config';
 import { FADE_UP, stagger } from '@shared/lib/animation-presets';
-import { Button, Card, Container, Badge, Separator } from '@shared/ui';
+import {
+    Button,
+    Card,
+    Container,
+    Badge,
+    Separator,
+    Tabs,
+    TabsList,
+    TabsTrigger,
+    TabsContent,
+} from '@shared/ui';
 import type { LucideIcon } from 'lucide-react';
 
 // ---------------------------------------------------------------------------
@@ -26,6 +37,7 @@ import type { LucideIcon } from 'lucide-react';
 // ---------------------------------------------------------------------------
 
 interface StackEntry {
+    category: StackCategory;
     name: string;
     version: string;
     icon: LucideIcon;
@@ -34,8 +46,38 @@ interface StackEntry {
     doesNot: string[];
 }
 
+type StackCategory =
+    | 'runtime'
+    | 'data'
+    | 'routing'
+    | 'state'
+    | 'validation'
+    | 'tooling'
+    | 'testing';
+
+const CATEGORY_LABELS: Record<StackCategory, string> = {
+    runtime: 'Runtime',
+    data: 'Data layer',
+    routing: 'Routing',
+    state: 'State',
+    validation: 'Validation',
+    tooling: 'Tooling',
+    testing: 'Testing',
+};
+
+const CATEGORY_ORDER: StackCategory[] = [
+    'runtime',
+    'data',
+    'routing',
+    'state',
+    'validation',
+    'tooling',
+    'testing',
+];
+
 const STACK_ENTRIES: StackEntry[] = [
     {
+        category: 'data',
         name: 'Axios',
         version: '1.x',
         icon: Shuffle,
@@ -53,6 +95,7 @@ const STACK_ENTRIES: StackEntry[] = [
         ],
     },
     {
+        category: 'data',
         name: 'TanStack Query',
         version: '5.x',
         icon: Database,
@@ -70,6 +113,7 @@ const STACK_ENTRIES: StackEntry[] = [
         ],
     },
     {
+        category: 'routing',
         name: 'TanStack Router',
         version: '1.x',
         icon: RouteIcon,
@@ -87,6 +131,7 @@ const STACK_ENTRIES: StackEntry[] = [
         ],
     },
     {
+        category: 'state',
         name: 'Zustand',
         version: '5.x',
         icon: Box,
@@ -104,6 +149,7 @@ const STACK_ENTRIES: StackEntry[] = [
         ],
     },
     {
+        category: 'validation',
         name: 'Zod',
         version: '4.x',
         icon: Shield,
@@ -121,6 +167,7 @@ const STACK_ENTRIES: StackEntry[] = [
         ],
     },
     {
+        category: 'runtime',
         name: 'React',
         version: '19',
         icon: Atom,
@@ -138,6 +185,7 @@ const STACK_ENTRIES: StackEntry[] = [
         ],
     },
     {
+        category: 'tooling',
         name: 'TypeScript',
         version: '~5.9',
         icon: FileCode2,
@@ -155,6 +203,7 @@ const STACK_ENTRIES: StackEntry[] = [
         ],
     },
     {
+        category: 'tooling',
         name: 'Vite',
         version: '7',
         icon: Zap,
@@ -172,6 +221,7 @@ const STACK_ENTRIES: StackEntry[] = [
         ],
     },
     {
+        category: 'tooling',
         name: 'Tailwind CSS',
         version: 'v4',
         icon: Paintbrush,
@@ -189,6 +239,7 @@ const STACK_ENTRIES: StackEntry[] = [
         ],
     },
     {
+        category: 'testing',
         name: 'Vitest + MSW',
         version: '4.x + 2.x',
         icon: FlaskConical,
@@ -212,90 +263,144 @@ const STACK_ENTRIES: StackEntry[] = [
 // ---------------------------------------------------------------------------
 
 export function StackPage() {
+    const [activeCategory, setActiveCategory] = useState<StackCategory>('runtime');
+
     return (
-        <Container maxWidth="2xl" className="space-y-12 py-24">
+        <Container maxWidth="2xl" className="relative space-y-12 py-20 sm:py-24">
+            <div
+                aria-hidden="true"
+                className="pointer-events-none absolute top-10 right-[-7rem] h-56 w-56 rounded-full bg-foreground/5 blur-3xl"
+            />
+
             {/* Header */}
-            <motion.header {...FADE_UP} className="space-y-4 text-center">
-                <h1 className="text-3xl font-bold tracking-tight text-foreground">Tech Stack</h1>
-                <p className="mx-auto max-w-lg text-muted-foreground">
+            <motion.header
+                {...FADE_UP}
+                className="space-y-4 rounded-2xl border border-border/80 bg-card/70 px-6 py-12 text-center shadow-sm sm:px-10"
+            >
+                <p className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+                    Built on deliberate choices
+                </p>
+                <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+                    Tech Stack
+                </h1>
+                <p className="mx-auto max-w-2xl text-muted-foreground">
                     Each library has a clear, non-overlapping responsibility. Here is exactly what
                     each tool does&mdash;and what it deliberately does not do.
                 </p>
+
+                <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
+                    {CATEGORY_ORDER.map((category) => (
+                        <Badge
+                            key={category}
+                            variant={category === activeCategory ? 'secondary' : 'outline'}
+                        >
+                            {CATEGORY_LABELS[category]}
+                        </Badge>
+                    ))}
+                </div>
             </motion.header>
 
             <Separator />
 
             {/* Stack entries */}
-            <div className="space-y-6">
-                {STACK_ENTRIES.map((entry, i) => {
-                    const Icon = entry.icon;
+            <Tabs
+                value={activeCategory}
+                onValueChange={(value) => setActiveCategory(value as StackCategory)}
+                animated
+            >
+                <TabsList className="mb-6 flex h-auto flex-wrap justify-start gap-1 rounded-xl border border-border/80 bg-card/70 p-1">
+                    {CATEGORY_ORDER.map((category) => (
+                        <TabsTrigger key={category} value={category} className="rounded-lg">
+                            {CATEGORY_LABELS[category]}
+                        </TabsTrigger>
+                    ))}
+                </TabsList>
+
+                {CATEGORY_ORDER.map((category) => {
+                    const entries = STACK_ENTRIES.filter((entry) => entry.category === category);
+
                     return (
-                        <motion.div key={entry.name} {...stagger(i)}>
-                            <Card padding="md" className="space-y-4">
-                                {/* Title row */}
-                                <div className="flex items-center gap-3">
-                                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-muted text-foreground">
-                                        <Icon className="h-4 w-4" />
-                                    </div>
-                                    <div className="flex items-center gap-2">
-                                        <h2 className="text-base font-semibold text-foreground">
-                                            {entry.name}
-                                        </h2>
-                                        <Badge variant="secondary">{entry.version}</Badge>
-                                    </div>
-                                    <Badge variant="outline" className="ml-auto hidden sm:flex">
-                                        {entry.role}
-                                    </Badge>
-                                </div>
+                        <TabsContent key={category} value={category} className="mt-0">
+                            <div className="mb-4 flex items-center justify-between">
+                                <Badge variant="secondary">{CATEGORY_LABELS[category]}</Badge>
+                                <span className="text-xs text-muted-foreground">
+                                    {entries.length} {entries.length === 1 ? 'entry' : 'entries'}
+                                </span>
+                            </div>
 
-                                {/* Role (visible on small screens) */}
-                                <p className="text-sm text-muted-foreground sm:hidden">
-                                    {entry.role}
-                                </p>
+                            <div className="grid gap-4 lg:grid-cols-2">
+                                {entries.map((entry, i) => {
+                                    const Icon = entry.icon;
 
-                                {/* Responsibilities grid */}
-                                <div className="grid gap-4 sm:grid-cols-2">
-                                    {/* Does */}
-                                    <div className="space-y-2">
-                                        <span className="text-xs font-medium uppercase tracking-wider text-success">
-                                            Responsibilities
-                                        </span>
-                                        <ul className="space-y-1.5">
-                                            {entry.responsibilities.map((r) => (
-                                                <li
-                                                    key={r}
-                                                    className="flex items-start gap-2 text-sm text-muted-foreground"
-                                                >
-                                                    <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-success" />
-                                                    {r}
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>
+                                    return (
+                                        <motion.div key={entry.name} {...stagger(i, 0.08, 0.08)}>
+                                            <Card
+                                                padding="md"
+                                                className="h-full border-border/80 bg-card/80 transition-colors hover:border-foreground/20"
+                                            >
+                                                <div className="flex items-start gap-3">
+                                                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-border bg-background text-foreground">
+                                                        <Icon className="h-4 w-4" />
+                                                    </div>
+                                                    <div className="min-w-0 flex-1">
+                                                        <div className="flex flex-wrap items-center gap-2">
+                                                            <h2 className="text-base font-semibold text-foreground">
+                                                                {entry.name}
+                                                            </h2>
+                                                            <Badge variant="secondary">
+                                                                {entry.version}
+                                                            </Badge>
+                                                        </div>
+                                                        <p className="mt-1 text-sm text-muted-foreground">
+                                                            {entry.role}
+                                                        </p>
+                                                    </div>
+                                                </div>
 
-                                    {/* Does not */}
-                                    <div className="space-y-2">
-                                        <span className="text-xs font-medium uppercase tracking-wider text-destructive">
-                                            Does not
-                                        </span>
-                                        <ul className="space-y-1.5">
-                                            {entry.doesNot.map((d) => (
-                                                <li
-                                                    key={d}
-                                                    className="flex items-start gap-2 text-sm text-muted-foreground"
-                                                >
-                                                    <X className="mt-0.5 h-3.5 w-3.5 shrink-0 text-destructive" />
-                                                    {d}
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>
-                                </div>
-                            </Card>
-                        </motion.div>
+                                                <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                                                    <div className="rounded-lg border border-success/20 bg-success/5 p-3">
+                                                        <p className="text-[11px] font-semibold tracking-wide text-success uppercase">
+                                                            Owns
+                                                        </p>
+                                                        <ul className="mt-2 space-y-1.5">
+                                                            {entry.responsibilities.map((item) => (
+                                                                <li
+                                                                    key={item}
+                                                                    className="flex items-start gap-2 text-xs text-muted-foreground"
+                                                                >
+                                                                    <Check className="mt-0.5 h-3 w-3 shrink-0 text-success" />
+                                                                    {item}
+                                                                </li>
+                                                            ))}
+                                                        </ul>
+                                                    </div>
+
+                                                    <div className="rounded-lg border border-destructive/20 bg-destructive/5 p-3">
+                                                        <p className="text-[11px] font-semibold tracking-wide text-destructive uppercase">
+                                                            Avoids
+                                                        </p>
+                                                        <ul className="mt-2 space-y-1.5">
+                                                            {entry.doesNot.map((item) => (
+                                                                <li
+                                                                    key={item}
+                                                                    className="flex items-start gap-2 text-xs text-muted-foreground"
+                                                                >
+                                                                    <X className="mt-0.5 h-3 w-3 shrink-0 text-destructive" />
+                                                                    {item}
+                                                                </li>
+                                                            ))}
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </Card>
+                                        </motion.div>
+                                    );
+                                })}
+                            </div>
+                        </TabsContent>
                     );
                 })}
-            </div>
+            </Tabs>
 
             {/* Navigation */}
             <motion.div
