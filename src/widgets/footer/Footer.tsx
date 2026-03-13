@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router';
 import { ROUTE_PATHS } from '@shared/config';
-import { Separator } from '@shared/ui/display';
+import { Separator } from '@shared/ui';
 
 // ---------------------------------------------------------------------------
 // Component

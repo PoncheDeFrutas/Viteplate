@@ -37,22 +37,35 @@ const INITIAL_STATE: SessionState = {
 export const sessionStore = createStore<SessionStore>()((set, get) => ({
     ...INITIAL_STATE,
 
+    /** Stores a new access token in the session. */
     setAccessToken: (token) => {
         set({ accessToken: token });
     },
 
+    /** Replaces the current user profile in the session. */
     setUser: (user) => {
         set({ user });
     },
 
-    clearSession: () => {
+    /**
+     * Clears all session state (token + user) and resets to initial values.
+     *
+     * @param reason - Why the session is being cleared (e.g. `'manual'`, `'expired'`).
+     *   Currently logged for debugging; can be extended for analytics or side-effects.
+     */
+    clearSession: (reason) => {
+        if (import.meta.env.DEV) {
+            console.debug(`[session] cleared (reason: ${reason})`);
+        }
         set({ ...INITIAL_STATE });
     },
 
+    /** Returns `true` if the current user has the given role. */
     hasRole: (role) => {
         return get().user?.role === role;
     },
 
+    /** Returns `true` if an access token is present (user is logged in). */
     isAuthenticated: () => {
         return get().accessToken !== null;
     },

@@ -3,7 +3,7 @@ import { z } from 'zod';
 type EnvDefaults = {
     VITE_API_BASE_URL: string;
     VITE_ENABLE_MSW: boolean;
-    VITE_ENABLE_DEBUG?: boolean;
+    VITE_ENABLE_DEBUG: boolean;
 };
 
 const DEFAULT_ENV: EnvDefaults = {
@@ -49,7 +49,7 @@ const booleanEnvSchema = z.preprocess((value) => {
 const envSchema = z.object({
     VITE_API_BASE_URL: z.url(),
     VITE_ENABLE_MSW: booleanEnvSchema,
-    VITE_ENABLE_DEBUG: booleanEnvSchema.optional(),
+    VITE_ENABLE_DEBUG: booleanEnvSchema,
 });
 
 function warnFallback(key: EnvKey, fallbackValue: EnvDefaults[EnvKey], reason: string) {
@@ -58,9 +58,9 @@ function warnFallback(key: EnvKey, fallbackValue: EnvDefaults[EnvKey], reason: s
     }
 
     console.warn(
-        `[shared/config] ${key} no está configurada correctamente. Se usará el valor por defecto "${String(
+        `[shared/config] ${key} is not configured correctly. Falling back to "${String(
             fallbackValue,
-        )}". Motivo: ${reason}. Revisa tu archivo .env.`,
+        )}". Reason: ${reason}. Check your .env file.`,
     );
 }
 
@@ -72,7 +72,7 @@ function resolveEnvValue<Key extends EnvKey>(
     if (value === undefined || value === '') {
         const fallbackValue = DEFAULT_ENV[key];
 
-        warnFallback(key, fallbackValue, 'variable ausente');
+        warnFallback(key, fallbackValue, 'missing variable');
 
         return fallbackValue;
     }
@@ -81,7 +81,7 @@ function resolveEnvValue<Key extends EnvKey>(
 
     if (!parsedValue.success) {
         const fallbackValue = DEFAULT_ENV[key];
-        const reason = parsedValue.error.issues[0]?.message ?? 'valor inválido';
+        const reason = parsedValue.error.issues[0]?.message ?? 'invalid value';
 
         warnFallback(key, fallbackValue, reason);
 

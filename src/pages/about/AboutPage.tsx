@@ -14,22 +14,9 @@ import {
     KeyRound,
 } from 'lucide-react';
 import { ROUTE_PATHS } from '@shared/config';
+import { FADE_UP, stagger } from '@shared/lib/animation-presets';
 import { Button, Card, Container, Badge, Separator } from '@shared/ui';
 import type { LucideIcon } from 'lucide-react';
-
-// ---------------------------------------------------------------------------
-// Animation presets
-// ---------------------------------------------------------------------------
-
-const FADE_UP = {
-    initial: { opacity: 0, y: 20 },
-    animate: { opacity: 1, y: 0 },
-    transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
-} as const;
-
-function stagger(index: number) {
-    return { ...FADE_UP, transition: { ...FADE_UP.transition, delay: 0.05 + index * 0.06 } };
-}
 
 // ---------------------------------------------------------------------------
 // Implementation phases
@@ -106,7 +93,7 @@ const AUTH_STEPS: AuthStep[] = [
     {
         title: 'Session store',
         description:
-            'Zustand holds tokens, user profile, and role. Provides login/logout/setSession actions with sessionStorage persistence.',
+            'Zustand holds tokens, user profile, and role in memory. Provides setAccessToken, setUser, and clearSession actions. No browser storage is used — tokens live only in the JS runtime.',
         icon: KeyRound,
     },
     {

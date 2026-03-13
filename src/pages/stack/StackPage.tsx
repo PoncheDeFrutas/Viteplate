@@ -17,22 +17,9 @@ import {
     X,
 } from 'lucide-react';
 import { ROUTE_PATHS } from '@shared/config';
+import { FADE_UP, stagger } from '@shared/lib/animation-presets';
 import { Button, Card, Container, Badge, Separator } from '@shared/ui';
 import type { LucideIcon } from 'lucide-react';
-
-// ---------------------------------------------------------------------------
-// Animation presets
-// ---------------------------------------------------------------------------
-
-const FADE_UP = {
-    initial: { opacity: 0, y: 20 },
-    animate: { opacity: 1, y: 0 },
-    transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
-} as const;
-
-function stagger(index: number) {
-    return { ...FADE_UP, transition: { ...FADE_UP.transition, delay: 0.05 + index * 0.06 } };
-}
 
 // ---------------------------------------------------------------------------
 // Stack data with responsibility details
@@ -105,10 +92,10 @@ const STACK_ENTRIES: StackEntry[] = [
         icon: Box,
         role: 'Client state management',
         responsibilities: [
-            'Holds session state (user, tokens, role)',
+            'Holds session state (user, tokens, role) in memory',
             'Provides hooks like useSession for reactive access',
-            'Persists and hydrates session via sessionStorage',
-            'Exposes login/logout/setSession actions',
+            'Exposes setAccessToken, setUser, clearSession actions',
+            'Vanilla store enables framework-agnostic access',
         ],
         doesNot: [
             'Fetch data from the server',

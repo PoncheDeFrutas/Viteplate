@@ -74,7 +74,13 @@ export function ProgressBar({
                     {showValue && <span>{Math.round(clamped)}%</span>}
                 </div>
             )}
-            <div className={trackVariants({ size })} role="progressbar" aria-valuenow={clamped}>
+            <div
+                className={trackVariants({ size })}
+                role="progressbar"
+                aria-valuenow={clamped}
+                aria-valuemin={0}
+                aria-valuemax={100}
+            >
                 <div className={fillVariants({ variant })} style={{ width: `${clamped}%` }} />
             </div>
         </div>

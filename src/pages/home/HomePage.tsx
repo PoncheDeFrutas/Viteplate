@@ -13,22 +13,9 @@ import {
     ArrowDown,
 } from 'lucide-react';
 import { ROUTE_PATHS } from '@shared/config';
+import { FADE_UP, stagger } from '@shared/lib/animation-presets';
 import { Button, Card, Container, Badge, Separator } from '@shared/ui';
 import type { LucideIcon } from 'lucide-react';
-
-// ---------------------------------------------------------------------------
-// Animation presets
-// ---------------------------------------------------------------------------
-
-const FADE_UP = {
-    initial: { opacity: 0, y: 20 },
-    animate: { opacity: 1, y: 0 },
-    transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
-} as const;
-
-function stagger(index: number) {
-    return { ...FADE_UP, transition: { ...FADE_UP.transition, delay: 0.1 + index * 0.1 } };
-}
 
 // ---------------------------------------------------------------------------
 // Highlights data
@@ -198,7 +185,7 @@ export function HomePage() {
                 {HIGHLIGHTS.map((item, i) => {
                     const Icon = item.icon;
                     return (
-                        <motion.div key={item.title} {...stagger(i)}>
+                        <motion.div key={item.title} {...stagger(i, 0.1, 0.1)}>
                             <Card interactive padding="md" className="h-full text-left">
                                 <div className="mb-3 inline-flex h-9 w-9 items-center justify-center rounded-md bg-muted text-foreground">
                                     <Icon className="h-4 w-4" />
@@ -235,7 +222,7 @@ export function HomePage() {
 
                 <div className="mx-auto max-w-md space-y-2">
                     {FSD_LAYERS.map((layer, i) => (
-                        <motion.div key={layer.name} {...stagger(i)}>
+                        <motion.div key={layer.name} {...stagger(i, 0.1, 0.1)}>
                             <div
                                 className={`flex items-center gap-3 rounded-lg border px-4 py-3 ${layer.color}`}
                             >
@@ -273,7 +260,7 @@ export function HomePage() {
                     {PRINCIPLES.map((p, i) => {
                         const Icon = p.icon;
                         return (
-                            <motion.div key={p.title} {...stagger(i)}>
+                            <motion.div key={p.title} {...stagger(i, 0.1, 0.1)}>
                                 <Card padding="sm" className="h-full">
                                     <div className="flex items-start gap-3">
                                         <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-muted text-foreground">

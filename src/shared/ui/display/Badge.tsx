@@ -8,7 +8,7 @@ import type { VariantProps } from 'class-variance-authority';
 // ---------------------------------------------------------------------------
 
 const badgeVariants = cva(
-    'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium transition-colors',
+    'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium',
     {
         variants: {
             variant: {
