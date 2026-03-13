@@ -72,7 +72,7 @@ export function DesignSystemPage() {
                 </p>
             </header>
 
-            <Tabs defaultValue="input">
+            <Tabs defaultValue="input" animated>
                 <TabsList className="mb-8 flex flex-wrap">
                     {tabItems.map((tab) => (
                         <TabsTrigger key={tab.value} value={tab.value}>

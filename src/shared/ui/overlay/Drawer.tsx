@@ -23,12 +23,8 @@ function DrawerOverlay({
 }: ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay>) {
     return (
         <DialogPrimitive.Overlay
-            className={cn(
-                'fixed inset-0 z-50 bg-black/80',
-                'data-[state=open]:animate-in data-[state=open]:fade-in-0',
-                'data-[state=closed]:animate-out data-[state=closed]:fade-out-0',
-                className,
-            )}
+            data-overlay-animate
+            className={cn('fixed inset-0 z-50 bg-black/80', className)}
             {...props}
         />
     );
@@ -39,14 +35,14 @@ function DrawerOverlay({
 // ---------------------------------------------------------------------------
 
 const drawerContentVariants = cva(
-    'fixed z-50 gap-4 border border-border bg-background p-6 shadow-lg transition-transform duration-300 ease-in-out',
+    'fixed z-50 gap-4 border border-border bg-background p-6 shadow-lg',
     {
         variants: {
             side: {
-                right: 'inset-y-0 right-0 h-full w-3/4 max-w-sm data-[state=open]:animate-in data-[state=open]:slide-in-from-right data-[state=closed]:animate-out data-[state=closed]:slide-out-to-right',
-                left: 'inset-y-0 left-0 h-full w-3/4 max-w-sm data-[state=open]:animate-in data-[state=open]:slide-in-from-left data-[state=closed]:animate-out data-[state=closed]:slide-out-to-left',
-                top: 'inset-x-0 top-0 data-[state=open]:animate-in data-[state=open]:slide-in-from-top data-[state=closed]:animate-out data-[state=closed]:slide-out-to-top',
-                bottom: 'inset-x-0 bottom-0 data-[state=open]:animate-in data-[state=open]:slide-in-from-bottom data-[state=closed]:animate-out data-[state=closed]:slide-out-to-bottom',
+                right: 'inset-y-0 right-0 h-full w-3/4 max-w-sm',
+                left: 'inset-y-0 left-0 h-full w-3/4 max-w-sm',
+                top: 'inset-x-0 top-0',
+                bottom: 'inset-x-0 bottom-0',
             },
         },
         defaultVariants: {
@@ -82,6 +78,7 @@ export function DrawerContent({
         <DialogPrimitive.Portal>
             <DrawerOverlay />
             <DialogPrimitive.Content
+                data-drawer-animate={side ?? 'right'}
                 className={cn(drawerContentVariants({ side }), className)}
                 {...props}
             >

@@ -10,7 +10,7 @@ export const Collapsible = CollapsiblePrimitive.Root;
 export const CollapsibleTrigger = CollapsiblePrimitive.Trigger;
 
 // ---------------------------------------------------------------------------
-// Content (animated via CSS)
+// Content (animated via CSS keyframes in index.css)
 // ---------------------------------------------------------------------------
 
 type CollapsibleContentProps = ComponentPropsWithoutRef<typeof CollapsiblePrimitive.Content>;
@@ -18,18 +18,15 @@ type CollapsibleContentProps = ComponentPropsWithoutRef<typeof CollapsiblePrimit
 /**
  * Animated collapsible content panel.
  *
- * Uses `--radix-collapsible-content-height` for smooth CSS height animation.
- * Add matching keyframes in your global CSS (see `data-collapsible-content`).
+ * Uses `--radix-collapsible-content-height` for a smooth height transition.
+ * The matching `collapsible-down` / `collapsible-up` keyframes live in the
+ * global CSS under `[data-collapsible-content]`.
  */
 export function CollapsibleContent({ className, ...props }: CollapsibleContentProps) {
     return (
         <CollapsiblePrimitive.Content
-            className={cn(
-                'overflow-hidden',
-                'data-[state=open]:animate-in data-[state=open]:fade-in-0',
-                'data-[state=closed]:animate-out data-[state=closed]:fade-out-0',
-                className,
-            )}
+            data-collapsible-content=""
+            className={cn('overflow-hidden', className)}
             {...props}
         />
     );

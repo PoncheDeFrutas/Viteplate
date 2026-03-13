@@ -352,6 +352,337 @@
 }
 
 /* =========================
+   Components: Collapsible
+   ========================= */
+@layer components {
+    [data-collapsible-content] {
+        --collapsible-ease: cubic-bezier(0.16, 1, 0.3, 1);
+        animation-duration: 250ms;
+        animation-timing-function: var(--collapsible-ease);
+        will-change: height, opacity;
+    }
+
+    [data-collapsible-content][data-state='open'] {
+        animation-name: collapsible-down;
+    }
+
+    [data-collapsible-content][data-state='closed'] {
+        animation-name: collapsible-up;
+    }
+
+    @keyframes collapsible-down {
+        from {
+            height: 0;
+            opacity: 0;
+        }
+
+        to {
+            height: var(--radix-collapsible-content-height);
+            opacity: 1;
+        }
+    }
+
+    @keyframes collapsible-up {
+        from {
+            height: var(--radix-collapsible-content-height);
+            opacity: 1;
+        }
+
+        to {
+            height: 0;
+            opacity: 0;
+        }
+    }
+}
+
+/* =========================
+   Components: Overlay animations
+   ========================= */
+@layer components {
+    /* --- Shared overlay entrance / exit via data-[state] --- */
+    --overlay-ease-in: cubic-bezier(0.16, 1, 0.3, 1);
+    --overlay-ease-out: cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Backdrop overlay (Dialog, Drawer, AlertDialog) */
+    [data-overlay-animate] {
+        animation-duration: 200ms;
+        animation-fill-mode: forwards;
+        will-change: opacity;
+    }
+
+    [data-overlay-animate][data-state='open'] {
+        animation-name: overlay-fade-in;
+        animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    [data-overlay-animate][data-state='closed'] {
+        animation-name: overlay-fade-out;
+        animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    @keyframes overlay-fade-in {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+
+    @keyframes overlay-fade-out {
+        from {
+            opacity: 1;
+        }
+
+        to {
+            opacity: 0;
+        }
+    }
+
+    /* Dialog / AlertDialog content panel */
+    [data-dialog-animate] {
+        animation-duration: 200ms;
+        animation-fill-mode: forwards;
+        will-change: opacity, transform;
+    }
+
+    [data-dialog-animate][data-state='open'] {
+        animation-name: dialog-enter;
+        animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    [data-dialog-animate][data-state='closed'] {
+        animation-name: dialog-exit;
+        animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    @keyframes dialog-enter {
+        from {
+            opacity: 0;
+            transform: scale(0.96);
+        }
+
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    @keyframes dialog-exit {
+        from {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        to {
+            opacity: 0;
+            transform: scale(0.96);
+        }
+    }
+
+    /* Drawer panels */
+    [data-drawer-animate='right'] {
+        animation-duration: 300ms;
+        animation-fill-mode: forwards;
+        animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+        will-change: transform;
+    }
+
+    [data-drawer-animate='right'][data-state='open'] {
+        animation-name: drawer-slide-in-right;
+    }
+
+    [data-drawer-animate='right'][data-state='closed'] {
+        animation-name: drawer-slide-out-right;
+    }
+
+    [data-drawer-animate='left'] {
+        animation-duration: 300ms;
+        animation-fill-mode: forwards;
+        animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+        will-change: transform;
+    }
+
+    [data-drawer-animate='left'][data-state='open'] {
+        animation-name: drawer-slide-in-left;
+    }
+
+    [data-drawer-animate='left'][data-state='closed'] {
+        animation-name: drawer-slide-out-left;
+    }
+
+    [data-drawer-animate='top'] {
+        animation-duration: 300ms;
+        animation-fill-mode: forwards;
+        animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+        will-change: transform;
+    }
+
+    [data-drawer-animate='top'][data-state='open'] {
+        animation-name: drawer-slide-in-top;
+    }
+
+    [data-drawer-animate='top'][data-state='closed'] {
+        animation-name: drawer-slide-out-top;
+    }
+
+    [data-drawer-animate='bottom'] {
+        animation-duration: 300ms;
+        animation-fill-mode: forwards;
+        animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+        will-change: transform;
+    }
+
+    [data-drawer-animate='bottom'][data-state='open'] {
+        animation-name: drawer-slide-in-bottom;
+    }
+
+    [data-drawer-animate='bottom'][data-state='closed'] {
+        animation-name: drawer-slide-out-bottom;
+    }
+
+    @keyframes drawer-slide-in-right {
+        from {
+            transform: translateX(100%);
+        }
+
+        to {
+            transform: translateX(0);
+        }
+    }
+
+    @keyframes drawer-slide-out-right {
+        from {
+            transform: translateX(0);
+        }
+
+        to {
+            transform: translateX(100%);
+        }
+    }
+
+    @keyframes drawer-slide-in-left {
+        from {
+            transform: translateX(-100%);
+        }
+
+        to {
+            transform: translateX(0);
+        }
+    }
+
+    @keyframes drawer-slide-out-left {
+        from {
+            transform: translateX(0);
+        }
+
+        to {
+            transform: translateX(-100%);
+        }
+    }
+
+    @keyframes drawer-slide-in-top {
+        from {
+            transform: translateY(-100%);
+        }
+
+        to {
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes drawer-slide-out-top {
+        from {
+            transform: translateY(0);
+        }
+
+        to {
+            transform: translateY(-100%);
+        }
+    }
+
+    @keyframes drawer-slide-in-bottom {
+        from {
+            transform: translateY(100%);
+        }
+
+        to {
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes drawer-slide-out-bottom {
+        from {
+            transform: translateY(0);
+        }
+
+        to {
+            transform: translateY(100%);
+        }
+    }
+
+    /* Floating menus: DropdownMenu, ContextMenu, Popover, HoverCard */
+    [data-floating-animate] {
+        animation-duration: 150ms;
+        animation-fill-mode: forwards;
+        will-change: opacity, transform;
+    }
+
+    [data-floating-animate][data-state='open'] {
+        animation-name: floating-enter;
+        animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    [data-floating-animate][data-state='closed'] {
+        animation-name: floating-exit;
+        animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    @keyframes floating-enter {
+        from {
+            opacity: 0;
+            transform: scale(0.96);
+        }
+
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    @keyframes floating-exit {
+        from {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        to {
+            opacity: 0;
+            transform: scale(0.96);
+        }
+    }
+
+    /* --- Tab content fade ------------------------------------------------- */
+
+    [data-tab-content][data-state='active'] {
+        animation: tab-fade-in 200ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes tab-fade-in {
+        from {
+            opacity: 0;
+            transform: translateY(4px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+}
+
+/* =========================
    Components: Skeleton shimmer
    ========================= */
 @layer components {

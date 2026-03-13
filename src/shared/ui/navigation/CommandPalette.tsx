@@ -1,6 +1,6 @@
 import { Command } from 'cmdk';
 import { motion, AnimatePresence } from 'motion/react';
-import { Search } from 'lucide-react';
+import { Search, X } from 'lucide-react';
 import { cn } from '@shared/lib/cn';
 import type { ComponentPropsWithoutRef, ReactNode } from 'react';
 
@@ -75,6 +75,14 @@ export function CommandPalette({
                                         placeholder={placeholder}
                                         className="flex h-11 w-full bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground"
                                     />
+                                    <button
+                                        type="button"
+                                        onClick={() => onOpenChange(false)}
+                                        className="shrink-0 rounded-sm p-1 text-muted-foreground opacity-70 transition-opacity hover:opacity-100 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+                                        aria-label="Close"
+                                    >
+                                        <X className="h-4 w-4" />
+                                    </button>
                                 </div>
                                 <Command.List className="max-h-80 overflow-y-auto p-2">
                                     {children}
