@@ -68,8 +68,11 @@ src/
 │   │   ├── query/                  # TanStack Query provider and config
 │   │   └── router/                 # TanStack Router provider
 │   ├── routers/                    # Route tree and router context type
-│   └── styles/                     # Global CSS and design tokens
-│       └── index.css
+│   └── styles/                     # Global CSS (modular)
+│       ├── index.css               # Aggregator imports
+│       ├── theme.css               # Tokens and @theme mapping
+│       ├── base.css                # Base styles and transitions
+│       └── components/             # Component-scoped CSS modules
 │
 ├── pages/                          # Route-level compositions
 │   ├── home/                       # HomePage.tsx
@@ -125,13 +128,13 @@ src/
 │   │   └── animation-presets.ts    # Reusable motion configs
 │   ├── types/                      # Shared type definitions
 │   │   └── api-error.ts            # ApiError interface
-│   └── ui/                         # 14 reusable UI primitives
-│       ├── input/                  # Button, Input, Label
-│       ├── display/                # Avatar, Badge, CodeBlock, Kbd, ProgressBar, Separator, Skeleton
-│       ├── feedback/               # Spinner, ErrorMessage, EmptyState
-│       ├── layout/                 # Card, Container
-│       ├── navigation/             # (reserved for future use)
-│       └── overlay/                # (reserved for future use)
+│   └── ui/                         # Shared UI component library
+│       ├── input/                  # Form and interactive primitives
+│       ├── display/                # Data and content presentation
+│       ├── feedback/               # Status and messaging components
+│       ├── overlay/                # Dialogs, popovers, menus
+│       ├── navigation/             # Breadcrumbs, pagination, stepper, links
+│       └── layout/                 # Structural composition primitives
 │
 └── main.tsx                        # Entry point (outside app/)
 

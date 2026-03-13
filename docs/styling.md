@@ -30,7 +30,21 @@ The styling stack consists of:
 | Motion                                | Animation library                   |
 | `prettier-plugin-tailwindcss`         | Automatic class sorting             |
 
-Global styles and tokens are defined in `src/app/styles/index.css`.
+Global styles are organized as modular files under `src/app/styles/`:
+
+```text
+src/app/styles/
+├── index.css                      # Aggregator (imports all style modules)
+├── theme.css                      # Design tokens + @theme mapping
+├── base.css                       # Base/reset and view transitions
+└── components/
+    ├── toast.css
+    ├── accordion.css
+    ├── collapsible.css
+    ├── overlay-animations.css
+    ├── skeleton.css
+    └── dot-grid.css
+```
 
 ---
 
@@ -66,7 +80,7 @@ The design system uses a two-tier token architecture:
 
 ### Tailwind Integration
 
-Tokens are mapped to Tailwind via the `@theme` block in `index.css`:
+Tokens are mapped to Tailwind via the `@theme` block in `src/app/styles/theme.css`:
 
 ```css
 @theme {
@@ -283,12 +297,20 @@ import { FADE_UP, STAGGER_CONTAINER } from '@shared/lib/animation-presets';
 
 ### CSS Animations
 
-The global stylesheet defines several CSS animations:
+CSS animations are grouped in modular component style files (mainly
+`src/app/styles/components/overlay-animations.css`, `skeleton.css`, and
+`accordion.css` / `collapsible.css`):
 
-| Animation          | Usage                             |
-| ------------------ | --------------------------------- |
-| `skeleton-shimmer` | Loading skeleton pulse effect     |
-| `dot-grid`         | Background pattern for login page |
+| Animation family               | Usage                                                               |
+| ------------------------------ | ------------------------------------------------------------------- |
+| `overlay-fade-*`               | Dialog/Drawer/AlertDialog backdrops                                 |
+| `dialog-*`                     | Dialog and AlertDialog content enter/exit                           |
+| `drawer-slide-*`               | Drawer panel transitions by side (`left`, `right`, `top`, `bottom`) |
+| `floating-*`                   | Select, DropdownMenu, ContextMenu, Popover, HoverCard               |
+| `tab-fade-in`                  | Active `TabsContent` transition                                     |
+| `accordion-*`, `collapsible-*` | Height-based disclosure animation via Radix measured height vars    |
+| `skeleton-shimmer`             | Loading skeleton shimmer effect                                     |
+| `.dot-grid` utility            | Decorative dotted background pattern                                |
 
 ---
 

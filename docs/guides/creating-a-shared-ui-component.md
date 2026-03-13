@@ -31,7 +31,7 @@ A shared UI component is a **domain-agnostic primitive** that provides reusable 
 
 ## Component Categories
 
-Shared UI is organized into four categories:
+Shared UI is organized into six categories:
 
 ```
 src/shared/ui/
@@ -52,6 +52,14 @@ src/shared/ui/
 │   ├── Spinner.tsx
 │   ├── ErrorMessage.tsx
 │   └── EmptyState.tsx
+├── overlay/          # Portaled/floating surfaces
+│   ├── Dialog.tsx
+│   ├── Drawer.tsx
+│   └── Popover.tsx
+├── navigation/       # Navigational primitives
+│   ├── Breadcrumb.tsx
+│   ├── Pagination.tsx
+│   └── Stepper.tsx
 └── layout/           # Structural containers
     ├── Card.tsx
     └── Container.tsx
@@ -59,12 +67,14 @@ src/shared/ui/
 
 ### Choosing a Category
 
-| Category    | Purpose                                      | Examples                                 |
-| ----------- | -------------------------------------------- | ---------------------------------------- |
-| `input/`    | Elements users interact with to provide data | Button, Input, Label, Select, Checkbox   |
-| `display/`  | Elements that present data visually          | Avatar, Badge, CodeBlock, ProgressBar    |
-| `feedback/` | Elements that communicate status or state    | Spinner, ErrorMessage, EmptyState, Toast |
-| `layout/`   | Structural wrappers that organize content    | Card, Container, Stack, Grid             |
+| Category      | Purpose                                      | Examples                                 |
+| ------------- | -------------------------------------------- | ---------------------------------------- |
+| `input/`      | Elements users interact with to provide data | Button, Input, Label, Select, Checkbox   |
+| `display/`    | Elements that present data visually          | Avatar, Badge, CodeBlock, ProgressBar    |
+| `feedback/`   | Elements that communicate status or state    | Spinner, ErrorMessage, EmptyState, Toast |
+| `overlay/`    | Floating/layered UI surfaces                 | Dialog, Drawer, Popover, DropdownMenu    |
+| `navigation/` | Wayfinding and flow controls                 | Breadcrumb, Pagination, Stepper          |
+| `layout/`     | Structural wrappers that organize content    | Card, Container, Stack, Grid             |
 
 ---
 
