@@ -1,6 +1,7 @@
 import { Outlet } from '@tanstack/react-router';
 import { useSession } from '@entities/session';
 import { useLogout } from '@features/auth/logout';
+import { Button } from '@shared/ui';
 import { useTheme } from '../providers/theme';
 
 export function ProtectedLayout() {
@@ -9,33 +10,27 @@ export function ProtectedLayout() {
     const { theme, toggleTheme } = useTheme();
 
     return (
-        <div className="flex min-h-screen flex-col bg-white dark:bg-gray-900">
-            <header className="flex items-center justify-between border-b border-gray-200 px-6 py-4 dark:border-gray-700">
-                <span className="text-lg font-semibold text-gray-800 dark:text-gray-100">
-                    Viteplate
-                </span>
+        <div className="flex min-h-screen flex-col bg-background">
+            <header className="flex items-center justify-between border-b border-border px-6 py-4">
+                <span className="text-lg font-semibold text-foreground">Viteplate</span>
                 <div className="flex items-center gap-4">
-                    {user && (
-                        <span className="text-sm text-gray-600 dark:text-gray-400">
-                            {user.name}
-                        </span>
-                    )}
-                    <button
-                        type="button"
+                    {user && <span className="text-sm text-muted-foreground">{user.name}</span>}
+                    <Button
+                        variant="ghost"
+                        size="sm"
                         onClick={toggleTheme}
-                        className="rounded-md px-2 py-1 text-sm text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
                         title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
                     >
                         {theme === 'light' ? 'Dark' : 'Light'}
-                    </button>
-                    <button
-                        type="button"
+                    </Button>
+                    <Button
+                        variant="ghost"
+                        size="md"
                         onClick={() => logoutMutation.mutate()}
-                        disabled={logoutMutation.isPending}
-                        className="rounded-md px-3 py-1 text-sm text-gray-600 hover:bg-gray-100 disabled:opacity-50 dark:text-gray-400 dark:hover:bg-gray-800"
+                        loading={logoutMutation.isPending}
                     >
                         {logoutMutation.isPending ? 'Signing out...' : 'Sign out'}
-                    </button>
+                    </Button>
                 </div>
             </header>
             <main className="flex flex-1 items-center justify-center p-6">

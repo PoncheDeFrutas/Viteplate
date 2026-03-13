@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { useSession } from '@entities/session';
 import { useRefreshSession } from '@features/auth/refresh-session';
+import { Spinner } from '@shared/ui';
 import { QueryProvider } from './providers/query';
 import { AppRouterProvider } from './providers/router';
 import { ThemeProvider } from './providers/theme';
@@ -10,7 +11,7 @@ import type { RouterContext } from './routers';
  * Root application component.
  *
  * Composes global providers in the correct order:
- *   ThemeProvider → QueryProvider → AppRouterProvider
+ *   ThemeProvider -> QueryProvider -> AppRouterProvider
  *
  * On mount, attempts to restore the user's session via the httpOnly
  * refresh-token cookie. The router is not rendered until this attempt
@@ -33,8 +34,8 @@ export function App() {
 
     if (isLoading) {
         return (
-            <div className="flex min-h-screen items-center justify-center">
-                <p className="text-sm text-gray-500 dark:text-gray-400">Loading...</p>
+            <div className="flex min-h-screen items-center justify-center bg-background">
+                <Spinner size="lg" label="Loading application" />
             </div>
         );
     }

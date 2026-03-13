@@ -1,36 +1,33 @@
 import { useSession } from '@entities/session';
+import { Card, Container } from '@shared/ui';
 
 export function DashboardPage() {
     const user = useSession((s) => s.user);
 
     return (
-        <div className="w-full max-w-2xl space-y-6">
-            <h1 className="text-2xl font-semibold text-gray-800 dark:text-gray-100">Dashboard</h1>
+        <Container maxWidth="2xl" className="space-y-6">
+            <h1 className="text-2xl font-semibold text-foreground">Dashboard</h1>
             {user ? (
-                <div className="rounded-lg border border-gray-200 bg-gray-50 p-6 dark:border-gray-700 dark:bg-gray-800">
-                    <h2 className="mb-4 text-lg font-medium text-gray-700 dark:text-gray-300">
-                        Profile
-                    </h2>
+                <Card>
+                    <h2 className="mb-4 text-lg font-medium text-foreground">Profile</h2>
                     <dl className="space-y-3 text-sm">
                         <div className="flex gap-2">
-                            <dt className="font-medium text-gray-500 dark:text-gray-400">Name:</dt>
-                            <dd className="text-gray-800 dark:text-gray-100">{user.name}</dd>
+                            <dt className="font-medium text-muted-foreground">Name:</dt>
+                            <dd className="text-foreground">{user.name}</dd>
                         </div>
                         <div className="flex gap-2">
-                            <dt className="font-medium text-gray-500 dark:text-gray-400">Email:</dt>
-                            <dd className="text-gray-800 dark:text-gray-100">{user.email}</dd>
+                            <dt className="font-medium text-muted-foreground">Email:</dt>
+                            <dd className="text-foreground">{user.email}</dd>
                         </div>
                         <div className="flex gap-2">
-                            <dt className="font-medium text-gray-500 dark:text-gray-400">Role:</dt>
-                            <dd className="text-gray-800 dark:text-gray-100">{user.role}</dd>
+                            <dt className="font-medium text-muted-foreground">Role:</dt>
+                            <dd className="text-foreground">{user.role}</dd>
                         </div>
                     </dl>
-                </div>
+                </Card>
             ) : (
-                <p className="text-sm text-gray-500 dark:text-gray-400">
-                    No user information available.
-                </p>
+                <p className="text-sm text-muted-foreground">No user information available.</p>
             )}
-        </div>
+        </Container>
     );
 }
