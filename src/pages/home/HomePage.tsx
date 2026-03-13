@@ -160,7 +160,7 @@ export function HomePage() {
                 <motion.h1
                     {...FADE_UP}
                     transition={{ ...FADE_UP.transition, delay: 0.1 }}
-                    className="bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-4xl font-bold tracking-tight text-transparent sm:text-5xl"
+                    className="bg-linear-to-r from-foreground to-muted-foreground bg-clip-text text-4xl font-bold tracking-tight text-transparent sm:text-5xl"
                 >
                     Viteplate
                 </motion.h1>
