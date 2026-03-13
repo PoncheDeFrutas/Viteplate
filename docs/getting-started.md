@@ -33,7 +33,7 @@ Viteplate uses **pnpm** exclusively as its package manager. Do not use npm or ya
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/viteplate.git
+git clone https://github.com/PoncheDeFrutas/frontend-fsd-vite.git
 cd viteplate
 
 # Install all dependencies
@@ -50,11 +50,11 @@ Viteplate validates environment variables at startup using Zod. All variables ha
 
 ### Variables
 
-| Variable            | Type           | Default                     | Description                                                 |
-| ------------------- | -------------- | --------------------------- | ----------------------------------------------------------- |
-| `VITE_API_BASE_URL` | `string` (URL) | `http://localhost:3000/api` | Base URL for all API requests                               |
-| `VITE_ENABLE_MSW`   | `boolean`      | `true`                      | Enable Mock Service Worker for local development            |
-| `VITE_ENABLE_DEBUG` | `boolean`      | `false`                     | Enable debug logging (session events, interceptor activity) |
+| Variable            | Type           | Default                 | Description                                                 |
+| ------------------- | -------------- | ----------------------- | ----------------------------------------------------------- |
+| `VITE_API_BASE_URL` | `string` (URL) | `http://localhost:3000` | Base URL for all API requests                               |
+| `VITE_ENABLE_MSW`   | `boolean`      | `true`                  | Enable Mock Service Worker for local development            |
+| `VITE_ENABLE_DEBUG` | `boolean`      | `false`                 | Enable debug logging (session events, interceptor activity) |
 
 ### Overriding Defaults
 
@@ -73,13 +73,21 @@ Vite loads `.env.local` automatically and it is gitignored by default.
 Environment variables are parsed in `src/shared/config/env.ts` using Zod's `safeParse`. If validation fails, the application logs a warning and falls back to default values rather than crashing. This ensures a smooth developer experience while still catching misconfiguration early.
 
 ```typescript
-// src/shared/config/env.ts
+// src/shared/config/env.ts (simplified)
+const DEFAULT_ENV = {
+    VITE_API_BASE_URL: 'http://localhost:3000',
+    VITE_ENABLE_MSW: true,
+    VITE_ENABLE_DEBUG: false,
+};
+
 const envSchema = z.object({
-    VITE_API_BASE_URL: z.string().url().default('http://localhost:3000/api'),
-    VITE_ENABLE_MSW: z.boolean().default(true),
-    VITE_ENABLE_DEBUG: z.boolean().default(false),
+    VITE_API_BASE_URL: z.url(),
+    VITE_ENABLE_MSW: booleanEnvSchema, // z.preprocess for string-to-boolean
+    VITE_ENABLE_DEBUG: booleanEnvSchema,
 });
 ```
+
+Each variable is individually validated with `safeParse`. If validation fails or the variable is missing, the default from `DEFAULT_ENV` is used.
 
 ---
 

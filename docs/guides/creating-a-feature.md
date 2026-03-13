@@ -45,7 +45,7 @@ src/features/
             └── [Name]Form.tsx    # UI component
 ```
 
-Not every feature needs every segment. A simple feature (like logout) may only have `model/` with a single hook.
+Not every feature needs every segment. A feature like `logout` has `api/`, `model/`, and `ui/`.
 
 ---
 
@@ -101,11 +101,12 @@ Write the API call in `api/endpoint.ts`:
 
 ```typescript
 // src/features/post/create-post/api/endpoint.ts
-import { httpClient } from '@shared/api';
+import { apiPost } from '@shared/api';
+import { createPostResponseSchema } from './dto';
 import type { CreatePostDto, CreatePostResponse } from './dto';
 
-export async function createPostEndpoint(dto: CreatePostDto): Promise<CreatePostResponse> {
-    return httpClient.post<CreatePostResponse>('/posts', dto);
+export async function createPost(dto: CreatePostDto): Promise<CreatePostResponse> {
+    return apiPost('/posts', dto, { schema: createPostResponseSchema });
 }
 ```
 
@@ -134,7 +135,7 @@ Write the business logic hook in `model/use-[name].ts`:
 // src/features/post/create-post/model/use-create-post.ts
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
-import { createPostEndpoint } from '../api/endpoint';
+import { createPost } from '../api/endpoint';
 import type { CreatePostDto } from '../api/dto';
 
 export function useCreatePost() {
@@ -142,7 +143,7 @@ export function useCreatePost() {
     const navigate = useNavigate();
 
     return useMutation({
-        mutationFn: (dto: CreatePostDto) => createPostEndpoint(dto),
+        mutationFn: (dto: CreatePostDto) => createPost(dto),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['posts'] });
             navigate({ to: '/posts' });
@@ -230,7 +231,7 @@ src/features/auth/login/
 ├── index.ts                        # Exports: LoginForm
 ├── api/
 │   ├── dto.ts                      # LoginDto, LoginResponse
-│   └── endpoint.ts                 # loginEndpoint (POST /auth/login, skipAuth)
+│   └── endpoint.ts                 # login() (POST /auth/login, skipAuth)
 ├── model/
 │   ├── use-login.ts                # TanStack Query mutation + session store update
 │   └── login-form-schema.ts        # Zod schema (email + password validation)

@@ -26,9 +26,9 @@ The API layer is organized as follows:
 src/shared/api/
 ├── index.ts                          # Public barrel
 └── http/
-    ├── client.ts                     # Axios instance and httpClient facade
-    ├── http-methods.ts               # Typed get/post/put/patch/delete
-    ├── http-config.ts                # Axios config defaults
+    ├── client.ts                     # Axios instance (raw httpClient)
+    ├── http-methods.ts               # Typed apiGet/apiPost/apiPut/apiPatch/apiDelete
+    ├── http-config.ts                # Request config interfaces
     ├── session-adapter.ts            # Token access bridge
     ├── refresh-controller.ts         # Single-flight token refresh
     ├── interceptors/
@@ -42,15 +42,7 @@ src/shared/api/
 
 ## HTTP Client
 
-The HTTP client is a facade that wraps an Axios instance and exposes typed methods for each HTTP verb. It is created in `src/shared/api/http/client.ts`.
-
-```typescript
-import { httpClient } from '@shared/api';
-
-// All methods return typed responses
-const users = await httpClient.get<User[]>('/users');
-const created = await httpClient.post<User>('/users', { name: 'Alice' });
-```
+The HTTP client is a raw Axios instance created in `src/shared/api/http/client.ts`. It is configured with base URL, timeout, default headers, and auth interceptors. You should not use `httpClient` directly in feature or entity code -- use the typed HTTP methods instead (see below).
 
 The client automatically:
 
@@ -62,23 +54,23 @@ The client automatically:
 
 ## Typed HTTP Methods
 
-Each HTTP method is defined in `src/shared/api/http/http-methods.ts` and provides full generic type safety:
+Each HTTP method is defined in `src/shared/api/http/http-methods.ts`. These are the functions you should use in feature endpoints and entity API layers. Every method validates the response against a Zod schema before returning.
 
-| Method     | Signature                             | Purpose                   |
-| ---------- | ------------------------------------- | ------------------------- |
-| `get<T>`   | `(url, config?) => Promise<T>`        | Fetch resources           |
-| `post<T>`  | `(url, data?, config?) => Promise<T>` | Create resources          |
-| `put<T>`   | `(url, data?, config?) => Promise<T>` | Full resource replacement |
-| `patch<T>` | `(url, data?, config?) => Promise<T>` | Partial resource update   |
-| `del<T>`   | `(url, config?) => Promise<T>`        | Delete resources          |
+| Method         | Signature                                                    | Purpose                   |
+| -------------- | ------------------------------------------------------------ | ------------------------- |
+| `apiGet<T>`    | `(url, options: { schema, params?, config? }) => Promise<T>` | Fetch resources           |
+| `apiPost<T>`   | `(url, body, options: { schema, config? }) => Promise<T>`    | Create resources          |
+| `apiPut<T>`    | `(url, body, options: { schema, config? }) => Promise<T>`    | Full resource replacement |
+| `apiPatch<T>`  | `(url, body, options: { schema, config? }) => Promise<T>`    | Partial resource update   |
+| `apiDelete<T>` | `(url, options: { schema, config? }) => Promise<T>`          | Delete resources          |
 
-The generic type parameter `T` types the response data, not the raw Axios response.
+The generic type parameter `T` is inferred from the Zod schema. Each method internally uses `httpClient`, calls `parseWithSchema()` on the response, and normalizes errors via `normalizeApiError()`.
 
 ---
 
 ## Configuration
 
-HTTP defaults are defined in `src/shared/api/http/http-config.ts`:
+HTTP configuration interfaces are defined in `src/shared/api/http/http-config.ts`. The Axios instance defaults are set in `src/shared/api/http/client.ts`:
 
 | Setting                | Value                        | Description                                      |
 | ---------------------- | ---------------------------- | ------------------------------------------------ |
@@ -88,7 +80,7 @@ HTTP defaults are defined in `src/shared/api/http/http-config.ts`:
 | `headers.Accept`       | `application/json`           | Default accept header                            |
 | `withCredentials`      | `true`                       | Send cookies (needed for httpOnly refresh token) |
 
-These defaults can be overridden per-request via the config parameter.
+The `HttpRequestConfig` interface extends Axios config with additional fields like `skipAuth` (boolean) to control interceptor behavior. These defaults can be overridden per-request via the config parameter.
 
 ---
 
@@ -140,11 +132,25 @@ All API errors are normalized to a consistent `ApiError` interface via the `norm
 interface ApiError {
     code: ApiErrorCode;
     message: string;
-    status: number | null;
+    status?: number;
     isRetryable: boolean;
-    traceId: string | null;
+    traceId?: string;
     timestamp: string;
-    details: Record<string, unknown> | null;
+    path?: string;
+    method?: string;
+    details?: ApiErrorDetails;
+}
+
+interface ApiErrorDetails {
+    reason?: string;
+    fields?: FieldError[];
+    meta?: Record<string, unknown>;
+}
+
+interface FieldError {
+    field: string;
+    message: string;
+    code?: string;
 }
 ```
 
@@ -168,9 +174,11 @@ interface ApiError {
 
 ```typescript
 import { normalizeApiError } from '@shared/api';
+import { apiGet } from '@shared/api';
+import { userSchema } from '@entities/user';
 
 try {
-    const data = await httpClient.get<User>('/me');
+    const user = await apiGet<User>('/me', { schema: userSchema });
 } catch (error) {
     const apiError = normalizeApiError(error);
     if (apiError.isRetryable) {
@@ -184,18 +192,19 @@ try {
 
 ## Zod Validation
 
-API responses should be validated at runtime using `parseWithSchema()` from `@shared/lib`:
+API response validation is built into the typed HTTP methods. When you call `apiGet`, `apiPost`, etc., you pass a Zod schema and the response is validated automatically via `parseWithSchema()`:
 
 ```typescript
-import { parseWithSchema } from '@shared/lib/parse-with-schema';
+import { apiGet } from '@shared/api';
 import { userSchema } from '@entities/user';
 
-const rawData = await httpClient.get('/me');
-const user = parseWithSchema(userSchema, rawData);
-// user is now fully typed and validated
+// Response is validated against userSchema before being returned
+const user = await apiGet<User>('/me', { schema: userSchema });
 ```
 
 `parseWithSchema()` throws a `ZodError` if validation fails, ensuring that unexpected API response shapes are caught immediately rather than causing runtime errors downstream.
+
+For standalone usage outside the typed HTTP methods, `parseWithSchema()` is available from `@shared/lib`:
 
 ---
 
@@ -204,8 +213,9 @@ const user = parseWithSchema(userSchema, rawData);
 Some endpoints (login, public data) should not include an auth token. Pass `skipAuth: true` in the request config:
 
 ```typescript
-const response = await httpClient.post<LoginResponse>('/auth/login', credentials, {
-    skipAuth: true,
+const response = await apiPost<LoginResponse>('/auth/login', credentials, {
+    schema: loginResponseSchema,
+    config: { skipAuth: true },
 });
 ```
 
@@ -219,11 +229,15 @@ This tells the request interceptor to skip attaching the Bearer token.
 
 ```typescript
 // src/features/auth/login/api/endpoint.ts
-import { httpClient } from '@shared/api';
-import type { LoginDto, LoginResponse } from './dto';
+import { apiPost } from '@shared/api';
+import { loginResponseDtoSchema } from './dto';
+import type { LoginRequestDto, LoginResponseDto } from './dto';
 
-export async function loginEndpoint(dto: LoginDto): Promise<LoginResponse> {
-    return httpClient.post<LoginResponse>('/auth/login', dto, { skipAuth: true });
+export async function login(credentials: LoginRequestDto): Promise<LoginResponseDto> {
+    return apiPost(AUTH_ENDPOINTS.login, credentials, {
+        schema: loginResponseDtoSchema,
+        config: { skipAuth: true, withCredentials: true },
+    });
 }
 ```
 

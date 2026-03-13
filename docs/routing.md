@@ -62,8 +62,8 @@ Routes are created using TanStack Router's `createRoute` API:
 ```typescript
 const dashboardRoute = createRoute({
     getParentRoute: () => protectedLayoutRoute,
-    path: '/dashboard',
-    beforeLoad: () => createRoleGuard('user'),
+    path: ROUTE_PATHS.dashboard,
+    beforeLoad: createRoleGuard('user'),
     component: DashboardPage,
 });
 ```
@@ -101,7 +101,7 @@ Guards are functions that run in `beforeLoad` before a route renders. They inspe
 Checks if the user is authenticated. If not, redirects to `/login`.
 
 ```typescript
-beforeLoad: ({ context }) => authGuard(context),
+beforeLoad: authGuard,
 ```
 
 ### `guestGuard`
@@ -111,7 +111,7 @@ beforeLoad: ({ context }) => authGuard(context),
 Checks if the user is unauthenticated. If they are already logged in, redirects to their role's home page using `getRoleHomePath()`.
 
 ```typescript
-beforeLoad: ({ context }) => guestGuard(context),
+beforeLoad: guestGuard,
 ```
 
 ### `createRoleGuard`
@@ -121,7 +121,7 @@ beforeLoad: ({ context }) => guestGuard(context),
 Factory function that creates a guard requiring one or more specific roles. If the user lacks the required role, redirects to `/unauthorized`.
 
 ```typescript
-beforeLoad: ({ context }) => createRoleGuard('admin')(context),
+beforeLoad: createRoleGuard('admin'),
 ```
 
 ### Guard Execution Flow
@@ -130,11 +130,16 @@ beforeLoad: ({ context }) => createRoleGuard('admin')(context),
 User navigates to /admin
   |
   v
-beforeLoad runs createRoleGuard('admin')
+Protected layout beforeLoad runs authGuard
   |
   ├── Not authenticated?  -->  Redirect to /login
-  ├── Authenticated but not admin?  -->  Redirect to /unauthorized
-  └── Authenticated admin?  -->  Allow, render AdminDashboardPage
+  └── Authenticated?  -->  Continue to admin-layout route
+                               |
+                               v
+                         admin-layout beforeLoad runs createRoleGuard('admin')
+                               |
+                               ├── Not admin?  -->  Redirect to /unauthorized
+                               └── Is admin?   -->  Allow, render AdminDashboardPage
 ```
 
 ---

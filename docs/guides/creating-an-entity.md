@@ -159,18 +159,23 @@ export function mapProductDtoToProduct(dto: ProductDto): Product {
 
 ```typescript
 // src/entities/product/api/endpoints.ts
-import { httpClient } from '@shared/api';
+import { apiGet } from '@shared/api';
+import { productSchema } from '../model/schema';
 import { mapProductDtoToProduct } from './mappers';
 import type { ProductDto } from './dto';
 import type { Product } from '../model/types';
 
 export async function fetchProducts(): Promise<Product[]> {
-    const dtos = await httpClient.get<ProductDto[]>('/products');
+    const dtos = await apiGet<ProductDto[]>('/products', {
+        schema: z.array(productDtoSchema),
+    });
     return dtos.map(mapProductDtoToProduct);
 }
 
 export async function fetchProductById(id: string): Promise<Product> {
-    const dto = await httpClient.get<ProductDto>(`/products/${id}`);
+    const dto = await apiGet<ProductDto>(`/products/${id}`, {
+        schema: productDtoSchema,
+    });
     return mapProductDtoToProduct(dto);
 }
 ```

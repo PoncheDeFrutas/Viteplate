@@ -38,17 +38,26 @@ The session store is the primary Zustand store in Viteplate. It is a **vanilla s
 
 #### Store Shape
 
+The store separates state from actions:
+
 ```typescript
 interface SessionState {
     accessToken: string | null;
     user: User | null;
+}
+
+interface SessionActions {
     setAccessToken: (token: string) => void;
     setUser: (user: User) => void;
-    clearSession: (reason: string) => void;
+    clearSession: (reason: SessionCleanupReason) => void;
+    hasRole: (role: Role) => boolean;
     isAuthenticated: () => boolean;
-    hasRole: (role: string) => boolean;
 }
+
+type SessionStore = SessionState & SessionActions;
 ```
+
+`SessionCleanupReason` is a union: `'logout' | 'missing_refresh_token' | 'refresh_failed' | 'manual_reset'`. `Role` is `'admin' | 'user' | 'viewer'`.
 
 #### Reading State in React
 
@@ -123,7 +132,7 @@ The `useSession` hook wraps the vanilla store with `useStore` for React componen
 | `staleTime`            | 60 seconds | Data is fresh for 1 minute before background refetch       |
 | `gcTime`               | 5 minutes  | Unused cache entries are garbage collected after 5 minutes |
 | `retry` (queries)      | 1          | One retry attempt on query failure                         |
-| `retry` (mutations)    | 0          | No retries for mutations (they are not idempotent)         |
+| `retry` (mutations)    | `false`    | No retries for mutations (they are not idempotent)         |
 | `refetchOnWindowFocus` | `false`    | No automatic refetch when the window regains focus         |
 
 ### Query Patterns
@@ -165,12 +174,12 @@ Feature mutations are defined in the feature's `model/` segment:
 ```typescript
 // src/features/auth/login/model/use-login.ts
 import { useMutation } from '@tanstack/react-query';
-import { loginEndpoint } from '../api/endpoint';
+import { login } from '../api/endpoint';
 import { sessionStore } from '@entities/session';
 
 export function useLogin() {
     return useMutation({
-        mutationFn: loginEndpoint,
+        mutationFn: login,
         onSuccess: (data) => {
             sessionStore.getState().setAccessToken(data.accessToken);
             sessionStore.getState().setUser(data.user);

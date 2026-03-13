@@ -98,7 +98,9 @@ src/
 │       │   ├── model/              # use-login.ts, login-form-schema.ts
 │       │   └── ui/                 # LoginForm.tsx
 │       ├── logout/                 # Logout feature
-│       │   └── model/              # use-logout.ts
+│       │   ├── api/                # endpoint.ts
+│       │   ├── model/              # use-logout.ts
+│       │   └── ui/                 # LogoutButton or similar
 │       └── refresh-session/        # Session refresh feature
 │           └── model/              # use-refresh-session.ts
 │
@@ -127,7 +129,9 @@ src/
 │       ├── input/                  # Button, Input, Label
 │       ├── display/                # Avatar, Badge, CodeBlock, Kbd, ProgressBar, Separator, Skeleton
 │       ├── feedback/               # Spinner, ErrorMessage, EmptyState
-│       └── layout/                 # Card, Container
+│       ├── layout/                 # Card, Container
+│       ├── navigation/             # (reserved for future use)
+│       └── overlay/                # (reserved for future use)
 │
 └── main.tsx                        # Entry point (outside app/)
 

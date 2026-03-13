@@ -76,12 +76,11 @@ test/
 │           └── http/
 │               └── client.test.ts
 ├── integration/                # Integration tests
-│   └── features/
-│       └── auth/
-│           ├── login.test.tsx
-│           ├── logout.test.tsx
-│           ├── guards.test.tsx
-│           └── refresh-session.test.tsx
+│   └── auth/
+│       ├── login.test.tsx
+│       ├── logout.test.tsx
+│       ├── guards.test.tsx
+│       └── refresh-session.test.tsx
 ├── msw/                        # MSW configuration
 │   ├── index.ts                # Barrel export (server + handlers)
 │   ├── server.ts               # Node MSW server instance
@@ -137,11 +136,11 @@ The auth handlers simulate:
 
 Three user fixtures cover all roles:
 
-| Fixture       | Email             | Role     | Password   |
-| ------------- | ----------------- | -------- | ---------- |
-| `adminUser`   | `admin@test.com`  | `admin`  | `password` |
-| `regularUser` | `user@test.com`   | `user`   | `password` |
-| `viewerUser`  | `viewer@test.com` | `viewer` | `password` |
+| Fixture             | Email                  | Role     | Password    |
+| ------------------- | ---------------------- | -------- | ----------- |
+| `MOCK_ADMIN_USER`   | `admin@viteplate.dev`  | `admin`  | `admin123`  |
+| `MOCK_REGULAR_USER` | `user@viteplate.dev`   | `user`   | `user123`   |
+| `MOCK_VIEWER_USER`  | `viewer@viteplate.dev` | `viewer` | `viewer123` |
 
 ### Handler State
 
@@ -219,8 +218,8 @@ describe('Login', () => {
         const user = userEvent.setup();
         await renderApp('/login');
 
-        await user.type(screen.getByLabelText(/email/i), 'admin@test.com');
-        await user.type(screen.getByLabelText(/password/i), 'password');
+        await user.type(screen.getByLabelText(/email/i), 'admin@viteplate.dev');
+        await user.type(screen.getByLabelText(/password/i), 'admin123');
         await user.click(screen.getByRole('button', { name: /sign in/i }));
 
         await waitFor(() => {
@@ -258,12 +257,12 @@ it('redirects unauthenticated user from /dashboard to /login', async () => {
 
 21 tests across 4 files:
 
-| File                                                 | Tests | Coverage                                                 |
-| ---------------------------------------------------- | ----- | -------------------------------------------------------- |
-| `integration/features/auth/login.test.tsx`           | 5     | Login form, validation, successful login, error handling |
-| `integration/features/auth/logout.test.tsx`          | 1     | Logout clears session and redirects                      |
-| `integration/features/auth/guards.test.tsx`          | 13    | Auth guard, guest guard, role guard for all roles        |
-| `integration/features/auth/refresh-session.test.tsx` | 2     | Session recovery on boot                                 |
+| File                                        | Tests | Coverage                                                 |
+| ------------------------------------------- | ----- | -------------------------------------------------------- |
+| `integration/auth/login.test.tsx`           | 5     | Login form, validation, successful login, error handling |
+| `integration/auth/logout.test.tsx`          | 1     | Logout clears session and redirects                      |
+| `integration/auth/guards.test.tsx`          | 13    | Auth guard, guest guard, role guard for all roles        |
+| `integration/auth/refresh-session.test.tsx` | 2     | Session recovery on boot                                 |
 
 ---
 

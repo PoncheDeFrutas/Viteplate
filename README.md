@@ -24,8 +24,6 @@ Rather than being a minimal boilerplate, Viteplate ships with a fully implemente
 
 ## Table of Contents
 
-- [Overview](#overview)
-- [Table of Contents](#table-of-contents)
 - [Tech Stack](#tech-stack)
     - [Core](#core)
     - [Routing and Data](#routing-and-data)
@@ -193,11 +191,11 @@ pnpm test -- --run
 
 All variables are validated at startup with Zod and have sensible defaults.
 
-| Variable            | Type           | Default                     | Description                     |
-| ------------------- | -------------- | --------------------------- | ------------------------------- |
-| `VITE_API_BASE_URL` | `string` (URL) | `http://localhost:3000/api` | Base URL for all API requests   |
-| `VITE_ENABLE_MSW`   | `boolean`      | `true`                      | Enable MSW request interception |
-| `VITE_ENABLE_DEBUG` | `boolean`      | `false`                     | Enable debug logging            |
+| Variable            | Type           | Default                 | Description                     |
+| ------------------- | -------------- | ----------------------- | ------------------------------- |
+| `VITE_API_BASE_URL` | `string` (URL) | `http://localhost:3000` | Base URL for all API requests   |
+| `VITE_ENABLE_MSW`   | `boolean`      | `true`                  | Enable MSW request interception |
+| `VITE_ENABLE_DEBUG` | `boolean`      | `false`                 | Enable debug logging            |
 
 Create a `.env.local` file in the project root to override defaults:
 

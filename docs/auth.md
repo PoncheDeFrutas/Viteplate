@@ -85,13 +85,13 @@ The session store is a Zustand **vanilla store** (not a React hook store) that h
 
 ### Actions
 
-| Action            | Signature                   | Description                                  |
-| ----------------- | --------------------------- | -------------------------------------------- |
-| `setAccessToken`  | `(token: string) => void`   | Store a new access token                     |
-| `setUser`         | `(user: User) => void`      | Store the authenticated user                 |
-| `clearSession`    | `(reason: string) => void`  | Clear all session state (logs reason in DEV) |
-| `isAuthenticated` | `() => boolean`             | Check if an access token exists              |
-| `hasRole`         | `(role: string) => boolean` | Check if the user has a specific role        |
+| Action            | Signature                                | Description                                  |
+| ----------------- | ---------------------------------------- | -------------------------------------------- |
+| `setAccessToken`  | `(token: string) => void`                | Store a new access token                     |
+| `setUser`         | `(user: User) => void`                   | Store the authenticated user                 |
+| `clearSession`    | `(reason: SessionCleanupReason) => void` | Clear all session state (logs reason in DEV) |
+| `isAuthenticated` | `() => boolean`                          | Check if an access token exists              |
+| `hasRole`         | `(role: Role) => boolean`                | Check if the user has a specific role        |
 
 ### Access Hook
 
@@ -117,12 +117,15 @@ const isAdmin = useSession((s) => s.hasRole('admin'));
 
 The session adapter is a **bridge** between the Zustand session store (in `entities/`) and the HTTP interceptors (in `shared/`). This respects the FSD dependency rule -- `shared/` cannot import from `entities/`, so the adapter provides pluggable token access functions.
 
-| Method                  | Description                                                                      |
-| ----------------------- | -------------------------------------------------------------------------------- |
-| `getAccessToken()`      | Retrieves the current access token from the session store                        |
-| `setAccessToken(token)` | Stores a new access token in the session store                                   |
-| `getRefreshToken()`     | Returns the sentinel string `"httponly"` (actual token is in an httpOnly cookie) |
-| `clearSession()`        | Clears all session state via the store                                           |
+| Method                                 | Description                                                                      |
+| -------------------------------------- | -------------------------------------------------------------------------------- |
+| `getAccessToken()`                     | Retrieves the current access token from the session store                        |
+| `getRefreshToken()`                    | Returns the sentinel string `"httponly"` (actual token is in an httpOnly cookie) |
+| `setTokens(accessToken, refreshToken)` | Stores the new access token (refresh token is ignored -- backend manages it)     |
+| `clearSession(reason)`                 | Clears all session state via the store (optional method)                         |
+| `clearTokens()`                        | Clears token state (optional method)                                             |
+
+`clearSession` accepts a `SessionCleanupReason` parameter: `'logout'`, `'missing_refresh_token'`, `'refresh_failed'`, or `'manual_reset'`.
 
 The adapter is injected into interceptors and the refresh controller at initialization time.
 
@@ -140,7 +143,7 @@ LoginForm (features/auth/login/ui)
 useLogin mutation hook (features/auth/login/model)
   |
   v
-loginEndpoint(dto) with skipAuth: true (features/auth/login/api)
+login(dto) with skipAuth: true (features/auth/login/api)
   |
   v
 POST /auth/login  -->  Server returns { accessToken, user }
@@ -217,13 +220,13 @@ User clicks logout
 useLogout mutation hook (features/auth/logout/model)
   |
   v
-logoutEndpoint() (features/auth/logout/api)
+logout() (features/auth/logout/api)
   |
   v
 POST /auth/logout  -->  Server invalidates refresh token
   |
   v
-sessionStore.clearSession('user-logout')
+sessionStore.clearSession('logout')
   |
   v
 navigate to /login
@@ -270,7 +273,9 @@ Guards run in TanStack Router's `beforeLoad` hook before a route renders.
 
 **Purpose:** Require unauthenticated state.
 **Behavior:** If `isAuthenticated()` returns true, redirect to `getRoleHomePath(user.role)`.
-**Used by:** Login page, home page.
+**Used by:** Login page.
+
+Note: The home page uses custom inline logic for its redirect (not `guestGuard`).
 
 ### `createRoleGuard(...roles)`
 

@@ -82,7 +82,7 @@ export interface SidebarItem {
 }
 
 export const SIDEBAR_ITEMS: SidebarItem[] = [
-    { label: 'Dashboard', path: ROUTE_PATHS.DASHBOARD, icon: Home, roles: ['user', 'admin'] },
+    { label: 'Dashboard', path: ROUTE_PATHS.dashboard, icon: Home, roles: ['user', 'admin'] },
     { label: 'Users', path: '/users', icon: Users, roles: ['admin'] },
     { label: 'Analytics', path: '/analytics', icon: BarChart, roles: ['admin'] },
     { label: 'Settings', path: '/settings', icon: Settings, roles: ['user', 'admin'] },
@@ -209,38 +209,50 @@ src/widgets/navbar/
 
 ### How It Works
 
-**`nav-config.ts`** defines all possible navigation items with role constraints:
+**`nav-config.ts`** defines navigation items organized by context (public vs. role-based):
 
 ```typescript
 export interface NavItem {
     label: string;
-    path: string;
-    roles?: string[]; // Undefined = visible to all
+    to: string;
 }
 
 export const PUBLIC_NAV_ITEMS: NavItem[] = [
-    { label: 'Home', path: ROUTE_PATHS.HOME },
-    { label: 'About', path: ROUTE_PATHS.ABOUT },
-    { label: 'Stack', path: ROUTE_PATHS.STACK },
+    { label: 'Home', to: ROUTE_PATHS.home },
+    { label: 'About', to: ROUTE_PATHS.about },
+    { label: 'Stack', to: ROUTE_PATHS.stack },
+    { label: 'Sign in', to: ROUTE_PATHS.login },
 ];
 
-export const AUTH_NAV_ITEMS: NavItem[] = [
-    { label: 'Dashboard', path: ROUTE_PATHS.DASHBOARD, roles: ['user'] },
-    { label: 'Dashboard', path: ROUTE_PATHS.ADMIN, roles: ['admin'] },
-    { label: 'Settings', path: ROUTE_PATHS.ADMIN_SETTINGS, roles: ['admin'] },
-    { label: 'Overview', path: ROUTE_PATHS.VIEWER, roles: ['viewer'] },
+const ADMIN_NAV_ITEMS: NavItem[] = [
+    { label: 'Dashboard', to: ROUTE_PATHS.admin },
+    { label: 'Settings', to: ROUTE_PATHS.adminSettings },
 ];
+
+const USER_NAV_ITEMS: NavItem[] = [{ label: 'Dashboard', to: ROUTE_PATHS.dashboard }];
+
+const VIEWER_NAV_ITEMS: NavItem[] = [{ label: 'Overview', to: ROUTE_PATHS.overview }];
 ```
 
-**`use-nav-items.ts`** filters items by the current user's role:
+Navigation items are grouped into separate arrays per role, and a `getNavItemsForRole(role)` function returns the correct set for a given role.
+
+**`use-nav-items.ts`** resolves items based on the current user's role:
 
 ```typescript
-export function useNavItems(): NavItem[] {
-    const role = useSession((s) => s.user?.role);
-    return useMemo(
-        () => AUTH_NAV_ITEMS.filter((item) => !item.roles || item.roles.includes(role ?? '')),
-        [role],
-    );
+interface UseNavItemsResult {
+    items: NavItem[];
+    userName: string | null;
+    isAuthenticated: boolean;
+}
+
+export function useNavItems(): UseNavItemsResult {
+    const user = useSession((s) => s.user);
+    const isAuthenticated = useSession((s) => s.isAuthenticated());
+
+    const items = isAuthenticated && user ? getNavItemsForRole(user.role as Role) : [];
+    const userName = user?.name ?? null;
+
+    return { items, userName, isAuthenticated };
 }
 ```
 

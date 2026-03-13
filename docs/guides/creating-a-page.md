@@ -105,7 +105,7 @@ import { SettingsPage } from '@pages/settings';
 const settingsRoute = createRoute({
     getParentRoute: () => protectedLayoutRoute,
     path: '/settings',
-    beforeLoad: ({ context }) => createRoleGuard('user', 'admin')(context),
+    beforeLoad: createRoleGuard('user', 'admin'),
     component: SettingsPage,
 });
 ```
@@ -127,7 +127,7 @@ const protectedRoutes = protectedLayoutRoute.addChildren([
 If the page should appear in the navbar, update `src/widgets/navbar/nav-config.ts`:
 
 ```typescript
-{ label: 'Settings', path: ROUTE_PATHS.SETTINGS, roles: ['user', 'admin'] },
+{ label: 'Settings', to: ROUTE_PATHS.settings },
 ```
 
 And add the route path to `src/shared/config/constants.ts`:
@@ -135,7 +135,7 @@ And add the route path to `src/shared/config/constants.ts`:
 ```typescript
 export const ROUTE_PATHS = {
     // ... existing paths
-    SETTINGS: '/settings',
+    settings: '/settings',
 } as const;
 ```
 
@@ -195,8 +195,8 @@ Add `createRoleGuard` in `beforeLoad`:
 ```typescript
 const adminRoute = createRoute({
     getParentRoute: () => protectedLayoutRoute,
-    path: '/admin',
-    beforeLoad: ({ context }) => createRoleGuard('admin')(context),
+    path: ROUTE_PATHS.admin,
+    beforeLoad: createRoleGuard('admin'),
     component: AdminDashboardPage,
 });
 ```
@@ -206,8 +206,8 @@ const adminRoute = createRoute({
 ```typescript
 const loginRoute = createRoute({
     getParentRoute: () => publicLayoutRoute,
-    path: '/login',
-    beforeLoad: ({ context }) => guestGuard(context),
+    path: ROUTE_PATHS.login,
+    beforeLoad: guestGuard,
     component: LoginPage,
 });
 ```
