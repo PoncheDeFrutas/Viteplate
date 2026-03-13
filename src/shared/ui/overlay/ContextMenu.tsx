@@ -1,6 +1,6 @@
 import * as ContextMenuPrimitive from '@radix-ui/react-context-menu';
-import { Check, ChevronRight, Circle } from 'lucide-react';
 import { cn } from '@shared/lib/cn';
+import { Check, ChevronRight, Circle } from 'lucide-react';
 import type { ComponentPropsWithoutRef } from 'react';
 
 // ---------------------------------------------------------------------------
@@ -49,7 +49,7 @@ export function ContextMenuItem({ className, inset, ...props }: ContextMenuItemP
             className={cn(
                 'relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors',
                 'focus:bg-accent focus:text-accent-foreground',
-                'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+                'data-disabled:pointer-events-none data-disabled:opacity-50',
                 inset && 'pl-8',
                 className,
             )}
@@ -77,7 +77,7 @@ export function ContextMenuCheckboxItem({
             className={cn(
                 'relative flex cursor-default select-none items-center rounded-sm py-1.5 pr-2 pl-8 text-sm outline-none transition-colors',
                 'focus:bg-accent focus:text-accent-foreground',
-                'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+                'data-disabled:pointer-events-none data-disabled:opacity-50',
                 className,
             )}
             checked={checked}
@@ -105,7 +105,7 @@ export function ContextMenuRadioItem({ className, children, ...props }: ContextM
             className={cn(
                 'relative flex cursor-default select-none items-center rounded-sm py-1.5 pr-2 pl-8 text-sm outline-none transition-colors',
                 'focus:bg-accent focus:text-accent-foreground',
-                'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+                'data-disabled:pointer-events-none data-disabled:opacity-50',
                 className,
             )}
             {...props}

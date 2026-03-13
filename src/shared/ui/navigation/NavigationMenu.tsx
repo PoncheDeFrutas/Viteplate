@@ -137,7 +137,7 @@ function NavigationMenuViewport() {
         <div className="absolute left-0 top-full flex justify-center">
             <NavMenuPrimitive.Viewport
                 className={cn(
-                    'origin-top-center relative mt-1.5 h-[var(--radix-navigation-menu-viewport-height)] w-full overflow-hidden rounded-md border border-border bg-popover text-popover-foreground shadow-lg',
+                    'origin-top-center relative mt-1.5 h-(--radix-navigation-menu-viewport-height) w-full overflow-hidden rounded-md border border-border bg-popover text-popover-foreground shadow-lg',
                     'data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-90',
                     'data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95',
                     'md:w-[var(--radix-navigation-menu-viewport-width)]',
@@ -157,7 +157,7 @@ export function NavigationMenuIndicator({ className, ...props }: NavigationMenuI
     return (
         <NavMenuPrimitive.Indicator
             className={cn(
-                'top-full z-[1] flex h-1.5 items-end justify-center overflow-hidden',
+                'top-full z-1 flex h-1.5 items-end justify-center overflow-hidden',
                 'data-[state=visible]:animate-in data-[state=visible]:fade-in',
                 'data-[state=hidden]:animate-out data-[state=hidden]:fade-out',
                 className,
