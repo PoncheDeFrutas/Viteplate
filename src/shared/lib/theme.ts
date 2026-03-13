@@ -61,7 +61,23 @@ export function setStoredTheme(theme: Theme): void {
 // DOM
 // ---------------------------------------------------------------------------
 
-/** Applies the theme by toggling the `dark` class on the `<html>` element. */
+/**
+ * Applies the theme by toggling the `dark` class on the `<html>` element.
+ *
+ * When the View Transitions API is available (Chromium 111+) the change is
+ * wrapped in `document.startViewTransition()` so the browser cross-fades the
+ * old and new snapshots at the compositor level — smooth, zero per-element
+ * transition cost. On browsers that don't support the API the toggle happens
+ * instantly (no degraded UX, just no animation).
+ */
 export function applyThemeToDocument(theme: Theme): void {
-    document.documentElement.classList.toggle('dark', theme === 'dark');
+    const apply = () => {
+        document.documentElement.classList.toggle('dark', theme === 'dark');
+    };
+
+    if (document.startViewTransition) {
+        document.startViewTransition(apply);
+    } else {
+        apply();
+    }
 }
