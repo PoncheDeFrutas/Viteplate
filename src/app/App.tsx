@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { useSession } from '@entities/session';
 import { QueryProvider } from './providers/query';
 import { AppRouterProvider } from './providers/router';
 import type { RouterContext } from './routers';
@@ -9,18 +10,19 @@ import type { RouterContext } from './routers';
  * Composes global providers in the correct order:
  *   QueryProvider → AppRouterProvider
  *
- * The router context is currently hardcoded as unauthenticated.
- * Once the session store (Zustand) is implemented, it will provide
- * real `isAuthenticated` and `role` values here.
+ * Router context is derived from the Zustand session store so that
+ * guards react to auth state changes in real time.
  */
 export function App() {
-    // TODO: Replace with values from the session store once implemented
+    const accessToken = useSession((s) => s.accessToken);
+    const role = useSession((s) => s.user?.role ?? null);
+
     const routerContext: RouterContext = useMemo(
         () => ({
-            isAuthenticated: false,
-            role: null,
+            isAuthenticated: accessToken !== null,
+            role,
         }),
-        [],
+        [accessToken, role],
     );
 
     return (
