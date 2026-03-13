@@ -80,6 +80,9 @@
     /* Disabled tokens */
     --disabled: var(--zinc-100);
     --disabled-foreground: var(--zinc-400);
+
+    /* Decorative */
+    --dot-grid: var(--zinc-300);
 }
 
 /* =========================
@@ -137,6 +140,9 @@
     /* Disabled */
     --disabled: 24 24 27;
     --disabled-foreground: 63 63 70;
+
+    /* Decorative */
+    --dot-grid: 63 63 70;
 }
 
 /* =========================
@@ -214,25 +220,6 @@
     ::after {
         border-color: rgb(var(--border));
     }
-}
-
-/*
- * Theme transition — applied outside @layer so it wins over any
- * layer-level rule and every element transitions at the same speed.
- * The properties list covers backgrounds, text, borders, SVG fills
- * (Spinner), outlines, and box-shadows so nothing lags behind.
- */
-*,
-*::before,
-*::after {
-    transition:
-        background-color 400ms ease,
-        border-color 400ms ease,
-        color 400ms ease,
-        fill 400ms ease,
-        stroke 400ms ease,
-        outline-color 400ms ease,
-        box-shadow 400ms ease;
 }
 
 /* =========================
@@ -337,5 +324,47 @@
 
     .accordion-flush [data-accordion-item] + [data-accordion-item] {
         border-top: 1px solid rgb(var(--border));
+    }
+}
+
+/* =========================
+   Components: Skeleton shimmer
+   ========================= */
+@layer components {
+    @keyframes skeleton-shimmer {
+        0% {
+            background-position: -200% 0;
+        }
+
+        100% {
+            background-position: 200% 0;
+        }
+    }
+
+    .skeleton-shimmer {
+        background: linear-gradient(
+            90deg,
+            rgb(var(--muted)) 0%,
+            rgb(var(--muted-foreground) / 0.08) 50%,
+            rgb(var(--muted)) 100%
+        );
+        background-size: 200% 100%;
+        animation: skeleton-shimmer 1.8s ease-in-out infinite;
+    }
+}
+
+/* =========================
+   Components: Decorative dot grid
+   ========================= */
+@layer components {
+    .dot-grid {
+        background-image: radial-gradient(circle, rgb(var(--dot-grid)) 1px, transparent 1px);
+        background-size: 24px 24px;
+        mask-image: radial-gradient(ellipse 70% 50% at 50% 50%, black 20%, transparent 100%);
+        -webkit-mask-image: radial-gradient(
+            ellipse 70% 50% at 50% 50%,
+            black 20%,
+            transparent 100%
+        );
     }
 }

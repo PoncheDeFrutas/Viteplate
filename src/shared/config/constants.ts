@@ -30,7 +30,27 @@ export const STORAGE_KEYS = {
 
 export const ROUTE_PATHS = {
     home: '/',
+    about: '/about',
+    stack: '/stack',
     login: '/login',
     dashboard: '/dashboard',
+    admin: '/admin',
+    adminSettings: '/admin/settings',
+    overview: '/overview',
     unauthorized: '/unauthorized',
 } as const;
+
+/**
+ * Returns the default home path for a given role.
+ * Used by guards and redirects to send users to their role-specific page.
+ */
+export function getRoleHomePath(role: string | null): string {
+    switch (role) {
+        case 'admin':
+            return ROUTE_PATHS.admin;
+        case 'viewer':
+            return ROUTE_PATHS.overview;
+        default:
+            return ROUTE_PATHS.dashboard;
+    }
+}

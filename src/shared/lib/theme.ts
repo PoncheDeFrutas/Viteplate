@@ -63,6 +63,5 @@ export function setStoredTheme(theme: Theme): void {
 
 /** Applies the theme by toggling the `dark` class on the `<html>` element. */
 export function applyThemeToDocument(theme: Theme): void {
-    const root = document.documentElement;
-    root.classList.toggle('dark', theme === 'dark');
+    document.documentElement.classList.toggle('dark', theme === 'dark');
 }

@@ -7,14 +7,14 @@ import type { VariantProps } from 'class-variance-authority';
 // Variants
 // ---------------------------------------------------------------------------
 
-const containerVariants = cva('mx-auto w-full', {
+const containerVariants = cva('mx-auto w-full px-4 sm:px-6 lg:px-8 xl:px-10', {
     variants: {
         maxWidth: {
             sm: 'max-w-sm',
             md: 'max-w-md',
             lg: 'max-w-lg',
             xl: 'max-w-xl',
-            '2xl': 'max-w-2xl',
+            '2xl': 'max-w-2xl md:max-w-3xl lg:max-w-4xl xl:max-w-5xl',
         },
     },
     defaultVariants: {

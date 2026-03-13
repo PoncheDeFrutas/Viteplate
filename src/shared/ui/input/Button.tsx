@@ -11,6 +11,8 @@ import type { VariantProps } from 'class-variance-authority';
 const buttonVariants = cva(
     [
         'inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium',
+        'transition-[transform,box-shadow] duration-150 ease-out',
+        'hover:shadow-sm active:scale-[0.98]',
         'focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none',
         'disabled:pointer-events-none disabled:opacity-50',
     ],

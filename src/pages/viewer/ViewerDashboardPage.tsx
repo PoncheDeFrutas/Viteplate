@@ -1,5 +1,5 @@
 import { motion } from 'motion/react';
-import { User } from 'lucide-react';
+import { Eye, User } from 'lucide-react';
 import { useSession } from '@entities/session';
 import { Card, Container } from '@shared/ui';
 import { Avatar } from '@shared/ui/display';
@@ -18,21 +18,33 @@ const FADE_UP = {
 // Component
 // ---------------------------------------------------------------------------
 
-export function DashboardPage() {
+export function ViewerDashboardPage() {
     const user = useSession((s) => s.user);
 
     return (
         <Container maxWidth="2xl" className="space-y-6">
             <motion.h1 {...FADE_UP} className="text-2xl font-semibold text-foreground">
-                Dashboard
+                Overview
             </motion.h1>
 
-            {user ? (
-                <motion.div {...FADE_UP} transition={{ ...FADE_UP.transition, delay: 0.1 }}>
+            <motion.div {...FADE_UP} transition={{ ...FADE_UP.transition, delay: 0.1 }}>
+                <Card>
+                    <div className="flex items-start gap-3">
+                        <Eye className="mt-0.5 h-4 w-4 text-muted-foreground" />
+                        <p className="text-sm text-muted-foreground">
+                            Welcome to your read-only overview. You can browse information but
+                            cannot make changes.
+                        </p>
+                    </div>
+                </Card>
+            </motion.div>
+
+            {user && (
+                <motion.div {...FADE_UP} transition={{ ...FADE_UP.transition, delay: 0.2 }}>
                     <Card>
                         <div className="mb-4 flex items-center gap-3">
                             <Avatar name={user.name} size="md" />
-                            <h2 className="text-lg font-medium text-foreground">Profile</h2>
+                            <h2 className="text-lg font-medium text-foreground">Your profile</h2>
                         </div>
                         <dl className="space-y-3 text-sm">
                             <div className="flex items-center gap-2">
@@ -53,8 +65,6 @@ export function DashboardPage() {
                         </dl>
                     </Card>
                 </motion.div>
-            ) : (
-                <p className="text-sm text-muted-foreground">No user information available.</p>
             )}
         </Container>
     );

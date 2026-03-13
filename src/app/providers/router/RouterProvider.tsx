@@ -16,6 +16,7 @@ function createAppRouter(context: RouterContext) {
         routeTree,
         context,
         defaultPreload: 'intent',
+        scrollRestoration: true,
     });
 }
 
