@@ -1,0 +1,49 @@
+/* =========================
+   Base styles + smooth transition
+   ========================= */
+@layer base {
+    html {
+        font-family:
+            'Poppins',
+            system-ui,
+            -apple-system,
+            BlinkMacSystemFont,
+            'Segoe UI',
+            sans-serif;
+    }
+
+    body {
+        background-color: rgb(var(--background));
+        color: rgb(var(--foreground));
+    }
+
+    *,
+    ::before,
+    ::after {
+        border-color: rgb(var(--border));
+    }
+}
+
+/*
+ * View Transition theme cross-fade.
+ *
+ * When `document.startViewTransition()` is called the browser snapshots the
+ * page, applies the DOM change, then cross-fades old -> new at the compositor
+ * level. The rules below control the duration and easing of that cross-fade.
+ * No per-element transitions needed - the entire viewport morphs as one.
+ *
+ * Browsers without View Transitions API get an instant switch (no jank).
+ */
+::view-transition-old(root),
+::view-transition-new(root) {
+    animation-duration: 250ms;
+    animation-timing-function: ease-in-out;
+}
+
+/* Prevent motion for users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+        animation-duration: 0ms;
+    }
+}

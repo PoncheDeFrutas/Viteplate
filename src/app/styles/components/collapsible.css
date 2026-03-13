@@ -1,0 +1,43 @@
+/* =========================
+   Components: Collapsible
+   ========================= */
+@layer components {
+    [data-collapsible-content] {
+        --collapsible-ease: cubic-bezier(0.16, 1, 0.3, 1);
+        animation-duration: 250ms;
+        animation-timing-function: var(--collapsible-ease);
+        will-change: height, opacity;
+    }
+
+    [data-collapsible-content][data-state='open'] {
+        animation-name: collapsible-down;
+    }
+
+    [data-collapsible-content][data-state='closed'] {
+        animation-name: collapsible-up;
+    }
+
+    @keyframes collapsible-down {
+        from {
+            height: 0;
+            opacity: 0;
+        }
+
+        to {
+            height: var(--radix-collapsible-content-height);
+            opacity: 1;
+        }
+    }
+
+    @keyframes collapsible-up {
+        from {
+            height: var(--radix-collapsible-content-height);
+            opacity: 1;
+        }
+
+        to {
+            height: 0;
+            opacity: 0;
+        }
+    }
+}
