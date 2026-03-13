@@ -14,6 +14,8 @@ export const DEBUG_CONFIG = {
 } as const;
 
 export const AUTH_ENDPOINTS = {
+    login: '/auth/login',
+    logout: '/auth/logout',
     refresh: '/auth/refresh',
 } as const;
 
