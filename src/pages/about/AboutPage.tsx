@@ -69,7 +69,7 @@ const PHASES: Phase[] = [
         number: 7,
         title: 'Shared UI',
         description:
-            'Component library: Button, Input, Card, Badge, Avatar, Separator, Skeleton, Spinner, EmptyState, and more.',
+            'Component library: 35+ components across 6 categories (input, display, feedback, overlay, navigation, layout), built with CVA and Radix UI primitives.',
     },
     {
         number: 8,

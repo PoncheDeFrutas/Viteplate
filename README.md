@@ -37,6 +37,7 @@ Rather than being a minimal boilerplate, Viteplate ships with a fully implemente
 - [Environment Variables](#environment-variables)
 - [Documentation](#documentation)
 - [Key Features](#key-features)
+- [Design System Showcase](#design-system-showcase)
 - [License](#license)
 
 ---
@@ -65,12 +66,13 @@ Rather than being a minimal boilerplate, Viteplate ships with a fully implemente
 
 ### UI and Styling
 
-| Technology                                                                                           | Version   | Purpose                      |
-| ---------------------------------------------------------------------------------------------------- | --------- | ---------------------------- |
-| [class-variance-authority](https://cva.style)                                                        | 0.7       | Component variant management |
-| [clsx](https://github.com/lukeed/clsx) + [tailwind-merge](https://github.com/dcastil/tailwind-merge) | 2.1 / 3.5 | Class name composition       |
-| [Motion](https://motion.dev)                                                                         | 12.36     | Animation library            |
-| [Lucide React](https://lucide.dev)                                                                   | 0.577     | Icon library                 |
+| Technology                                                                                           | Version   | Purpose                        |
+| ---------------------------------------------------------------------------------------------------- | --------- | ------------------------------ |
+| [Radix UI](https://www.radix-ui.com)                                                                 | various   | Headless accessible primitives |
+| [class-variance-authority](https://cva.style)                                                        | 0.7       | Component variant management   |
+| [clsx](https://github.com/lukeed/clsx) + [tailwind-merge](https://github.com/dcastil/tailwind-merge) | 2.1 / 3.5 | Class name composition         |
+| [Motion](https://motion.dev)                                                                         | 12.36     | Animation library              |
+| [Lucide React](https://lucide.dev)                                                                   | 0.577     | Icon library                   |
 
 ### Development and Testing
 
@@ -116,6 +118,7 @@ Viteplate follows [Feature-Sliced Design](https://feature-sliced.design/) with a
 src/
 ├── app/                    # Bootstrap, providers, router, guards, layouts
 ├── pages/                  # Route-level page compositions
+│   └── design-system/      # Dev-only component showcase (lazy-loaded tabs)
 ├── widgets/                # Reusable composed UI blocks (navbar, footer)
 ├── features/               # Business use cases (auth/login, auth/logout)
 ├── entities/               # Domain models (session, user)
@@ -124,7 +127,13 @@ src/
 │   ├── config/             # Environment validation, constants
 │   ├── lib/                # Utility functions (cn, parseWithSchema)
 │   ├── types/              # Shared type definitions
-│   └── ui/                 # 14 reusable UI primitives
+│   └── ui/                 # 35+ UI components (118 exports across 6 categories)
+│       ├── input/          # Button, Input, Label, Textarea, Checkbox, Switch, RadioGroup, Select
+│       ├── display/        # Accordion, Avatar, Badge, CodeBlock, Kbd, ProgressBar, Separator, Skeleton, Table, Tabs, Tooltip
+│       ├── feedback/       # Alert, EmptyState, ErrorMessage, Spinner, Toast (imperative API)
+│       ├── overlay/        # Dialog, Drawer, DropdownMenu, Popover
+│       ├── navigation/     # Breadcrumb, Pagination, StyledLink
+│       └── layout/         # AspectRatio, Card, Container, Grid, Stack
 └── main.tsx                # Application entry point
 
 test/
@@ -236,11 +245,29 @@ VITE_ENABLE_DEBUG=true
 - **JWT Authentication** -- complete auth flow with token refresh, role-based access control, and route guards
 - **Type-Safe Routing** -- code-based TanStack Router with typed route contexts and navigation
 - **Design System** -- zinc-based color palette with semantic tokens, dark mode, and smooth theme transitions
-- **14 Shared UI Primitives** -- Button, Input, Card, Badge, Avatar, Spinner, and more, all built with CVA
+- **35+ Shared UI Components** -- 118 exports across 6 categories (input, display, feedback, overlay, navigation, layout), built with CVA and Radix UI primitives
+- **Design System Showcase** -- dev-only `/design-system` page with tabbed, lazy-loaded sections showcasing every component and variant (tree-shaken from production builds)
 - **API Error Normalization** -- structured error handling with retry flags, trace IDs, and error codes
 - **Zod Validation** -- runtime schema validation for API responses and environment configuration
 - **MSW Testing** -- realistic API mocking with in-memory session state for integration tests
 - **Pre-commit Hooks** -- automated formatting with Husky and lint-staged
+
+---
+
+## Design System Showcase
+
+In development mode, navigate to `/design-system` (or click "Design System" in the navbar) to browse an interactive showcase of every shared UI component and its variants. The page is organized into six tabbed sections:
+
+| Tab            | Components                                                                                       |
+| -------------- | ------------------------------------------------------------------------------------------------ |
+| **Input**      | Button, Input, Label, Textarea, Checkbox, Switch, RadioGroup, Select                             |
+| **Display**    | Accordion, Avatar, Badge, CodeBlock, Kbd, ProgressBar, Separator, Skeleton, Table, Tabs, Tooltip |
+| **Feedback**   | Alert, EmptyState, ErrorMessage, Spinner, Toast                                                  |
+| **Overlay**    | Dialog, Drawer, DropdownMenu, Popover                                                            |
+| **Navigation** | Breadcrumb, Pagination, StyledLink                                                               |
+| **Layout**     | AspectRatio, Card, Container, Grid, Stack                                                        |
+
+Each section is lazy-loaded via `React.lazy()` + `Suspense`, so only the active tab's code is downloaded. The route and nav link are guarded by `import.meta.env.DEV` and fully tree-shaken from production builds.
 
 ---
 

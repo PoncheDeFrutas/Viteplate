@@ -13,6 +13,7 @@ import { AdminSettingsPage } from '@pages/admin-settings';
 import { ViewerDashboardPage } from '@pages/viewer';
 import { NotFoundPage } from '@pages/not-found';
 import { UnauthorizedPage } from '@pages/unauthorized';
+import { DesignSystemPage } from '@pages/design-system';
 import type { RouterContext } from './router-context';
 
 // ---------------------------------------------------------------------------
@@ -62,6 +63,16 @@ const loginRoute = createRoute({
     path: ROUTE_PATHS.login,
     beforeLoad: guestGuard,
     component: LoginPage,
+});
+
+// ---------------------------------------------------------------------------
+// Dev-only: Design System showcase (tree-shaken from production builds)
+// ---------------------------------------------------------------------------
+
+const designSystemRoute = createRoute({
+    getParentRoute: () => publicLayoutRoute,
+    path: ROUTE_PATHS.designSystem,
+    component: DesignSystemPage,
 });
 
 // ---------------------------------------------------------------------------
@@ -124,8 +135,16 @@ const unauthorizedRoute = createRoute({
 // Route tree
 // ---------------------------------------------------------------------------
 
+const publicRoutes = [homeRoute, aboutRoute, stackRoute, loginRoute] as const;
+
+// Include design system route only in development — Vite dead-code eliminates this
+// branch in production builds, so the DesignSystemPage import is tree-shaken away.
+const devPublicRoutes = import.meta.env.DEV
+    ? ([...publicRoutes, designSystemRoute] as const)
+    : publicRoutes;
+
 export const routeTree = rootRoute.addChildren([
-    publicLayoutRoute.addChildren([homeRoute, aboutRoute, stackRoute, loginRoute]),
+    publicLayoutRoute.addChildren([...devPublicRoutes]),
     protectedLayoutRoute.addChildren([
         dashboardRoute,
         adminLayoutRoute.addChildren([adminDashboardRoute, adminSettingsRoute]),

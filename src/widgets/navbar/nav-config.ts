@@ -19,6 +19,8 @@ export const PUBLIC_NAV_ITEMS: NavItem[] = [
     { label: 'About', to: ROUTE_PATHS.about },
     { label: 'Stack', to: ROUTE_PATHS.stack },
     { label: 'Sign in', to: ROUTE_PATHS.login },
+    // Dev-only link — tree-shaken from production builds
+    ...(import.meta.env.DEV ? [{ label: 'Design System', to: ROUTE_PATHS.designSystem }] : []),
 ];
 
 const ADMIN_NAV_ITEMS: NavItem[] = [

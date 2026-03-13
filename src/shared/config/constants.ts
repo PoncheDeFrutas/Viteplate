@@ -38,6 +38,7 @@ export const ROUTE_PATHS = {
     adminSettings: '/admin/settings',
     overview: '/overview',
     unauthorized: '/unauthorized',
+    designSystem: '/design-system',
 } as const;
 
 /**
