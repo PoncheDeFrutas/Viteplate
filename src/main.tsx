@@ -1,7 +1,14 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
+import { setSessionAdapter } from '@shared/api';
+import { createSessionAdapter } from '@entities/session';
 import { App } from '@app/App';
 import '@app/styles/index.css';
+
+// Plug the Zustand-backed session adapter into the HTTP client
+// interceptors before the app renders. This ensures every request
+// has access to the in-memory access token from the session store.
+setSessionAdapter(createSessionAdapter());
 
 async function enableMocking(): Promise<void> {
     if (!import.meta.env.DEV) {

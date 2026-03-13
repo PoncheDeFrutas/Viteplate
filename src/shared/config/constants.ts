@@ -17,6 +17,10 @@ export const AUTH_ENDPOINTS = {
     refresh: '/auth/refresh',
 } as const;
 
+export const USER_ENDPOINTS = {
+    me: '/users/me',
+} as const;
+
 export const STORAGE_KEYS = {
     session: 'viteplate.session',
 } as const;

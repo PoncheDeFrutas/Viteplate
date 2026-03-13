@@ -36,9 +36,12 @@ export function createResponseAuthInterceptor(
             return Promise.reject(normalizeApiError(error));
         }
 
-        const refreshToken = getSessionAdapter().getRefreshToken();
+        // With httpOnly cookies, getRefreshToken() returns a sentinel
+        // ("httponly") when the user has an active session, or null when
+        // they don't. It never returns the actual refresh token.
+        const canRefresh = getSessionAdapter().getRefreshToken();
 
-        if (!refreshToken) {
+        if (!canRefresh) {
             clearSession('missing_refresh_token');
             return Promise.reject(normalizeApiError(error));
         }
@@ -47,10 +50,13 @@ export function createResponseAuthInterceptor(
             const newToken = await handleUnauthorized(() => {
                 const refreshConfig: HttpRequestConfig = {
                     skipAuth: true,
+                    withCredentials: true,
                 };
 
+                // The refresh token is sent automatically by the browser
+                // as an httpOnly cookie. No token in the request body.
                 return httpClient
-                    .post<unknown>(AUTH_ENDPOINTS.refresh, { refreshToken }, refreshConfig)
+                    .post<unknown>(AUTH_ENDPOINTS.refresh, undefined, refreshConfig)
                     .then((res) => parseWithSchema(refreshTokenResponseSchema, res.data));
             });
 
