@@ -227,6 +227,7 @@ VITE_ENABLE_DEBUG=true
 | [Routing](docs/routing.md)                                                      | TanStack Router setup, route tree, guards, layouts                 |
 | [API Layer](docs/api-layer.md)                                                  | HTTP client, typed methods, interceptors, error normalization      |
 | [Auth System](docs/auth.md)                                                     | JWT auth, session management, guards, refresh flow                 |
+| [Backend Integration](docs/backend-integration.md)                              | Required backend endpoints, auth contract, CORS, cookies           |
 | [State Management](docs/state-management.md)                                    | Zustand stores, TanStack Query integration                         |
 | [Styling](docs/styling.md)                                                      | Tailwind v4, design tokens, theming, cn(), CVA patterns            |
 | [Testing](docs/testing.md)                                                      | Vitest configuration, MSW handlers, test utilities                 |
