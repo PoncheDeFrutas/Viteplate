@@ -20,3 +20,10 @@ export const AUTH_ENDPOINTS = {
 export const STORAGE_KEYS = {
     session: 'viteplate.session',
 } as const;
+
+export const ROUTE_PATHS = {
+    home: '/',
+    login: '/login',
+    dashboard: '/dashboard',
+    unauthorized: '/unauthorized',
+} as const;
