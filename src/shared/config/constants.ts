@@ -23,6 +23,7 @@ export const USER_ENDPOINTS = {
 
 export const STORAGE_KEYS = {
     session: 'viteplate.session',
+    theme: 'viteplate.theme',
 } as const;
 
 export const ROUTE_PATHS = {
