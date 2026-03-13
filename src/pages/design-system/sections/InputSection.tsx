@@ -1,24 +1,53 @@
 import { useState } from 'react';
 import {
     Button,
+    Checkbox,
+    Combobox,
+    FileUpload,
     Input,
     Label,
-    Textarea,
-    Checkbox,
-    Switch,
+    NumberInput,
+    PinInput,
+    PinInputGroup,
+    PinInputSlot,
+    PinInputSeparator,
     RadioGroup,
     RadioGroupItem,
+    Rating,
+    SegmentedControl,
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
     SelectValue,
+    Slider,
+    Switch,
+    Textarea,
+    Toggle,
+    ToggleGroup,
+    ToggleGroupItem,
 } from '@shared/ui';
+import { Bold, Italic, Underline } from 'lucide-react';
+
+const COMBOBOX_OPTIONS = [
+    { value: 'react', label: 'React' },
+    { value: 'vue', label: 'Vue' },
+    { value: 'svelte', label: 'Svelte' },
+    { value: 'angular', label: 'Angular' },
+    { value: 'solid', label: 'SolidJS' },
+    { value: 'qwik', label: 'Qwik' },
+];
 
 export function InputSection() {
     const [checked, setChecked] = useState(false);
     const [switchOn, setSwitchOn] = useState(false);
     const [radio, setRadio] = useState('option-1');
+    const [comboValue, setComboValue] = useState('');
+    const [numberValue, setNumberValue] = useState(5);
+    const [pinValue, setPinValue] = useState('');
+    const [sliderValue, setSliderValue] = useState([50]);
+    const [ratingValue, setRatingValue] = useState(3);
+    const [segment, setSegment] = useState('center');
 
     return (
         <div className="space-y-12">
@@ -200,6 +229,162 @@ export function InputSection() {
                         </SelectContent>
                     </Select>
                 </div>
+            </div>
+
+            {/* Slider */}
+            <div>
+                <h3 className="mb-4 text-lg font-semibold text-foreground">Slider</h3>
+                <p className="mb-6 text-sm text-muted-foreground">
+                    Radix-based slider with hover/active scale transforms.
+                </p>
+                <div className="max-w-sm space-y-3">
+                    <Slider value={sliderValue} onValueChange={setSliderValue} max={100} step={1} />
+                    <p className="text-sm text-muted-foreground">Value: {sliderValue[0]}</p>
+                </div>
+            </div>
+
+            {/* Toggle */}
+            <div>
+                <h3 className="mb-4 text-lg font-semibold text-foreground">Toggle</h3>
+                <div className="flex items-center gap-2">
+                    <Toggle aria-label="Toggle bold">
+                        <Bold className="h-4 w-4" />
+                    </Toggle>
+                    <Toggle aria-label="Toggle italic">
+                        <Italic className="h-4 w-4" />
+                    </Toggle>
+                    <Toggle variant="outline" aria-label="Toggle underline">
+                        <Underline className="h-4 w-4" />
+                    </Toggle>
+                </div>
+            </div>
+
+            {/* ToggleGroup */}
+            <div>
+                <h3 className="mb-4 text-lg font-semibold text-foreground">ToggleGroup</h3>
+                <ToggleGroup type="multiple">
+                    <ToggleGroupItem value="bold" aria-label="Toggle bold">
+                        <Bold className="h-4 w-4" />
+                    </ToggleGroupItem>
+                    <ToggleGroupItem value="italic" aria-label="Toggle italic">
+                        <Italic className="h-4 w-4" />
+                    </ToggleGroupItem>
+                    <ToggleGroupItem value="underline" aria-label="Toggle underline">
+                        <Underline className="h-4 w-4" />
+                    </ToggleGroupItem>
+                </ToggleGroup>
+            </div>
+
+            {/* Combobox */}
+            <div>
+                <h3 className="mb-4 text-lg font-semibold text-foreground">Combobox</h3>
+                <p className="mb-6 text-sm text-muted-foreground">
+                    Searchable select built on cmdk + Radix Popover.
+                </p>
+                <div className="max-w-sm">
+                    <Combobox
+                        options={COMBOBOX_OPTIONS}
+                        value={comboValue}
+                        onValueChange={setComboValue}
+                        placeholder="Select a framework..."
+                    />
+                </div>
+            </div>
+
+            {/* NumberInput */}
+            <div>
+                <h3 className="mb-4 text-lg font-semibold text-foreground">NumberInput</h3>
+                <div className="max-w-[12rem] space-y-2">
+                    <Label>Quantity</Label>
+                    <NumberInput
+                        value={numberValue}
+                        onValueChange={setNumberValue}
+                        min={0}
+                        max={99}
+                    />
+                </div>
+            </div>
+
+            {/* PinInput */}
+            <div>
+                <h3 className="mb-4 text-lg font-semibold text-foreground">PinInput</h3>
+                <p className="mb-6 text-sm text-muted-foreground">
+                    One-time password / PIN code input built on input-otp.
+                </p>
+                <PinInput maxLength={6} value={pinValue} onChange={setPinValue}>
+                    <PinInputGroup>
+                        <PinInputSlot
+                            char={pinValue[0] ?? ''}
+                            hasFakeCaret={pinValue.length === 0}
+                            isActive={pinValue.length === 0}
+                        />
+                        <PinInputSlot
+                            char={pinValue[1] ?? ''}
+                            hasFakeCaret={pinValue.length === 1}
+                            isActive={pinValue.length === 1}
+                        />
+                        <PinInputSlot
+                            char={pinValue[2] ?? ''}
+                            hasFakeCaret={pinValue.length === 2}
+                            isActive={pinValue.length === 2}
+                        />
+                    </PinInputGroup>
+                    <PinInputSeparator />
+                    <PinInputGroup>
+                        <PinInputSlot
+                            char={pinValue[3] ?? ''}
+                            hasFakeCaret={pinValue.length === 3}
+                            isActive={pinValue.length === 3}
+                        />
+                        <PinInputSlot
+                            char={pinValue[4] ?? ''}
+                            hasFakeCaret={pinValue.length === 4}
+                            isActive={pinValue.length === 4}
+                        />
+                        <PinInputSlot
+                            char={pinValue[5] ?? ''}
+                            hasFakeCaret={pinValue.length === 5}
+                            isActive={pinValue.length === 5}
+                        />
+                    </PinInputGroup>
+                </PinInput>
+            </div>
+
+            {/* FileUpload */}
+            <div>
+                <h3 className="mb-4 text-lg font-semibold text-foreground">FileUpload</h3>
+                <div className="max-w-md">
+                    <FileUpload accept="image/*,.pdf" multiple maxSize={5 * 1024 * 1024} />
+                </div>
+            </div>
+
+            {/* Rating */}
+            <div>
+                <h3 className="mb-4 text-lg font-semibold text-foreground">Rating</h3>
+                <div className="space-y-4">
+                    <div className="flex items-center gap-4">
+                        <Rating value={ratingValue} onValueChange={setRatingValue} />
+                        <span className="text-sm text-muted-foreground">{ratingValue} / 5</span>
+                    </div>
+                    <div className="flex items-center gap-4">
+                        <Rating value={4} readOnly size={16} />
+                        <span className="text-sm text-muted-foreground">Read-only</span>
+                    </div>
+                </div>
+            </div>
+
+            {/* SegmentedControl */}
+            <div>
+                <h3 className="mb-4 text-lg font-semibold text-foreground">SegmentedControl</h3>
+                <SegmentedControl
+                    options={[
+                        { value: 'left', label: 'Left' },
+                        { value: 'center', label: 'Center' },
+                        { value: 'right', label: 'Right' },
+                    ]}
+                    value={segment}
+                    onValueChange={setSegment}
+                />
             </div>
         </div>
     );

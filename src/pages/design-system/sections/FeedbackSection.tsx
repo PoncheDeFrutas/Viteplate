@@ -1,8 +1,11 @@
 import { useState } from 'react';
 import {
     Alert,
+    Banner,
+    CopyButton,
     EmptyState,
     ErrorMessage,
+    LoadingOverlay,
     Spinner,
     Toast,
     ToastClose,
@@ -11,11 +14,13 @@ import {
     ToastTitle,
     ToastViewport,
     Button,
+    Card,
 } from '@shared/ui';
 import { Inbox } from 'lucide-react';
 
 export function FeedbackSection() {
     const [showToast, setShowToast] = useState(false);
+    const [overlayVisible, setOverlayVisible] = useState(false);
 
     return (
         <div className="space-y-12">
@@ -44,6 +49,36 @@ export function FeedbackSection() {
                 </div>
             </div>
 
+            {/* Banner */}
+            <div>
+                <h3 className="mb-4 text-lg font-semibold text-foreground">Banner</h3>
+                <p className="mb-6 text-sm text-muted-foreground">
+                    Callout banner for important contextual messages with Motion entrance animation.
+                </p>
+                <div className="max-w-lg space-y-4">
+                    <Banner variant="info" title="New feature available">
+                        Check out the new command palette by pressing Ctrl+K.
+                    </Banner>
+                    <Banner variant="warning" title="Maintenance scheduled" dismissible>
+                        The system will be down for maintenance on Sunday 2:00 AM UTC.
+                    </Banner>
+                    <Banner variant="success" title="Deployment successful">
+                        Version 2.4.0 has been deployed to production.
+                    </Banner>
+                </div>
+            </div>
+
+            {/* CopyButton */}
+            <div>
+                <h3 className="mb-4 text-lg font-semibold text-foreground">CopyButton</h3>
+                <div className="flex items-center gap-3">
+                    <code className="rounded-md bg-muted px-3 py-1.5 text-sm">
+                        pnpm add viteplate
+                    </code>
+                    <CopyButton value="pnpm add viteplate" />
+                </div>
+            </div>
+
             {/* EmptyState */}
             <div>
                 <h3 className="mb-4 text-lg font-semibold text-foreground">EmptyState</h3>
@@ -64,6 +99,30 @@ export function FeedbackSection() {
                 <h3 className="mb-4 text-lg font-semibold text-foreground">ErrorMessage</h3>
                 <div className="max-w-sm">
                     <ErrorMessage message="This field is required." />
+                </div>
+            </div>
+
+            {/* LoadingOverlay */}
+            <div>
+                <h3 className="mb-4 text-lg font-semibold text-foreground">LoadingOverlay</h3>
+                <p className="mb-4 text-sm text-muted-foreground">
+                    Full-area translucent overlay with fade animation.
+                </p>
+                <div className="relative">
+                    <Card className="h-32">
+                        <p className="text-sm text-muted-foreground">
+                            Content behind the overlay. Click the button to toggle.
+                        </p>
+                        <Button
+                            size="sm"
+                            variant="outline"
+                            className="mt-3"
+                            onClick={() => setOverlayVisible((v) => !v)}
+                        >
+                            {overlayVisible ? 'Hide' : 'Show'} overlay
+                        </Button>
+                    </Card>
+                    <LoadingOverlay visible={overlayVisible} />
                 </div>
             </div>
 

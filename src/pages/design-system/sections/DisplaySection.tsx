@@ -2,7 +2,13 @@ import { useState } from 'react';
 import {
     Avatar,
     Badge,
+    Blockquote,
+    Carousel,
+    CarouselSlide,
     CodeBlock,
+    DataList,
+    DataListItem,
+    Indicator,
     Kbd,
     ProgressBar,
     Separator,
@@ -15,6 +21,9 @@ import {
     TabsContent,
     TabsList,
     TabsTrigger,
+    Tag,
+    TagGroup,
+    Timeline,
     SimpleTooltip,
     TooltipProvider,
     Table,
@@ -23,11 +32,46 @@ import {
     TableHead,
     TableHeader,
     TableRow,
+    Tree,
     Button,
 } from '@shared/ui';
 
+const TREE_DATA = [
+    {
+        id: 'src',
+        label: 'src',
+        children: [
+            {
+                id: 'app',
+                label: 'app',
+                children: [
+                    { id: 'main', label: 'main.tsx' },
+                    { id: 'router', label: 'router.ts' },
+                ],
+            },
+            {
+                id: 'shared',
+                label: 'shared',
+                children: [
+                    { id: 'ui', label: 'ui', children: [{ id: 'button', label: 'Button.tsx' }] },
+                    { id: 'lib', label: 'lib', children: [{ id: 'cn', label: 'cn.ts' }] },
+                ],
+            },
+        ],
+    },
+    { id: 'pkg', label: 'package.json' },
+    { id: 'ts', label: 'tsconfig.json' },
+];
+
+const TIMELINE_ITEMS = [
+    { title: 'Project created', description: 'Initial repository setup.', date: 'Jan 2026' },
+    { title: 'Auth system', description: 'JWT auth with refresh flow.', date: 'Feb 2026' },
+    { title: 'UI library', description: '50+ shared components.', date: 'Mar 2026' },
+];
+
 export function DisplaySection() {
     const [progress, setProgress] = useState(65);
+    const [tags, setTags] = useState(['React', 'TypeScript', 'Tailwind', 'Vite']);
 
     return (
         <TooltipProvider>
@@ -55,6 +99,119 @@ export function DisplaySection() {
                         <Badge variant="warning">Warning</Badge>
                         <Badge variant="info">Info</Badge>
                         <Badge variant="muted">Muted</Badge>
+                    </div>
+                </div>
+
+                {/* Tag */}
+                <div>
+                    <h3 className="mb-4 text-lg font-semibold text-foreground">Tag</h3>
+                    <p className="mb-4 text-sm text-muted-foreground">
+                        Compact labels with animated removal. Click X to remove.
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                        <TagGroup>
+                            {tags.map((tag) => (
+                                <Tag
+                                    key={tag}
+                                    variant="default"
+                                    onRemove={() =>
+                                        setTags((prev) => prev.filter((t) => t !== tag))
+                                    }
+                                >
+                                    {tag}
+                                </Tag>
+                            ))}
+                        </TagGroup>
+                        {tags.length < 4 && (
+                            <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => setTags(['React', 'TypeScript', 'Tailwind', 'Vite'])}
+                            >
+                                Reset
+                            </Button>
+                        )}
+                    </div>
+                </div>
+
+                {/* Indicator */}
+                <div>
+                    <h3 className="mb-4 text-lg font-semibold text-foreground">Indicator</h3>
+                    <div className="flex items-center gap-6">
+                        <span className="flex items-center gap-2 text-sm">
+                            <Indicator variant="success" /> Online
+                        </span>
+                        <span className="flex items-center gap-2 text-sm">
+                            <Indicator variant="warning" pulse /> Away
+                        </span>
+                        <span className="flex items-center gap-2 text-sm">
+                            <Indicator variant="destructive" /> Offline
+                        </span>
+                        <span className="flex items-center gap-2 text-sm">
+                            <Indicator variant="muted" /> Unknown
+                        </span>
+                    </div>
+                </div>
+
+                {/* Timeline */}
+                <div>
+                    <h3 className="mb-4 text-lg font-semibold text-foreground">Timeline</h3>
+                    <div className="max-w-md">
+                        <Timeline items={TIMELINE_ITEMS} />
+                    </div>
+                </div>
+
+                {/* DataList */}
+                <div>
+                    <h3 className="mb-4 text-lg font-semibold text-foreground">DataList</h3>
+                    <div className="max-w-md">
+                        <DataList>
+                            <DataListItem label="Name">John Doe</DataListItem>
+                            <DataListItem label="Email">john@example.com</DataListItem>
+                            <DataListItem label="Role">
+                                <Badge variant="info">Admin</Badge>
+                            </DataListItem>
+                            <DataListItem label="Status">
+                                <span className="flex items-center gap-2">
+                                    <Indicator variant="success" size="sm" /> Active
+                                </span>
+                            </DataListItem>
+                        </DataList>
+                    </div>
+                </div>
+
+                {/* Blockquote */}
+                <div>
+                    <h3 className="mb-4 text-lg font-semibold text-foreground">Blockquote</h3>
+                    <div className="max-w-lg">
+                        <Blockquote footer="Rich Harris, creator of Svelte">
+                            Frameworks are not tools for organising your code, they are tools for
+                            organising your mind.
+                        </Blockquote>
+                    </div>
+                </div>
+
+                {/* Carousel */}
+                <div>
+                    <h3 className="mb-4 text-lg font-semibold text-foreground">Carousel</h3>
+                    <div className="max-w-md">
+                        <Carousel>
+                            {[1, 2, 3, 4].map((i) => (
+                                <CarouselSlide key={i}>
+                                    <div className="flex h-40 items-center justify-center rounded-lg bg-muted text-lg font-medium text-muted-foreground">
+                                        Slide {i}
+                                    </div>
+                                </CarouselSlide>
+                            ))}
+                        </Carousel>
+                    </div>
+                </div>
+
+                {/* Tree */}
+                <div>
+                    <h3 className="mb-4 text-lg font-semibold text-foreground">Tree</h3>
+                    <div className="max-w-xs rounded-md border border-border p-2">
+                        <Tree data={TREE_DATA} defaultExpanded={['src']} />
                     </div>
                 </div>
 

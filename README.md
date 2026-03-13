@@ -127,13 +127,13 @@ src/
 │   ├── config/             # Environment validation, constants
 │   ├── lib/                # Utility functions (cn, parseWithSchema)
 │   ├── types/              # Shared type definitions
-│   └── ui/                 # 35+ UI components (118 exports across 6 categories)
-│       ├── input/          # Button, Input, Label, Textarea, Checkbox, Switch, RadioGroup, Select
-│       ├── display/        # Accordion, Avatar, Badge, CodeBlock, Kbd, ProgressBar, Separator, Skeleton, Table, Tabs, Tooltip
-│       ├── feedback/       # Alert, EmptyState, ErrorMessage, Spinner, Toast (imperative API)
-│       ├── overlay/        # Dialog, Drawer, DropdownMenu, Popover
-│       ├── navigation/     # Breadcrumb, Pagination, StyledLink
-│       └── layout/         # AspectRatio, Card, Container, Grid, Stack
+│   └── ui/                 # 65 UI components (193 exports across 6 categories)
+│       ├── input/          # Button, Checkbox, Combobox, FileUpload, Input, Label, NumberInput, PinInput, RadioGroup, Rating, SegmentedControl, Select, Slider, Switch, Textarea, Toggle, ToggleGroup
+│       ├── display/        # Accordion, Avatar, Badge, Blockquote, Carousel, CodeBlock, DataList, Indicator, Kbd, ProgressBar, Separator, Skeleton, Table, Tabs, Tag, Timeline, Tooltip, Tree
+│       ├── feedback/       # Alert, Banner, CopyButton, EmptyState, ErrorMessage, LoadingOverlay, Spinner, Toast (imperative API)
+│       ├── overlay/        # AlertDialog, ContextMenu, Dialog, Drawer, DropdownMenu, HoverCard, Popover
+│       ├── navigation/     # Breadcrumb, CommandPalette, NavigationMenu, Pagination, Stepper, StyledLink
+│       └── layout/         # Affix, AspectRatio, Card, Collapsible, Container, Grid, ResizablePanels, ScrollArea, Stack
 └── main.tsx                # Application entry point
 
 test/
@@ -245,7 +245,7 @@ VITE_ENABLE_DEBUG=true
 - **JWT Authentication** -- complete auth flow with token refresh, role-based access control, and route guards
 - **Type-Safe Routing** -- code-based TanStack Router with typed route contexts and navigation
 - **Design System** -- zinc-based color palette with semantic tokens, dark mode, and smooth theme transitions
-- **35+ Shared UI Components** -- 118 exports across 6 categories (input, display, feedback, overlay, navigation, layout), built with CVA and Radix UI primitives
+- **65 Shared UI Components** -- 193 exports across 6 categories (input, display, feedback, overlay, navigation, layout), built with CVA, Radix UI primitives, and Motion animations
 - **Design System Showcase** -- dev-only `/design-system` page with tabbed, lazy-loaded sections showcasing every component and variant (tree-shaken from production builds)
 - **API Error Normalization** -- structured error handling with retry flags, trace IDs, and error codes
 - **Zod Validation** -- runtime schema validation for API responses and environment configuration
@@ -258,14 +258,14 @@ VITE_ENABLE_DEBUG=true
 
 In development mode, navigate to `/design-system` (or click "Design System" in the navbar) to browse an interactive showcase of every shared UI component and its variants. The page is organized into six tabbed sections:
 
-| Tab            | Components                                                                                       |
-| -------------- | ------------------------------------------------------------------------------------------------ |
-| **Input**      | Button, Input, Label, Textarea, Checkbox, Switch, RadioGroup, Select                             |
-| **Display**    | Accordion, Avatar, Badge, CodeBlock, Kbd, ProgressBar, Separator, Skeleton, Table, Tabs, Tooltip |
-| **Feedback**   | Alert, EmptyState, ErrorMessage, Spinner, Toast                                                  |
-| **Overlay**    | Dialog, Drawer, DropdownMenu, Popover                                                            |
-| **Navigation** | Breadcrumb, Pagination, StyledLink                                                               |
-| **Layout**     | AspectRatio, Card, Container, Grid, Stack                                                        |
+| Tab            | Components                                                                                                                                                               |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Input**      | Button, Checkbox, Combobox, FileUpload, Input, Label, NumberInput, PinInput, RadioGroup, Rating, SegmentedControl, Select, Slider, Switch, Textarea, Toggle, ToggleGroup |
+| **Display**    | Accordion, Avatar, Badge, Blockquote, Carousel, CodeBlock, DataList, Indicator, Kbd, ProgressBar, Separator, Skeleton, Table, Tabs, Tag, Timeline, Tooltip, Tree         |
+| **Feedback**   | Alert, Banner, CopyButton, EmptyState, ErrorMessage, LoadingOverlay, Spinner, Toast                                                                                      |
+| **Overlay**    | AlertDialog, ContextMenu, Dialog, Drawer, DropdownMenu, HoverCard, Popover                                                                                               |
+| **Navigation** | Breadcrumb, CommandPalette, NavigationMenu, Pagination, Stepper, StyledLink                                                                                              |
+| **Layout**     | Affix, AspectRatio, Card, Collapsible, Container, Grid, ResizablePanels, ScrollArea, Stack                                                                               |
 
 Each section is lazy-loaded via `React.lazy()` + `Suspense`, so only the active tab's code is downloaded. The route and nav link are guarded by `import.meta.env.DEV` and fully tree-shaken from production builds.
 

@@ -1,4 +1,32 @@
 export {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from './AlertDialog';
+export {
+    ContextMenu,
+    ContextMenuCheckboxItem,
+    ContextMenuContent,
+    ContextMenuGroup,
+    ContextMenuItem,
+    ContextMenuLabel,
+    ContextMenuPortal,
+    ContextMenuRadioGroup,
+    ContextMenuRadioItem,
+    ContextMenuSeparator,
+    ContextMenuShortcut,
+    ContextMenuSub,
+    ContextMenuSubContent,
+    ContextMenuSubTrigger,
+    ContextMenuTrigger,
+} from './ContextMenu';
+export {
     Dialog,
     DialogClose,
     DialogContent,
@@ -35,4 +63,5 @@ export {
     DropdownMenuSubTrigger,
     DropdownMenuTrigger,
 } from './DropdownMenu';
+export { HoverCard, HoverCardContent, HoverCardTrigger } from './HoverCard';
 export { Popover, PopoverAnchor, PopoverClose, PopoverContent, PopoverTrigger } from './Popover';

@@ -1,5 +1,20 @@
 import { useState } from 'react';
 import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+    ContextMenu,
+    ContextMenuContent,
+    ContextMenuItem,
+    ContextMenuSeparator,
+    ContextMenuShortcut,
+    ContextMenuTrigger,
     Dialog,
     DialogContent,
     DialogDescription,
@@ -21,6 +36,9 @@ import {
     DropdownMenuSeparator,
     DropdownMenuShortcut,
     DropdownMenuTrigger,
+    HoverCard,
+    HoverCardContent,
+    HoverCardTrigger,
     Popover,
     PopoverContent,
     PopoverTrigger,
@@ -28,7 +46,7 @@ import {
     Input,
     Label,
 } from '@shared/ui';
-import { LogOut, Settings, User } from 'lucide-react';
+import { Copy, LogOut, Pen, Settings, Trash, User } from 'lucide-react';
 
 export function OverlaySection() {
     const [drawerSide, setDrawerSide] = useState<'left' | 'right'>('right');
@@ -64,6 +82,82 @@ export function OverlaySection() {
                         </DialogFooter>
                     </DialogContent>
                 </Dialog>
+            </div>
+
+            {/* AlertDialog */}
+            <div>
+                <h3 className="mb-4 text-lg font-semibold text-foreground">AlertDialog</h3>
+                <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                        <Button variant="destructive">Delete account</Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                        <AlertDialogHeader>
+                            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                            <AlertDialogDescription>
+                                This action cannot be undone. This will permanently delete your
+                                account and remove all data from our servers.
+                            </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction>Continue</AlertDialogAction>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
+            </div>
+
+            {/* HoverCard */}
+            <div>
+                <h3 className="mb-4 text-lg font-semibold text-foreground">HoverCard</h3>
+                <HoverCard>
+                    <HoverCardTrigger asChild>
+                        <Button variant="link" className="p-0 text-base">
+                            @viteplate
+                        </Button>
+                    </HoverCardTrigger>
+                    <HoverCardContent className="w-80">
+                        <div className="space-y-2">
+                            <h4 className="text-sm font-semibold">Viteplate</h4>
+                            <p className="text-sm text-muted-foreground">
+                                Scalable React 19 starter template with Feature-Sliced Design, 50+
+                                UI components, and full auth system.
+                            </p>
+                            <div className="text-xs text-muted-foreground">Joined January 2026</div>
+                        </div>
+                    </HoverCardContent>
+                </HoverCard>
+            </div>
+
+            {/* ContextMenu */}
+            <div>
+                <h3 className="mb-4 text-lg font-semibold text-foreground">ContextMenu</h3>
+                <p className="mb-4 text-sm text-muted-foreground">Right-click on the area below.</p>
+                <ContextMenu>
+                    <ContextMenuTrigger>
+                        <div className="flex h-32 w-full items-center justify-center rounded-lg border-2 border-dashed border-border text-sm text-muted-foreground">
+                            Right-click here
+                        </div>
+                    </ContextMenuTrigger>
+                    <ContextMenuContent className="w-56">
+                        <ContextMenuItem>
+                            <Pen className="mr-2 h-4 w-4" />
+                            Edit
+                            <ContextMenuShortcut>Ctrl+E</ContextMenuShortcut>
+                        </ContextMenuItem>
+                        <ContextMenuItem>
+                            <Copy className="mr-2 h-4 w-4" />
+                            Copy
+                            <ContextMenuShortcut>Ctrl+C</ContextMenuShortcut>
+                        </ContextMenuItem>
+                        <ContextMenuSeparator />
+                        <ContextMenuItem className="text-destructive">
+                            <Trash className="mr-2 h-4 w-4" />
+                            Delete
+                            <ContextMenuShortcut>Del</ContextMenuShortcut>
+                        </ContextMenuItem>
+                    </ContextMenuContent>
+                </ContextMenu>
             </div>
 
             {/* Drawer */}

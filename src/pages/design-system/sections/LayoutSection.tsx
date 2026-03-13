@@ -1,6 +1,24 @@
-import { AspectRatio, Card, Container, Grid, Stack } from '@shared/ui';
+import { useState } from 'react';
+import {
+    AspectRatio,
+    Card,
+    Collapsible,
+    CollapsibleContent,
+    CollapsibleTrigger,
+    Container,
+    Grid,
+    ResizableHandle,
+    ResizablePanel,
+    ResizablePanelGroup,
+    ScrollArea,
+    Stack,
+    Button,
+} from '@shared/ui';
+import { ChevronsUpDown } from 'lucide-react';
 
 export function LayoutSection() {
+    const [collapsibleOpen, setCollapsibleOpen] = useState(false);
+
     return (
         <div className="space-y-12">
             {/* Card */}
@@ -41,6 +59,72 @@ export function LayoutSection() {
                             </p>
                         </div>
                     </Card>
+                </div>
+            </div>
+
+            {/* Collapsible */}
+            <div>
+                <h3 className="mb-4 text-lg font-semibold text-foreground">Collapsible</h3>
+                <div className="max-w-sm">
+                    <Collapsible open={collapsibleOpen} onOpenChange={setCollapsibleOpen}>
+                        <div className="flex items-center justify-between">
+                            <h4 className="text-sm font-semibold">3 items hidden</h4>
+                            <CollapsibleTrigger asChild>
+                                <Button variant="ghost" size="icon">
+                                    <ChevronsUpDown className="h-4 w-4" />
+                                    <span className="sr-only">Toggle</span>
+                                </Button>
+                            </CollapsibleTrigger>
+                        </div>
+                        <div className="mt-2 rounded-md border border-border px-4 py-3 text-sm">
+                            Always visible item
+                        </div>
+                        <CollapsibleContent className="mt-1.5 space-y-1.5">
+                            <div className="rounded-md border border-border px-4 py-3 text-sm">
+                                Hidden item 1
+                            </div>
+                            <div className="rounded-md border border-border px-4 py-3 text-sm">
+                                Hidden item 2
+                            </div>
+                            <div className="rounded-md border border-border px-4 py-3 text-sm">
+                                Hidden item 3
+                            </div>
+                        </CollapsibleContent>
+                    </Collapsible>
+                </div>
+            </div>
+
+            {/* ScrollArea */}
+            <div>
+                <h3 className="mb-4 text-lg font-semibold text-foreground">ScrollArea</h3>
+                <ScrollArea className="h-48 w-full max-w-sm rounded-md border border-border">
+                    <div className="p-4">
+                        {Array.from({ length: 20 }, (_, i) => (
+                            <div key={i} className="border-b border-border py-2 text-sm">
+                                Item {i + 1}
+                            </div>
+                        ))}
+                    </div>
+                </ScrollArea>
+            </div>
+
+            {/* ResizablePanels */}
+            <div>
+                <h3 className="mb-4 text-lg font-semibold text-foreground">ResizablePanels</h3>
+                <div className="max-w-lg rounded-md border border-border">
+                    <ResizablePanelGroup orientation="horizontal" className="h-40">
+                        <ResizablePanel defaultSize={50}>
+                            <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
+                                Panel A
+                            </div>
+                        </ResizablePanel>
+                        <ResizableHandle withHandle />
+                        <ResizablePanel defaultSize={50}>
+                            <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
+                                Panel B
+                            </div>
+                        </ResizablePanel>
+                    </ResizablePanelGroup>
                 </div>
             </div>
 
@@ -147,6 +231,16 @@ export function LayoutSection() {
                         </Container>
                     ))}
                 </div>
+            </div>
+
+            {/* Affix */}
+            <div>
+                <h3 className="mb-4 text-lg font-semibold text-foreground">Affix</h3>
+                <p className="text-sm text-muted-foreground">
+                    Affix uses CSS <code className="text-xs">position: sticky</code> to pin content
+                    when scrolled past. It gains a shadow when stuck. This component works best
+                    observed in a full page scroll context.
+                </p>
             </div>
 
             {/* AspectRatio */}
