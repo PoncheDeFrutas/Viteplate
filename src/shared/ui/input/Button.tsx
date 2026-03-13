@@ -1,5 +1,6 @@
 import { cva } from 'class-variance-authority';
 import { cn } from '@shared/lib/cn';
+import { Spinner } from '../feedback/Spinner';
 import type { ButtonHTMLAttributes } from 'react';
 import type { VariantProps } from 'class-variance-authority';
 
@@ -9,27 +10,34 @@ import type { VariantProps } from 'class-variance-authority';
 
 const buttonVariants = cva(
     [
-        'inline-flex items-center justify-center rounded-md text-sm font-medium',
-        'focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background focus:outline-none',
-        'disabled:cursor-not-allowed disabled:opacity-50',
+        'inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium',
+        'focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none',
+        'disabled:pointer-events-none disabled:opacity-50',
     ],
     {
         variants: {
             variant: {
-                primary: ['bg-primary text-primary-foreground shadow-sm', 'hover:bg-primary-hover'],
-                ghost: ['text-muted-foreground', 'hover:bg-accent hover:text-accent-foreground'],
+                default: 'bg-primary text-primary-foreground hover:bg-primary-hover',
+                secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary-hover',
+                outline:
+                    'border border-input bg-transparent text-foreground hover:bg-accent hover:text-accent-foreground',
+                ghost: 'text-foreground hover:bg-accent hover:text-accent-foreground',
+                destructive:
+                    'bg-destructive text-destructive-foreground hover:bg-destructive-hover',
+                link: 'text-foreground underline-offset-4 hover:underline',
             },
             size: {
-                sm: 'px-2 py-1',
-                md: 'px-3 py-1.5',
-                lg: 'px-4 py-2',
+                sm: 'h-8 px-3 text-xs',
+                md: 'h-9 px-4',
+                lg: 'h-10 px-5',
+                icon: 'h-9 w-9',
             },
             fullWidth: {
                 true: 'w-full',
             },
         },
         defaultVariants: {
-            variant: 'primary',
+            variant: 'default',
             size: 'md',
             fullWidth: false,
         },
@@ -42,12 +50,15 @@ const buttonVariants = cva(
 
 interface ButtonProps
     extends ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonVariants> {
-    /** Shows a loading state (disables the button). */
+    /** Shows a loading spinner and disables the button. */
     loading?: boolean;
 }
 
 /**
- * Button primitive with primary and ghost variants.
+ * Multi-variant button primitive.
+ *
+ * Variants: `default`, `secondary`, `outline`, `ghost`, `destructive`, `link`.
+ * Sizes: `sm`, `md`, `lg`, `icon`.
  */
 export function Button({
     className,
@@ -67,6 +78,7 @@ export function Button({
             className={cn(buttonVariants({ variant, size, fullWidth }), className)}
             {...props}
         >
+            {loading && <Spinner size="xs" className="text-current" />}
             {children}
         </button>
     );

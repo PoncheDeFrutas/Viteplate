@@ -95,7 +95,7 @@ export function LoginForm() {
                 {([isSubmitting]) => (
                     <Button
                         type="submit"
-                        variant="primary"
+                        variant="default"
                         size="lg"
                         fullWidth
                         loading={isSubmitting || loginMutation.isPending}

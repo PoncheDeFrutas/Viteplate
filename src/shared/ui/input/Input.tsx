@@ -9,16 +9,17 @@ import type { VariantProps } from 'class-variance-authority';
 
 const inputVariants = cva(
     [
-        'block w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground',
-        'placeholder-muted-foreground shadow-sm',
-        'focus:ring-1 focus:ring-ring focus:outline-none',
+        'flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm text-foreground',
+        'file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground',
+        'placeholder:text-muted-foreground',
+        'focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-none',
         'disabled:cursor-not-allowed disabled:opacity-50',
     ],
     {
         variants: {
             variant: {
-                default: ['focus:border-ring'],
-                error: ['border-destructive', 'focus:border-destructive focus:ring-destructive'],
+                default: '',
+                error: 'border-destructive focus-visible:ring-destructive',
             },
         },
         defaultVariants: {
@@ -37,7 +38,7 @@ interface InputProps
         VariantProps<typeof inputVariants> {}
 
 /**
- * Styled text input with default and error variants.
+ * Minimal text input with default and error variants.
  */
 export function Input({ className, variant, ...props }: InputProps) {
     return <input className={cn(inputVariants({ variant }), className)} {...props} />;

@@ -8,12 +8,13 @@ import type { VariantProps } from 'class-variance-authority';
 // ---------------------------------------------------------------------------
 
 const spinnerVariants = cva(
-    'animate-spin rounded-full border-2 border-current border-t-transparent',
+    'animate-spin rounded-full border-[1.5px] border-current border-t-transparent',
     {
         variants: {
             size: {
+                xs: 'h-3 w-3',
                 sm: 'h-4 w-4',
-                md: 'h-6 w-6',
+                md: 'h-5 w-5',
                 lg: 'h-8 w-8',
             },
         },
@@ -34,7 +35,7 @@ interface SpinnerProps
 }
 
 /**
- * Animated loading spinner with accessible label.
+ * Minimal loading spinner with accessible label.
  */
 export function Spinner({ className, size, label = 'Loading', ...props }: SpinnerProps) {
     return (

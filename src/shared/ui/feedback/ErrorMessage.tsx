@@ -7,9 +7,7 @@ interface ErrorMessageProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 /**
- * Error message display. Renders as an alert banner for server/form-level
- * errors, or as inline text for field-level errors depending on usage.
- *
+ * Minimal error message with a left accent border.
  * Returns `null` if `message` is falsy.
  */
 export function ErrorMessage({ message, className, ...props }: ErrorMessageProps) {
@@ -21,7 +19,7 @@ export function ErrorMessage({ message, className, ...props }: ErrorMessageProps
         <div
             role="alert"
             className={cn(
-                'rounded-md border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive',
+                'border-l-2 border-destructive bg-destructive/5 px-4 py-3 text-sm text-destructive',
                 className,
             )}
             {...props}
