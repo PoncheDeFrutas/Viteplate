@@ -1,9 +1,9 @@
 import * as ToastPrimitive from '@radix-ui/react-toast';
+import { cn } from '@shared/lib/cn';
+import type { VariantProps } from 'class-variance-authority';
 import { cva } from 'class-variance-authority';
 import { X } from 'lucide-react';
-import { cn } from '@shared/lib/cn';
 import type { ComponentPropsWithoutRef } from 'react';
-import type { VariantProps } from 'class-variance-authority';
 
 // ---------------------------------------------------------------------------
 // Provider
@@ -24,7 +24,7 @@ export function ToastViewport({ className, ...props }: ToastViewportProps) {
     return (
         <ToastPrimitive.Viewport
             className={cn(
-                'fixed top-0 right-0 z-100 flex max-h-screen w-full flex-col-reverse gap-2 p-4 sm:right-0 sm:bottom-0 sm:top-auto sm:flex-col md:max-w-[420px]',
+                'fixed top-0 right-0 z-100 flex max-h-screen w-full flex-col-reverse gap-2 p-4 sm:right-0 sm:bottom-0 sm:top-auto sm:flex-col md:max-w-105',
                 className,
             )}
             {...props}
