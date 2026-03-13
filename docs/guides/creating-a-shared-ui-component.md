@@ -33,7 +33,7 @@ A shared UI component is a **domain-agnostic primitive** that provides reusable 
 
 Shared UI is organized into six categories:
 
-```
+```bash
 src/shared/ui/
 ├── index.ts          # Barrel export for all components
 ├── input/            # Interactive form elements
@@ -195,7 +195,7 @@ export { Tag } from './display/Tag';
 
 Every CVA-based component follows this pattern:
 
-```
+```bash
 1. Import CVA and cn()
 2. Define variant configuration with cva()
 3. Define props interface extending HTML attrs + VariantProps

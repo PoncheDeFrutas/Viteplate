@@ -145,7 +145,7 @@ Theme switches use the [View Transitions API](https://developer.mozilla.org/en-U
 }
 ```
 
-### Usage
+### Theme Usage
 
 ```typescript
 import { useTheme } from '@app/providers/theme/use-theme';
