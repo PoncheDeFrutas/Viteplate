@@ -35,6 +35,7 @@ export function LoginForm() {
                 e.preventDefault();
                 void form.handleSubmit();
             }}
+            autoComplete="off"
             className="mx-auto w-full max-w-sm space-y-6"
         >
             <ErrorMessage message={serverError?.message} />
@@ -47,7 +48,7 @@ export function LoginForm() {
                             <Input
                                 id={field.name}
                                 type="email"
-                                autoComplete="email"
+                                autoComplete="off"
                                 value={field.state.value}
                                 onChange={(e) => field.handleChange(e.target.value)}
                                 onBlur={field.handleBlur}
@@ -73,7 +74,7 @@ export function LoginForm() {
                             <Input
                                 id={field.name}
                                 type="password"
-                                autoComplete="current-password"
+                                autoComplete="off"
                                 value={field.state.value}
                                 onChange={(e) => field.handleChange(e.target.value)}
                                 onBlur={field.handleBlur}
