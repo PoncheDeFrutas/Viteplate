@@ -39,23 +39,6 @@ export function LoginForm() {
             data-lpignore="true"
             className="mx-auto w-full max-w-sm space-y-6"
         >
-            <input
-                type="text"
-                name="username"
-                autoComplete="username"
-                tabIndex={-1}
-                aria-hidden="true"
-                className="sr-only"
-            />
-            <input
-                type="password"
-                name="password"
-                autoComplete="current-password"
-                tabIndex={-1}
-                aria-hidden="true"
-                className="sr-only"
-            />
-
             <ErrorMessage message={serverError?.message} />
 
             <div className="space-y-2">
