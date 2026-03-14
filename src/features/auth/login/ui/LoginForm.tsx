@@ -48,12 +48,16 @@ export function LoginForm() {
                             <Label htmlFor={field.name}>Email</Label>
                             <Input
                                 id={field.name}
-                                name="login-email"
-                                type="email"
+                                type="text"
+                                inputMode="email"
                                 autoComplete="off"
                                 autoCapitalize="none"
                                 autoCorrect="off"
                                 spellCheck={false}
+                                readOnly
+                                onFocus={(e) => {
+                                    e.currentTarget.readOnly = false;
+                                }}
                                 value={field.state.value}
                                 onChange={(e) => field.handleChange(e.target.value)}
                                 onBlur={field.handleBlur}
@@ -78,9 +82,12 @@ export function LoginForm() {
                             <Label htmlFor={field.name}>Password</Label>
                             <Input
                                 id={field.name}
-                                name="login-password"
                                 type="password"
-                                autoComplete="new-password"
+                                autoComplete="one-time-code"
+                                readOnly
+                                onFocus={(e) => {
+                                    e.currentTarget.readOnly = false;
+                                }}
                                 value={field.state.value}
                                 onChange={(e) => field.handleChange(e.target.value)}
                                 onBlur={field.handleBlur}
