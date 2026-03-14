@@ -36,8 +36,26 @@ export function LoginForm() {
                 void form.handleSubmit();
             }}
             autoComplete="off"
+            data-lpignore="true"
             className="mx-auto w-full max-w-sm space-y-6"
         >
+            <input
+                type="text"
+                name="username"
+                autoComplete="username"
+                tabIndex={-1}
+                aria-hidden="true"
+                className="sr-only"
+            />
+            <input
+                type="password"
+                name="password"
+                autoComplete="current-password"
+                tabIndex={-1}
+                aria-hidden="true"
+                className="sr-only"
+            />
+
             <ErrorMessage message={serverError?.message} />
 
             <div className="space-y-2">
@@ -47,8 +65,12 @@ export function LoginForm() {
                             <Label htmlFor={field.name}>Email</Label>
                             <Input
                                 id={field.name}
+                                name="login-email"
                                 type="email"
                                 autoComplete="off"
+                                autoCapitalize="none"
+                                autoCorrect="off"
+                                spellCheck={false}
                                 value={field.state.value}
                                 onChange={(e) => field.handleChange(e.target.value)}
                                 onBlur={field.handleBlur}
@@ -73,8 +95,9 @@ export function LoginForm() {
                             <Label htmlFor={field.name}>Password</Label>
                             <Input
                                 id={field.name}
+                                name="login-password"
                                 type="password"
-                                autoComplete="off"
+                                autoComplete="new-password"
                                 value={field.state.value}
                                 onChange={(e) => field.handleChange(e.target.value)}
                                 onBlur={field.handleBlur}
