@@ -26,6 +26,18 @@ import {
 import { WorkspacePageHeader, WorkspaceStatCard } from '@widgets/workspace';
 
 type ProjectStatus = 'healthy' | 'risk' | 'paused';
+type HealthFilter = 'all' | ProjectStatus;
+
+const HEALTH_FILTER_OPTIONS: { value: HealthFilter; label: string }[] = [
+    { value: 'all', label: 'All' },
+    { value: 'healthy', label: 'Healthy' },
+    { value: 'risk', label: 'Risk' },
+    { value: 'paused', label: 'Paused' },
+];
+
+function isHealthFilter(value: string): value is HealthFilter {
+    return HEALTH_FILTER_OPTIONS.some((option) => option.value === value);
+}
 
 interface ProjectRow {
     name: string;
@@ -111,7 +123,7 @@ export function DashboardPage() {
     const user = useSession((s) => s.user);
     const motionFx = useMotionPresets();
 
-    const [activeHealth, setActiveHealth] = useState<'all' | ProjectStatus>('all');
+    const [activeHealth, setActiveHealth] = useState<HealthFilter>('all');
     const [query, setQuery] = useState('');
 
     const filteredProjects = useMemo(() => {
@@ -211,14 +223,11 @@ export function DashboardPage() {
                                 <SegmentedControl
                                     value={activeHealth}
                                     onValueChange={(value) => {
-                                        setActiveHealth(value as 'all' | ProjectStatus);
+                                        if (isHealthFilter(value)) {
+                                            setActiveHealth(value);
+                                        }
                                     }}
-                                    options={[
-                                        { value: 'all', label: 'All' },
-                                        { value: 'healthy', label: 'Healthy' },
-                                        { value: 'risk', label: 'Risk' },
-                                        { value: 'paused', label: 'Paused' },
-                                    ]}
+                                    options={HEALTH_FILTER_OPTIONS}
                                 />
                                 <div className="relative w-56">
                                     <Search className="pointer-events-none absolute top-2.5 left-2.5 h-4 w-4 text-muted-foreground" />
