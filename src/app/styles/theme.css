@@ -16,6 +16,17 @@
     --zinc-900: 24 24 27;
     --zinc-950: 9 9 11;
 
+    /* Monochrome accent palette */
+    --mono-50: 246 247 249;
+    --mono-100: 236 238 242;
+    --mono-200: 216 220 227;
+    --mono-300: 186 192 203;
+    --mono-400: 138 145 160;
+    --mono-500: 99 107 124;
+    --mono-700: 46 51 61;
+    --mono-800: 28 31 38;
+    --mono-900: 16 18 22;
+
     /* Status palette */
     --red-500: 239 68 68;
     --red-600: 220 38 38;
@@ -32,35 +43,35 @@
     /* =========================
      Semantic tokens
      ========================= */
-    --background: var(--zinc-50);
-    --foreground: var(--zinc-900);
+    --background: var(--mono-50);
+    --foreground: var(--mono-900);
 
-    --surface: var(--zinc-100);
-    --surface-foreground: var(--zinc-900);
+    --surface: var(--mono-100);
+    --surface-foreground: var(--mono-900);
 
-    --card: var(--zinc-100);
-    --card-foreground: var(--zinc-900);
+    --card: 251 252 254;
+    --card-foreground: var(--mono-900);
 
-    --popover: var(--zinc-50);
-    --popover-foreground: var(--zinc-900);
+    --popover: 251 252 254;
+    --popover-foreground: var(--mono-900);
 
-    --border: var(--zinc-200);
-    --input: var(--zinc-200);
-    --ring: var(--zinc-900);
+    --border: var(--mono-200);
+    --input: var(--mono-200);
+    --ring: var(--mono-900);
 
-    --muted: var(--zinc-100);
-    --muted-foreground: var(--zinc-500);
+    --muted: var(--mono-100);
+    --muted-foreground: var(--mono-500);
 
-    --primary: var(--zinc-900);
+    --primary: var(--mono-900);
     --primary-foreground: 255 255 255;
-    --primary-hover: var(--zinc-700);
+    --primary-hover: var(--mono-700);
 
-    --secondary: var(--zinc-200);
-    --secondary-foreground: var(--zinc-900);
-    --secondary-hover: var(--zinc-300);
+    --secondary: var(--mono-200);
+    --secondary-foreground: var(--mono-900);
+    --secondary-hover: var(--mono-300);
 
-    --accent: var(--zinc-200);
-    --accent-foreground: var(--zinc-900);
+    --accent: var(--mono-900);
+    --accent-foreground: 255 255 255;
 
     --destructive: var(--red-600);
     --destructive-foreground: 255 255 255;
@@ -76,11 +87,14 @@
     --info-foreground: 255 255 255;
 
     /* Disabled tokens */
-    --disabled: var(--zinc-100);
-    --disabled-foreground: var(--zinc-400);
+    --disabled: var(--mono-100);
+    --disabled-foreground: var(--mono-400);
 
     /* Decorative */
-    --dot-grid: var(--zinc-300);
+    --dot-grid: var(--mono-300);
+    --atmo-vignette: 0 0 0;
+    --atmo-glow-a: 190 197 209;
+    --atmo-glow-b: 132 141 158;
 }
 
 /* =========================
@@ -88,38 +102,38 @@
    ========================= */
 .dark {
     /* Backgrounds */
-    --background: 0 0 0;
-    --foreground: 250 250 250;
+    --background: 5 5 6;
+    --foreground: 235 236 239;
 
-    --surface: 10 10 10;
-    --surface-foreground: 250 250 250;
+    --surface: 12 12 14;
+    --surface-foreground: 235 236 239;
 
-    --card: 10 10 10;
-    --card-foreground: 250 250 250;
+    --card: 10 10 12;
+    --card-foreground: 235 236 239;
 
-    --popover: 5 5 5;
-    --popover-foreground: 250 250 250;
+    --popover: 8 8 10;
+    --popover-foreground: 235 236 239;
 
     /* Borders & inputs */
-    --border: 39 39 42;
-    --input: 39 39 42;
-    --ring: 212 212 216;
+    --border: 46 46 53;
+    --input: 46 46 53;
+    --ring: 229 229 234;
 
     /* Muted */
-    --muted: 24 24 27;
-    --muted-foreground: 161 161 170;
+    --muted: 16 16 20;
+    --muted-foreground: 136 139 148;
 
     /* Brand */
-    --primary: 250 250 250;
-    --primary-foreground: 9 9 11;
-    --primary-hover: 212 212 216;
+    --primary: 240 240 242;
+    --primary-foreground: 7 7 8;
+    --primary-hover: 216 217 222;
 
-    --secondary: 39 39 42;
-    --secondary-foreground: 250 250 250;
-    --secondary-hover: 63 63 70;
+    --secondary: 29 30 35;
+    --secondary-foreground: 235 236 239;
+    --secondary-hover: 42 44 52;
 
-    --accent: 39 39 42;
-    --accent-foreground: 250 250 250;
+    --accent: 240 240 242;
+    --accent-foreground: 7 7 8;
 
     /* Status (tuned for dark backgrounds) */
     --destructive: 248 113 113;
@@ -136,11 +150,14 @@
     --info-foreground: 9 9 11;
 
     /* Disabled */
-    --disabled: 24 24 27;
-    --disabled-foreground: 63 63 70;
+    --disabled: 16 16 20;
+    --disabled-foreground: 76 78 86;
 
     /* Decorative */
-    --dot-grid: 63 63 70;
+    --dot-grid: 72 74 84;
+    --atmo-vignette: 0 0 0;
+    --atmo-glow-a: 107 111 124;
+    --atmo-glow-b: 62 66 78;
 }
 
 /* =========================

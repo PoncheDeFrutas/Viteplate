@@ -73,6 +73,12 @@ export function setStoredTheme(theme: Theme): void {
 export function applyThemeToDocument(theme: Theme): void {
     const apply = () => {
         document.documentElement.classList.toggle('dark', theme === 'dark');
+
+        const themeColor = theme === 'dark' ? '#050506' : '#f6f7f9';
+        const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+        if (metaThemeColor) {
+            metaThemeColor.setAttribute('content', themeColor);
+        }
     };
 
     if (document.startViewTransition) {

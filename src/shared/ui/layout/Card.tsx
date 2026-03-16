@@ -10,12 +10,13 @@ import type { VariantProps } from 'class-variance-authority';
 const cardVariants = cva(
     [
         'rounded-lg border border-border text-card-foreground',
-        'transition-[box-shadow,border-color,transform] duration-200 ease-out',
+        'bg-linear-to-br from-card/95 via-card/88 to-surface/92',
+        'transition-[box-shadow,border-color,transform,background] duration-200 ease-out',
     ],
     {
         variants: {
             variant: {
-                default: 'bg-transparent',
+                default: '',
                 filled: 'bg-card',
             },
             padding: {
@@ -24,7 +25,7 @@ const cardVariants = cva(
                 md: 'p-6',
             },
             interactive: {
-                true: 'hover:-translate-y-0.5 hover:border-muted-foreground/30 hover:shadow-md',
+                true: 'hover:-translate-y-0.5 hover:border-primary/35 hover:shadow-[0_18px_32px_-24px_rgb(var(--atmo-vignette)/0.9)]',
             },
         },
         defaultVariants: {

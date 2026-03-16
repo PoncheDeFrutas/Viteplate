@@ -1,407 +1,181 @@
 import { Link } from '@tanstack/react-router';
 import { motion } from 'motion/react';
-import {
-    ArrowLeft,
-    ArrowRight,
-    Layers,
-    ShieldCheck,
-    AlertTriangle,
-    Rocket,
-    Target,
-    Lock,
-    RefreshCcw,
-    UserCheck,
-    KeyRound,
-} from 'lucide-react';
+import { ArrowLeft, ArrowRight, Check, ShieldCheck } from 'lucide-react';
 import { ROUTE_PATHS } from '@shared/config';
-import { FADE_UP, stagger } from '@shared/lib/animation-presets';
-import { Button, Card, Container, Badge, Separator } from '@shared/ui';
-import type { LucideIcon } from 'lucide-react';
+import { useMotionPresets } from '@shared/lib/motion';
+import { Badge, Button } from '@shared/ui';
 
-// ---------------------------------------------------------------------------
-// Implementation phases
-// ---------------------------------------------------------------------------
-
-interface Phase {
-    number: number;
-    title: string;
-    description: string;
-}
-
-const PHASES: Phase[] = [
-    {
-        number: 1,
-        title: 'Foundations',
-        description:
-            'Project scaffolding, Vite config, Tailwind CSS v4, path aliases, ESLint, Prettier, and the CSS design system.',
-    },
-    {
-        number: 2,
-        title: 'Entities',
-        description:
-            'Domain models for User and Session with Zod schemas, TypeScript types, and session adapter.',
-    },
-    {
-        number: 3,
-        title: 'Auth features',
-        description:
-            'Login/logout features with HTTP interceptors, token refresh controller, and error normalization.',
-    },
-    {
-        number: 4,
-        title: 'Providers',
-        description:
-            'QueryClient provider, theme provider with persistence, router context, and MSW conditional setup.',
-    },
-    {
-        number: 5,
-        title: 'Router & guards',
-        description:
-            'Code-based route tree, auth/guest/role guards, layout routes, and role-aware redirects.',
-    },
-    {
-        number: 6,
-        title: 'Pages',
-        description:
-            'All route-level pages: Home, About, Login, Dashboard, Admin, Viewer, NotFound, Unauthorized.',
-    },
-    {
-        number: 7,
-        title: 'Shared UI',
-        description:
-            'Component library: 35+ components across 6 categories (input, display, feedback, overlay, navigation, layout), built with CVA and Radix UI primitives.',
-    },
-    {
-        number: 8,
-        title: 'Testing',
-        description:
-            'Vitest + MSW integration tests covering login, logout, guards, session refresh — 21 tests passing.',
-    },
-];
-
-// ---------------------------------------------------------------------------
-// Auth model
-// ---------------------------------------------------------------------------
-
-interface AuthStep {
-    title: string;
-    description: string;
-    icon: LucideIcon;
-}
-
-const AUTH_STEPS: AuthStep[] = [
-    {
-        title: 'Session store',
-        description:
-            'Zustand holds tokens, user profile, and role in memory. Provides setAccessToken, setUser, and clearSession actions. No browser storage is used — tokens live only in the JS runtime.',
-        icon: KeyRound,
-    },
-    {
-        title: 'Request interceptor',
-        description:
-            'Attaches Bearer token to every outgoing request via the session adapter. Tokens never appear in logs.',
-        icon: Lock,
-    },
-    {
-        title: 'Token refresh',
-        description:
-            'Single-flight refresh controller: on 401, queues concurrent requests, retries up to 2 times, then forces logout.',
-        icon: RefreshCcw,
-    },
-    {
-        title: 'Role-based guards',
-        description:
-            'beforeLoad guards check authentication and role. Unauthorized users redirect to /login or /unauthorized.',
-        icon: UserCheck,
-    },
-];
-
-// ---------------------------------------------------------------------------
-// Anti-patterns
-// ---------------------------------------------------------------------------
-
-const ANTI_PATTERNS: string[] = [
-    'Mixing Axios transport concerns with TanStack Query caching responsibilities',
-    'Placing business logic directly in page components instead of features',
-    'Violating FSD boundaries by importing upward or bypassing public APIs',
-    'Duplicating retry logic in Axios when TanStack Query already handles it',
-    'Using explicit any instead of unknown with proper narrowing',
-    'Creating barrel files that add no architectural value',
-];
-
-const SUMMARY_STATS = [
-    { label: 'Layers enforced', value: '6 FSD' },
-    { label: 'UI components', value: '35+' },
-    { label: 'Auth model', value: 'JWT + RBAC' },
+const PURPOSE_POINTS = [
+    'Scalable React 19 + TypeScript starter with strict architecture boundaries',
+    'Architecture reference for teams adopting Feature-Sliced Design',
+    'Operational guide for secure auth, reliable routing, and predictable delivery',
 ] as const;
 
-const ABOUT_FSD_LAYERS = [
-    { name: 'app', detail: 'Providers, router, guards, bootstrap' },
-    { name: 'pages', detail: 'Route composition only' },
-    { name: 'widgets', detail: 'Feature/entity compositions' },
-    { name: 'features', detail: 'Business use cases' },
-    { name: 'entities', detail: 'Domain models and state' },
-    { name: 'shared', detail: 'UI primitives and infrastructure' },
+const PRINCIPLES = [
+    'Respect FSD dependency direction and slice public APIs',
+    'Keep pages thin and feature logic out of route-level composition',
+    'Avoid explicit any and validate runtime inputs with Zod',
+    'Keep auth behavior centralized in shared HTTP and dedicated features',
 ] as const;
 
-// ---------------------------------------------------------------------------
-// Component
-// ---------------------------------------------------------------------------
+const LIBRARY_RESPONSIBILITIES = [
+    {
+        library: 'Axios',
+        does: 'Base client, auth interceptors, transport error normalization',
+        avoids: 'Business retry policy, cache orchestration, domain logic',
+    },
+    {
+        library: 'TanStack Query',
+        does: 'Server-state cache, retry/refetch policy, mutation invalidation',
+        avoids: 'Token storage, HTTP interceptor concerns',
+    },
+    {
+        library: 'TanStack Router',
+        does: 'Route tree, layouts, guards, and access redirection',
+        avoids: 'Direct HTTP calls and auth business orchestration',
+    },
+    {
+        library: 'Zustand',
+        does: 'Session state and explicit session actions',
+        avoids: 'API fetching and server-cache responsibilities',
+    },
+] as const;
 
 export function AboutPage() {
+    const motionFx = useMotionPresets();
+
     return (
-        <Container maxWidth="2xl" className="relative space-y-16 py-20 sm:py-24">
-            <div
-                aria-hidden="true"
-                className="pointer-events-none absolute top-8 left-[-7rem] h-56 w-56 rounded-full bg-foreground/5 blur-3xl"
-            />
-
-            {/* ─── Header ─── */}
-            <motion.header
-                {...FADE_UP}
-                className="space-y-5 rounded-2xl border border-border/80 bg-card/70 px-6 py-12 text-center shadow-sm sm:px-10"
-            >
-                <p className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
-                    Why Viteplate
-                </p>
-                <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-                    About Viteplate
-                </h1>
-                <p className="mx-auto max-w-2xl text-muted-foreground">
-                    A production-ready starter template and living architectural reference for
-                    scalable React applications. Every design decision is intentional.
-                </p>
-
-                <div className="mx-auto grid max-w-2xl gap-3 pt-2 sm:grid-cols-3">
-                    {SUMMARY_STATS.map((item) => (
-                        <Card key={item.label} padding="sm" className="bg-background/70 text-left">
-                            <p className="text-xs uppercase tracking-wide text-muted-foreground">
-                                {item.label}
-                            </p>
-                            <p className="mt-1 text-sm font-semibold text-foreground">
-                                {item.value}
-                            </p>
-                        </Card>
-                    ))}
-                </div>
-            </motion.header>
-
-            <Separator />
-
-            {/* ─── Project Goals ─── */}
-            <motion.section
-                {...FADE_UP}
-                transition={{ ...FADE_UP.transition, delay: 0.1 }}
-                className="space-y-6"
-            >
-                <div className="flex items-center gap-2">
-                    <Target className="h-5 w-5 text-foreground" />
-                    <h2 className="text-xl font-bold text-foreground">Project Goals</h2>
-                </div>
-                <div className="grid gap-4 sm:grid-cols-2">
-                    {[
-                        {
-                            title: 'Reusable foundation',
-                            text: 'Clone and start building immediately with a clean, tested architecture that scales.',
-                        },
-                        {
-                            title: 'Architectural reference',
-                            text: 'Every pattern demonstrated here — from FSD layers to auth flows — serves as documentation.',
-                        },
-                        {
-                            title: 'Strict conventions',
-                            text: 'Named exports only, type-only imports, kebab-case files, zero any — enforced by tooling.',
-                        },
-                        {
-                            title: 'Minimal dependencies',
-                            text: 'Every dependency is justified by clear architectural value. No bloat, no unnecessary abstractions.',
-                        },
-                    ].map((goal, i) => (
-                        <motion.div key={goal.title} {...stagger(i)}>
-                            <Card padding="sm" className="h-full border-border/80 bg-card/80">
-                                <p className="text-sm font-medium text-foreground">{goal.title}</p>
-                                <p className="mt-1 text-sm text-muted-foreground">{goal.text}</p>
-                            </Card>
-                        </motion.div>
-                    ))}
-                </div>
-            </motion.section>
-
-            <Separator />
-
-            {/* ─── Implementation Phases ─── */}
-            <motion.section
-                {...FADE_UP}
-                transition={{ ...FADE_UP.transition, delay: 0.15 }}
-                className="space-y-6"
-            >
-                <div className="flex items-center gap-2">
-                    <Rocket className="h-5 w-5 text-foreground" />
-                    <h2 className="text-xl font-bold text-foreground">Implementation Phases</h2>
-                </div>
-                <p className="text-sm text-muted-foreground">
-                    Viteplate was built in 8 incremental phases, each adding a specific
-                    architectural layer.
-                </p>
-
-                <div className="space-y-3">
-                    {PHASES.map((phase, i) => (
-                        <motion.div key={phase.number} {...stagger(i)}>
-                            <Card padding="sm" className="border-border/80 bg-card/80">
-                                <div className="flex items-start gap-3 border-l-2 border-border pl-3">
-                                    <Badge variant="secondary" className="mt-0.5 shrink-0">
-                                        {phase.number}
-                                    </Badge>
-                                    <div>
-                                        <p className="text-sm font-medium text-foreground">
-                                            {phase.title}
-                                        </p>
-                                        <p className="mt-1 text-sm text-muted-foreground">
-                                            {phase.description}
-                                        </p>
-                                    </div>
-                                </div>
-                            </Card>
-                        </motion.div>
-                    ))}
-                </div>
-            </motion.section>
-
-            <Separator />
-
-            {/* ─── Auth Model ─── */}
-            <motion.section
-                {...FADE_UP}
-                transition={{ ...FADE_UP.transition, delay: 0.2 }}
-                className="space-y-6"
-            >
-                <div className="flex items-center gap-2">
-                    <ShieldCheck className="h-5 w-5 text-foreground" />
-                    <h2 className="text-xl font-bold text-foreground">Auth Model</h2>
-                </div>
-                <p className="text-sm text-muted-foreground">
-                    JWT-based authentication with role-based access control, built across four
-                    interconnected layers.
-                </p>
-
-                <div className="grid gap-4 sm:grid-cols-2">
-                    {AUTH_STEPS.map((step, i) => {
-                        const Icon = step.icon;
-                        return (
-                            <motion.div key={step.title} {...stagger(i)}>
-                                <Card padding="sm" className="h-full border-border/80 bg-card/80">
-                                    <div className="flex items-start gap-3">
-                                        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-muted text-foreground">
-                                            <Icon className="h-4 w-4" />
-                                        </div>
-                                        <div>
-                                            <p className="text-sm font-medium text-foreground">
-                                                {step.title}
-                                            </p>
-                                            <p className="mt-1 text-sm text-muted-foreground">
-                                                {step.description}
-                                            </p>
-                                        </div>
-                                    </div>
-                                </Card>
-                            </motion.div>
-                        );
-                    })}
-                </div>
-            </motion.section>
-
-            <Separator />
-
-            {/* ─── Architecture Quick Reference ─── */}
-            <motion.section
-                {...FADE_UP}
-                transition={{ ...FADE_UP.transition, delay: 0.25 }}
-                className="space-y-4"
-            >
-                <div className="flex items-center gap-2">
-                    <Layers className="h-5 w-5 text-foreground" />
-                    <h2 className="text-xl font-bold text-foreground">FSD at a Glance</h2>
-                </div>
-                <Card padding="md" className="relative border-border/80 bg-card/80">
-                    <div
-                        aria-hidden="true"
-                        className="pointer-events-none absolute inset-x-8 top-10 h-px bg-linear-to-r from-transparent via-border to-transparent"
-                    />
-
-                    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                        {ABOUT_FSD_LAYERS.map((layer, index) => (
-                            <motion.div key={layer.name} {...stagger(index, 0.08, 0.1)}>
-                                <div className="relative rounded-xl border border-border/80 bg-background/70 p-4 backdrop-blur">
-                                    <span className="absolute top-[-0.6rem] left-4 rounded-full border border-border bg-background px-2 py-0.5 text-[10px] font-semibold tracking-wide text-muted-foreground uppercase">
-                                        L{index + 1}
-                                    </span>
-                                    <p className="text-sm font-semibold text-foreground">
-                                        {layer.name}
-                                    </p>
-                                    <p className="mt-1 text-xs text-muted-foreground">
-                                        {layer.detail}
-                                    </p>
-                                </div>
-                            </motion.div>
-                        ))}
+        <div className="public-shell">
+            <section className="public-frame py-10 sm:py-14 lg:py-16">
+                <div className="public-grid">
+                    <div className="col-span-12 space-y-5 lg:col-span-7">
+                        <motion.p {...motionFx.reveal()} className="public-kicker">
+                            About The Project
+                        </motion.p>
+                        <motion.h1
+                            {...motionFx.reveal({ delay: 0.05 })}
+                            className="public-heading max-w-4xl text-4xl font-semibold text-foreground sm:text-6xl"
+                        >
+                            Viteplate is both a starter and a system for frontend project execution.
+                        </motion.h1>
+                        <motion.p
+                            {...motionFx.reveal({ delay: 0.1 })}
+                            className="max-w-3xl text-base leading-relaxed text-muted-foreground sm:text-xl"
+                        >
+                            The project exists to reduce architecture chaos in early-stage frontend
+                            development. It provides a clear technical baseline and a documented
+                            path from setup to production-ready delivery.
+                        </motion.p>
                     </div>
 
-                    <div className="mt-4 flex items-center justify-center gap-2 text-xs text-muted-foreground">
-                        <span>Imports only move downward</span>
-                        <ArrowRight className="h-3.5 w-3.5" />
-                        <span>cross-slice access via public APIs</span>
-                    </div>
-                </Card>
-            </motion.section>
-
-            <Separator />
-
-            {/* ─── Anti-Patterns ─── */}
-            <motion.section
-                {...FADE_UP}
-                transition={{ ...FADE_UP.transition, delay: 0.3 }}
-                className="space-y-4"
-            >
-                <div className="flex items-center gap-2">
-                    <AlertTriangle className="h-5 w-5 text-warning" />
-                    <h2 className="text-xl font-bold text-foreground">Anti-Patterns to Avoid</h2>
-                </div>
-
-                <Card padding="md" className="border-warning/20 bg-warning/5">
-                    <ul className="space-y-2">
-                        {ANTI_PATTERNS.map((ap, i) => (
-                            <motion.li
-                                key={i}
-                                {...stagger(i)}
-                                className="flex items-start gap-2 text-sm text-muted-foreground"
+                    <div className="col-span-12 grid gap-3 self-end sm:grid-cols-2 lg:col-span-5 lg:grid-cols-1">
+                        {PURPOSE_POINTS.map((item, index) => (
+                            <motion.div
+                                key={item}
+                                {...motionFx.sequence(index, 0.1, 0.06)}
+                                className="retro-panel rounded-sm p-4"
                             >
-                                <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-warning" />
-                                {ap}
-                            </motion.li>
+                                <p className="text-sm leading-relaxed text-foreground">{item}</p>
+                            </motion.div>
                         ))}
-                    </ul>
-                </Card>
-            </motion.section>
+                    </div>
+                </div>
+            </section>
 
-            {/* ─── Navigation ─── */}
-            <motion.div
-                {...FADE_UP}
-                transition={{ ...FADE_UP.transition, delay: 0.35 }}
-                className="flex items-center justify-center gap-4"
-            >
-                <Link to={ROUTE_PATHS.home}>
-                    <Button variant="outline">
-                        <ArrowLeft className="h-4 w-4" />
-                        Home
-                    </Button>
-                </Link>
-                <Link to={ROUTE_PATHS.stack}>
-                    <Button variant="outline">
-                        Tech Stack
-                        <ArrowRight className="h-4 w-4" />
-                    </Button>
-                </Link>
-            </motion.div>
-        </Container>
+            <section className="public-band py-12 sm:py-14 lg:py-16">
+                <div className="public-frame public-grid">
+                    <div className="col-span-12 lg:col-span-4">
+                        <motion.p {...motionFx.reveal()} className="public-kicker">
+                            Non-Negotiable Principles
+                        </motion.p>
+                        <motion.h2
+                            {...motionFx.reveal({ delay: 0.05 })}
+                            className="public-heading mt-3 max-w-xl text-3xl font-semibold text-foreground sm:text-4xl"
+                        >
+                            Quality guardrails, not optional recommendations
+                        </motion.h2>
+                    </div>
+
+                    <div className="col-span-12 grid gap-3 lg:col-span-8">
+                        {PRINCIPLES.map((item, index) => (
+                            <motion.div
+                                key={item}
+                                {...motionFx.sequence(index, 0.08, 0.06)}
+                                className="retro-panel flex items-start gap-3 rounded-sm p-4"
+                            >
+                                <Check className="mt-0.5 h-4 w-4 shrink-0" />
+                                <p className="text-sm leading-relaxed text-foreground">{item}</p>
+                            </motion.div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            <section className="public-band bg-card/40 py-12 sm:py-14 lg:py-16">
+                <div className="public-frame public-grid">
+                    <div className="col-span-12 lg:col-span-4">
+                        <motion.p {...motionFx.reveal()} className="public-kicker">
+                            Responsibility Model
+                        </motion.p>
+                        <motion.h2
+                            {...motionFx.reveal({ delay: 0.05 })}
+                            className="public-heading mt-3 max-w-xl text-3xl font-semibold text-foreground sm:text-4xl"
+                        >
+                            Clear ownership per library keeps the system stable
+                        </motion.h2>
+                    </div>
+
+                    <div className="col-span-12 grid gap-3 lg:col-span-8">
+                        {LIBRARY_RESPONSIBILITIES.map((item, index) => (
+                            <motion.article
+                                key={item.library}
+                                {...motionFx.sequence(index, 0.1, 0.07)}
+                                className="retro-panel rounded-sm p-5"
+                            >
+                                <div className="mb-3 flex items-center justify-between gap-2">
+                                    <h3 className="text-lg font-semibold text-foreground">
+                                        {item.library}
+                                    </h3>
+                                    <Badge variant="outline">Defined Scope</Badge>
+                                </div>
+                                <p className="text-sm leading-relaxed text-foreground">
+                                    <span className="font-medium">Handles:</span> {item.does}
+                                </p>
+                                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                                    <span className="font-medium text-foreground">Avoids:</span>{' '}
+                                    {item.avoids}
+                                </p>
+                            </motion.article>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            <section className="public-band border-b border-border py-10 sm:py-12">
+                <div className="public-frame flex flex-wrap items-center justify-between gap-3">
+                    <motion.div {...motionFx.reveal()} className="flex items-center gap-2 text-sm">
+                        <ShieldCheck className="h-4 w-4" />
+                        <span className="text-muted-foreground">
+                            Build, lint, type-check, and test are mandatory validation gates.
+                        </span>
+                    </motion.div>
+
+                    <motion.div {...motionFx.reveal({ delay: 0.06 })} className="flex gap-2">
+                        <Link to={ROUTE_PATHS.home}>
+                            <Button variant="outline">
+                                <ArrowLeft className="h-4 w-4" />
+                                Home
+                            </Button>
+                        </Link>
+                        <Link to={ROUTE_PATHS.stack}>
+                            <Button variant="outline">
+                                Stack
+                                <ArrowRight className="h-4 w-4" />
+                            </Button>
+                        </Link>
+                    </motion.div>
+                </div>
+            </section>
+        </div>
     );
 }

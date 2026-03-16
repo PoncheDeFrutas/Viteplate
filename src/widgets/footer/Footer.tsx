@@ -13,30 +13,31 @@ const FOOTER_LINKS = [
     { label: 'Sign in', to: ROUTE_PATHS.login },
 ] as const;
 
-/**
- * Minimal footer for public pages — links, copyright.
- */
 export function Footer() {
     const year = new Date().getFullYear();
 
     return (
-        <footer className="mt-auto">
+        <footer className="mt-auto border-t border-border bg-background">
             <Separator />
-            <div className="flex flex-col items-center gap-4 px-6 py-6 sm:flex-row sm:justify-between">
-                <nav className="flex items-center gap-4">
+            <div className="public-frame grid gap-5 py-8 sm:grid-cols-2 sm:items-end">
+                <nav className="flex flex-wrap items-center gap-4">
                     {FOOTER_LINKS.map((link) => (
                         <Link
                             key={link.to}
                             to={link.to}
-                            className="text-xs text-muted-foreground transition-colors hover:text-foreground"
+                            className="eyebrow-label text-[10px] text-muted-foreground transition-colors hover:text-foreground"
                         >
                             {link.label}
                         </Link>
                     ))}
                 </nav>
-                <p className="text-xs text-muted-foreground">
-                    &copy; {year} Viteplate. All rights reserved.
-                </p>
+
+                <div className="text-left sm:text-right">
+                    <p className="text-sm font-medium text-foreground">Viteplate</p>
+                    <p className="text-xs text-muted-foreground">
+                        {year} // React 19 + TypeScript starter for scalable frontend templates.
+                    </p>
+                </div>
             </div>
         </footer>
     );

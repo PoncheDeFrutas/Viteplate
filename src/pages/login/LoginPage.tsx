@@ -1,48 +1,46 @@
 import { motion } from 'motion/react';
 import { LogIn } from 'lucide-react';
 import { LoginForm } from '@features/auth/login';
+import { useMotionPresets } from '@shared/lib/motion';
 import { Card } from '@shared/ui';
 
-// ---------------------------------------------------------------------------
-// Animation
-// ---------------------------------------------------------------------------
-
-const FADE_UP = {
-    initial: { opacity: 0, y: 16 },
-    animate: { opacity: 1, y: 0 },
-    transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] },
-} as const;
-
-// ---------------------------------------------------------------------------
-// Component
-// ---------------------------------------------------------------------------
-
 export function LoginPage() {
+    const motionFx = useMotionPresets();
+
     return (
-        <div className="relative flex min-h-full flex-col items-center justify-center px-4">
-            {/* Subtle dot-grid background */}
-            <div
-                aria-hidden="true"
-                className="dot-grid pointer-events-none absolute inset-0 opacity-30"
-            />
-
-            <motion.div {...FADE_UP} className="relative w-full max-w-sm space-y-8">
-                {/* Branding area */}
-                <div className="flex flex-col items-center gap-3 text-center">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-muted text-foreground">
-                        <LogIn className="h-5 w-5" />
-                    </div>
-                    <h1 className="text-2xl font-semibold text-foreground">Sign in</h1>
-                    <p className="text-sm text-muted-foreground">
-                        Enter your credentials to access the dashboard.
+        <div className="public-shell py-10 sm:py-14">
+            <div className="public-frame public-grid min-h-[68vh] items-center">
+                <motion.section {...motionFx.reveal()} className="col-span-12 lg:col-span-6">
+                    <p className="public-kicker">Authentication</p>
+                    <h1 className="public-heading mt-3 max-w-xl text-4xl font-semibold text-foreground sm:text-5xl">
+                        Access the protected workspace.
+                    </h1>
+                    <p className="mt-4 max-w-xl text-sm leading-relaxed text-muted-foreground sm:text-base">
+                        Session state, role guards, and refresh behavior are centralized in the
+                        platform architecture. Sign in to continue to your role-specific dashboard.
                     </p>
-                </div>
+                </motion.section>
 
-                {/* Form in card */}
-                <Card variant="filled" padding="md">
-                    <LoginForm />
-                </Card>
-            </motion.div>
+                <motion.section
+                    {...motionFx.reveal({ delay: 0.06 })}
+                    className="col-span-12 lg:col-span-5 lg:col-start-8"
+                >
+                    <Card variant="filled" padding="md" className="retro-panel rounded-sm">
+                        <div className="mb-6 flex items-center gap-3">
+                            <span className="inline-flex rounded-sm border border-border p-2">
+                                <LogIn className="h-4 w-4" />
+                            </span>
+                            <div>
+                                <p className="public-kicker">Sign in</p>
+                                <p className="text-sm text-muted-foreground">
+                                    Use your platform credentials
+                                </p>
+                            </div>
+                        </div>
+                        <LoginForm />
+                    </Card>
+                </motion.section>
+            </div>
         </div>
     );
 }

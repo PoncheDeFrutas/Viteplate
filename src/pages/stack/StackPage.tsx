@@ -1,426 +1,253 @@
-import { useState } from 'react';
 import { Link } from '@tanstack/react-router';
 import { motion } from 'motion/react';
 import {
-    Atom,
-    FileCode2,
-    Zap,
-    Route as RouteIcon,
-    Database,
-    Box,
-    Shield,
-    FlaskConical,
-    Paintbrush,
     ArrowLeft,
     ArrowRight,
-    Shuffle,
+    Braces,
     Check,
-    X,
+    FlaskConical,
+    GitBranch,
+    Shield,
 } from 'lucide-react';
 import { ROUTE_PATHS } from '@shared/config';
-import { FADE_UP, stagger } from '@shared/lib/animation-presets';
-import {
-    Button,
-    Card,
-    Container,
-    Badge,
-    Separator,
-    Tabs,
-    TabsList,
-    TabsTrigger,
-    TabsContent,
-} from '@shared/ui';
-import type { LucideIcon } from 'lucide-react';
+import { useMotionPresets } from '@shared/lib/motion';
+import { Button } from '@shared/ui';
 
-// ---------------------------------------------------------------------------
-// Stack data with responsibility details
-// ---------------------------------------------------------------------------
+const STACK_GROUPS = [
+    {
+        title: 'Core Runtime',
+        tools: 'React 19, TypeScript 5.9, Vite 7, Tailwind CSS v4',
+    },
+    {
+        title: 'Data + Navigation',
+        tools: 'TanStack Query, TanStack Router, TanStack Form, Axios',
+    },
+    {
+        title: 'State + Validation',
+        tools: 'Zustand for session and UI globals, Zod for runtime validation',
+    },
+    {
+        title: 'Quality + Tooling',
+        tools: 'Vitest, MSW, ESLint 9, Prettier 3, Husky, lint-staged',
+    },
+] as const;
 
-interface StackEntry {
-    category: StackCategory;
-    name: string;
-    version: string;
-    icon: LucideIcon;
-    role: string;
-    responsibilities: string[];
-    doesNot: string[];
-}
+const DEPENDENCY_RULES = [
+    'Dependency direction is fixed: app -> pages -> widgets -> features -> entities -> shared',
+    'Cross-slice access must pass through public APIs (index.ts)',
+    'No deep imports into another slice internals',
+    'Shared UI stays domain-agnostic and free of business logic',
+] as const;
 
-type StackCategory =
-    | 'runtime'
-    | 'data'
-    | 'routing'
-    | 'state'
-    | 'validation'
-    | 'tooling'
-    | 'testing';
+const BUILD_GATES = ['pnpm lint', 'pnpm check-types', 'pnpm build', 'pnpm test -- --run'] as const;
 
-const CATEGORY_LABELS: Record<StackCategory, string> = {
-    runtime: 'Runtime',
-    data: 'Data layer',
-    routing: 'Routing',
-    state: 'State',
-    validation: 'Validation',
-    tooling: 'Tooling',
-    testing: 'Testing',
-};
-
-const CATEGORY_ORDER: StackCategory[] = [
-    'runtime',
-    'data',
-    'routing',
-    'state',
-    'validation',
-    'tooling',
-    'testing',
-];
-
-const STACK_ENTRIES: StackEntry[] = [
-    {
-        category: 'data',
-        name: 'Axios',
-        version: '1.x',
-        icon: Shuffle,
-        role: 'HTTP transport layer',
-        responsibilities: [
-            'Sends HTTP requests and receives responses',
-            'Manages request/response interceptors',
-            'Handles timeouts and cancellation',
-            'Normalizes errors to ApiError via normalizeApiError()',
-        ],
-        doesNot: [
-            'Cache responses (TanStack Query does that)',
-            'Manage retry logic for queries (TanStack Query does that)',
-            'Store or manage UI state',
-        ],
-    },
-    {
-        category: 'data',
-        name: 'TanStack Query',
-        version: '5.x',
-        icon: Database,
-        role: 'Async state manager',
-        responsibilities: [
-            'Caches server data and deduplicates requests',
-            'Manages loading, error, and success states',
-            'Handles background refetches and stale-while-revalidate',
-            'Provides retry logic for failed queries',
-        ],
-        doesNot: [
-            'Make HTTP calls directly (Axios does that)',
-            'Handle auth token refresh (interceptors do that)',
-            'Manage client-only state',
-        ],
-    },
-    {
-        category: 'routing',
-        name: 'TanStack Router',
-        version: '1.x',
-        icon: RouteIcon,
-        role: 'Type-safe routing',
-        responsibilities: [
-            'Defines routes via code (not file-based)',
-            'Runs beforeLoad guards for auth and role checks',
-            'Provides full TypeScript inference for routes',
-            'Manages navigation and redirects',
-        ],
-        doesNot: [
-            'Manage auth state (Zustand does that)',
-            'Fetch data (TanStack Query does that)',
-            'Define UI components',
-        ],
-    },
-    {
-        category: 'state',
-        name: 'Zustand',
-        version: '5.x',
-        icon: Box,
-        role: 'Client state management',
-        responsibilities: [
-            'Holds session state (user, tokens, role) in memory',
-            'Provides hooks like useSession for reactive access',
-            'Exposes setAccessToken, setUser, clearSession actions',
-            'Vanilla store enables framework-agnostic access',
-        ],
-        doesNot: [
-            'Fetch data from the server',
-            'Handle routing or navigation',
-            'Replace TanStack Query for server state',
-        ],
-    },
-    {
-        category: 'validation',
-        name: 'Zod',
-        version: '4.x',
-        icon: Shield,
-        role: 'Runtime validation',
-        responsibilities: [
-            'Validates API responses at runtime',
-            'Validates environment variables with safeParse',
-            'Provides parseWithSchema() utility for strict parsing',
-            'Generates TypeScript types from schemas via z.infer',
-        ],
-        doesNot: [
-            'Replace TypeScript static types',
-            'Make HTTP requests',
-            'Handle error display in UI',
-        ],
-    },
-    {
-        category: 'runtime',
-        name: 'React',
-        version: '19',
-        icon: Atom,
-        role: 'UI framework',
-        responsibilities: [
-            'Renders components and manages component lifecycle',
-            'Provides hooks for state and effects',
-            'Supports concurrent features for smooth UX',
-            'Handles the view layer exclusively',
-        ],
-        doesNot: [
-            'Manage global state (Zustand does that)',
-            'Fetch data (TanStack Query does that)',
-            'Handle routing (TanStack Router does that)',
-        ],
-    },
-    {
-        category: 'tooling',
-        name: 'TypeScript',
-        version: '~5.9',
-        icon: FileCode2,
-        role: 'Type system',
-        responsibilities: [
-            'Strict mode with zero implicit any',
-            'Type-only imports via verbatimModuleSyntax',
-            'Full inference for routes, schemas, and stores',
-            'Catches bugs at compile time, not runtime',
-        ],
-        doesNot: [
-            'Validate data at runtime (Zod does that)',
-            'Replace unit tests',
-            'Run in production (compiled to JS)',
-        ],
-    },
-    {
-        category: 'tooling',
-        name: 'Vite',
-        version: '7',
-        icon: Zap,
-        role: 'Build tool',
-        responsibilities: [
-            'Provides instant dev server with HMR',
-            'Bundles for production with Rollup',
-            'Integrates Tailwind CSS v4 plugin',
-            'Resolves FSD path aliases',
-        ],
-        doesNot: [
-            'Lint code (ESLint does that)',
-            'Format code (Prettier does that)',
-            'Run tests (Vitest does that)',
-        ],
-    },
-    {
-        category: 'tooling',
-        name: 'Tailwind CSS',
-        version: 'v4',
-        icon: Paintbrush,
-        role: 'Styling framework',
-        responsibilities: [
-            'Utility-first CSS via @theme and design tokens',
-            'Dark mode via .dark class variant',
-            'Responsive design with breakpoint prefixes',
-            'Class sorting via prettier-plugin-tailwindcss',
-        ],
-        doesNot: [
-            'Manage theme state (useTheme hook does that)',
-            'Provide component logic',
-            'Replace semantic CSS tokens for theming',
-        ],
-    },
-    {
-        category: 'testing',
-        name: 'Vitest + MSW',
-        version: '4.x + 2.x',
-        icon: FlaskConical,
-        role: 'Testing infrastructure',
-        responsibilities: [
-            'Unit and integration tests with globals: true',
-            'jsdom environment for React component testing',
-            'MSW intercepts HTTP for realistic API mocking',
-            'onUnhandledRequest: error ensures no leaks',
-        ],
-        doesNot: [
-            'Replace E2E tests (Playwright/Cypress for that)',
-            'Test visual regressions',
-            'Run in production',
-        ],
-    },
-];
-
-// ---------------------------------------------------------------------------
-// Component
-// ---------------------------------------------------------------------------
+const AUTH_GUARDRAILS = [
+    'JWT attach/refresh/retry/logout remains centralized in shared HTTP auth modules',
+    'Refresh flow must preserve single-flight behavior and bounded retries',
+    'Unrecoverable refresh failure clears session safely',
+    'Role-based route protection is enforced by route guards',
+] as const;
 
 export function StackPage() {
-    const [activeCategory, setActiveCategory] = useState<StackCategory>('runtime');
+    const motionFx = useMotionPresets();
 
     return (
-        <Container maxWidth="2xl" className="relative space-y-12 py-20 sm:py-24">
-            <div
-                aria-hidden="true"
-                className="pointer-events-none absolute top-10 right-[-7rem] h-56 w-56 rounded-full bg-foreground/5 blur-3xl"
-            />
-
-            {/* Header */}
-            <motion.header
-                {...FADE_UP}
-                className="space-y-4 rounded-2xl border border-border/80 bg-card/70 px-6 py-12 text-center shadow-sm sm:px-10"
-            >
-                <p className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
-                    Built on deliberate choices
-                </p>
-                <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-                    Tech Stack
-                </h1>
-                <p className="mx-auto max-w-2xl text-muted-foreground">
-                    Each library has a clear, non-overlapping responsibility. Here is exactly what
-                    each tool does&mdash;and what it deliberately does not do.
-                </p>
-
-                <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
-                    {CATEGORY_ORDER.map((category) => (
-                        <Badge
-                            key={category}
-                            variant={category === activeCategory ? 'secondary' : 'outline'}
+        <div className="public-shell">
+            <section className="public-frame py-10 sm:py-14 lg:py-16">
+                <div className="public-grid">
+                    <div className="col-span-12 space-y-5 lg:col-span-8">
+                        <motion.p {...motionFx.reveal()} className="public-kicker">
+                            Stack Architecture
+                        </motion.p>
+                        <motion.h1
+                            {...motionFx.reveal({ delay: 0.05 })}
+                            className="public-heading max-w-5xl text-4xl font-semibold text-foreground sm:text-6xl"
                         >
-                            {CATEGORY_LABELS[category]}
-                        </Badge>
-                    ))}
+                            A strict technical stack designed for predictable template generation.
+                        </motion.h1>
+                        <motion.p
+                            {...motionFx.reveal({ delay: 0.1 })}
+                            className="max-w-3xl text-base leading-relaxed text-muted-foreground sm:text-xl"
+                        >
+                            The stack is intentionally opinionated. Each tool has explicit
+                            responsibilities so teams can ship quickly without cross-layer entropy.
+                        </motion.p>
+                    </div>
+
+                    <div className="col-span-12 self-end lg:col-span-4">
+                        <motion.div
+                            {...motionFx.reveal({ delay: 0.12 })}
+                            className="retro-panel rounded-sm p-5"
+                        >
+                            <p className="public-kicker">Package Manager</p>
+                            <p className="mt-2 text-xl font-semibold text-foreground">pnpm</p>
+                            <p className="mt-2 text-sm text-muted-foreground">
+                                Keep dependency workflows consistent across local development and
+                                CI.
+                            </p>
+                        </motion.div>
+                    </div>
                 </div>
-            </motion.header>
+            </section>
 
-            <Separator />
+            <section className="public-band py-12 sm:py-14 lg:py-16">
+                <div className="public-frame public-grid">
+                    <div className="col-span-12 lg:col-span-4">
+                        <motion.p {...motionFx.reveal()} className="public-kicker">
+                            Stack Snapshot
+                        </motion.p>
+                        <motion.h2
+                            {...motionFx.reveal({ delay: 0.05 })}
+                            className="public-heading mt-3 max-w-xl text-3xl font-semibold text-foreground sm:text-4xl"
+                        >
+                            Tooling selected for role clarity and maintainability
+                        </motion.h2>
+                    </div>
 
-            {/* Stack entries */}
-            <Tabs
-                value={activeCategory}
-                onValueChange={(value) => setActiveCategory(value as StackCategory)}
-                animated
-            >
-                <TabsList className="mb-6 flex h-auto flex-wrap justify-start gap-1 rounded-xl border border-border/80 bg-card/70 p-1">
-                    {CATEGORY_ORDER.map((category) => (
-                        <TabsTrigger key={category} value={category} className="rounded-lg">
-                            {CATEGORY_LABELS[category]}
-                        </TabsTrigger>
-                    ))}
-                </TabsList>
+                    <div className="col-span-12 grid gap-3 sm:grid-cols-2 lg:col-span-8">
+                        {STACK_GROUPS.map((group, index) => (
+                            <motion.article
+                                key={group.title}
+                                {...motionFx.sequence(index, 0.08, 0.06)}
+                                className="retro-panel rounded-sm p-5"
+                            >
+                                <h3 className="text-base font-semibold text-foreground">
+                                    {group.title}
+                                </h3>
+                                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                                    {group.tools}
+                                </p>
+                            </motion.article>
+                        ))}
+                    </div>
+                </div>
+            </section>
 
-                {CATEGORY_ORDER.map((category) => {
-                    const entries = STACK_ENTRIES.filter((entry) => entry.category === category);
+            <section className="public-band bg-card/40 py-12 sm:py-14 lg:py-16">
+                <div className="public-frame public-grid">
+                    <div className="col-span-12 lg:col-span-4">
+                        <motion.p {...motionFx.reveal()} className="public-kicker">
+                            FSD Rules
+                        </motion.p>
+                        <motion.h2
+                            {...motionFx.reveal({ delay: 0.05 })}
+                            className="public-heading mt-3 max-w-xl text-3xl font-semibold text-foreground sm:text-4xl"
+                        >
+                            Structural constraints that keep large codebases coherent
+                        </motion.h2>
+                    </div>
 
-                    return (
-                        <TabsContent key={category} value={category} className="mt-0">
-                            <div className="mb-4 flex items-center justify-between">
-                                <Badge variant="secondary">{CATEGORY_LABELS[category]}</Badge>
-                                <span className="text-xs text-muted-foreground">
-                                    {entries.length} {entries.length === 1 ? 'entry' : 'entries'}
-                                </span>
+                    <div className="col-span-12 grid gap-3 lg:col-span-8">
+                        {DEPENDENCY_RULES.map((rule, index) => (
+                            <motion.div
+                                key={rule}
+                                {...motionFx.sequence(index, 0.08, 0.06)}
+                                className="retro-panel flex items-start gap-3 rounded-sm p-4"
+                            >
+                                <GitBranch className="mt-0.5 h-4 w-4 shrink-0" />
+                                <p className="text-sm leading-relaxed text-foreground">{rule}</p>
+                            </motion.div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            <section className="public-band py-12 sm:py-14 lg:py-16">
+                <div className="public-frame public-grid">
+                    <div className="col-span-12 grid gap-4 lg:col-span-7">
+                        <motion.article
+                            {...motionFx.reveal()}
+                            className="retro-panel rounded-sm p-5"
+                        >
+                            <div className="mb-3 flex items-center gap-2">
+                                <Shield className="h-4 w-4" />
+                                <p className="text-sm font-semibold text-foreground">
+                                    Auth Guardrails
+                                </p>
                             </div>
-
-                            <div className="grid gap-4 lg:grid-cols-2">
-                                {entries.map((entry, i) => {
-                                    const Icon = entry.icon;
-
-                                    return (
-                                        <motion.div key={entry.name} {...stagger(i, 0.08, 0.08)}>
-                                            <Card
-                                                padding="md"
-                                                className="h-full border-border/80 bg-card/80 transition-colors hover:border-foreground/20"
-                                            >
-                                                <div className="flex items-start gap-3">
-                                                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-border bg-background text-foreground">
-                                                        <Icon className="h-4 w-4" />
-                                                    </div>
-                                                    <div className="min-w-0 flex-1">
-                                                        <div className="flex flex-wrap items-center gap-2">
-                                                            <h2 className="text-base font-semibold text-foreground">
-                                                                {entry.name}
-                                                            </h2>
-                                                            <Badge variant="secondary">
-                                                                {entry.version}
-                                                            </Badge>
-                                                        </div>
-                                                        <p className="mt-1 text-sm text-muted-foreground">
-                                                            {entry.role}
-                                                        </p>
-                                                    </div>
-                                                </div>
-
-                                                <div className="mt-4 grid gap-4 sm:grid-cols-2">
-                                                    <div className="rounded-lg border border-success/20 bg-success/5 p-3">
-                                                        <p className="text-[11px] font-semibold tracking-wide text-success uppercase">
-                                                            Owns
-                                                        </p>
-                                                        <ul className="mt-2 space-y-1.5">
-                                                            {entry.responsibilities.map((item) => (
-                                                                <li
-                                                                    key={item}
-                                                                    className="flex items-start gap-2 text-xs text-muted-foreground"
-                                                                >
-                                                                    <Check className="mt-0.5 h-3 w-3 shrink-0 text-success" />
-                                                                    {item}
-                                                                </li>
-                                                            ))}
-                                                        </ul>
-                                                    </div>
-
-                                                    <div className="rounded-lg border border-destructive/20 bg-destructive/5 p-3">
-                                                        <p className="text-[11px] font-semibold tracking-wide text-destructive uppercase">
-                                                            Avoids
-                                                        </p>
-                                                        <ul className="mt-2 space-y-1.5">
-                                                            {entry.doesNot.map((item) => (
-                                                                <li
-                                                                    key={item}
-                                                                    className="flex items-start gap-2 text-xs text-muted-foreground"
-                                                                >
-                                                                    <X className="mt-0.5 h-3 w-3 shrink-0 text-destructive" />
-                                                                    {item}
-                                                                </li>
-                                                            ))}
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </Card>
-                                        </motion.div>
-                                    );
-                                })}
+                            <div className="grid gap-2">
+                                {AUTH_GUARDRAILS.map((item, index) => (
+                                    <motion.div
+                                        key={item}
+                                        {...motionFx.sequence(index, 0.1, 0.05)}
+                                        className="flex items-start gap-2"
+                                    >
+                                        <Check className="mt-0.5 h-4 w-4 shrink-0" />
+                                        <p className="text-sm text-muted-foreground">{item}</p>
+                                    </motion.div>
+                                ))}
                             </div>
-                        </TabsContent>
-                    );
-                })}
-            </Tabs>
+                        </motion.article>
+                    </div>
 
-            {/* Navigation */}
-            <motion.div
-                {...FADE_UP}
-                transition={{ ...FADE_UP.transition, delay: 0.4 }}
-                className="flex items-center justify-center gap-4"
-            >
-                <Link to={ROUTE_PATHS.about}>
-                    <Button variant="outline">
-                        <ArrowLeft className="h-4 w-4" />
-                        About
-                    </Button>
-                </Link>
-                <Link to={ROUTE_PATHS.home}>
-                    <Button variant="outline">
-                        Home
-                        <ArrowRight className="h-4 w-4" />
-                    </Button>
-                </Link>
-            </motion.div>
-        </Container>
+                    <div className="col-span-12 grid gap-3 lg:col-span-5">
+                        <motion.article
+                            {...motionFx.reveal({ delay: 0.05 })}
+                            className="retro-panel rounded-sm p-5"
+                        >
+                            <div className="mb-3 flex items-center gap-2">
+                                <Braces className="h-4 w-4" />
+                                <p className="text-sm font-semibold text-foreground">
+                                    Validation Gates
+                                </p>
+                            </div>
+                            <p className="mb-3 text-sm text-muted-foreground">
+                                Every phase is expected to pass these checks before handoff.
+                            </p>
+                            <div className="grid gap-2">
+                                {BUILD_GATES.map((cmd, index) => (
+                                    <motion.div
+                                        key={cmd}
+                                        {...motionFx.sequence(index, 0.12, 0.05)}
+                                        className="rounded-sm border border-border px-3 py-2"
+                                    >
+                                        <code className="text-xs text-foreground">{cmd}</code>
+                                    </motion.div>
+                                ))}
+                            </div>
+                        </motion.article>
+
+                        <motion.article
+                            {...motionFx.reveal({ delay: 0.1 })}
+                            className="retro-panel rounded-sm p-5"
+                        >
+                            <div className="mb-2 flex items-center gap-2">
+                                <FlaskConical className="h-4 w-4" />
+                                <p className="text-sm font-semibold text-foreground">
+                                    Testing Policy
+                                </p>
+                            </div>
+                            <p className="text-sm text-muted-foreground">
+                                Tests mirror src structure under test/. MSW is required for API
+                                mocking and unhandled requests should fail fast.
+                            </p>
+                        </motion.article>
+                    </div>
+                </div>
+            </section>
+
+            <section className="public-band border-b border-border py-10 sm:py-12">
+                <div className="public-frame flex flex-wrap items-center justify-between gap-3">
+                    <motion.p {...motionFx.reveal()} className="text-sm text-muted-foreground">
+                        Continue with implementation guidance in About or return to the Home
+                        overview.
+                    </motion.p>
+                    <motion.div {...motionFx.reveal({ delay: 0.05 })} className="flex gap-2">
+                        <Link to={ROUTE_PATHS.about}>
+                            <Button variant="outline">
+                                <ArrowLeft className="h-4 w-4" />
+                                About
+                            </Button>
+                        </Link>
+                        <Link to={ROUTE_PATHS.home}>
+                            <Button variant="outline">
+                                Home
+                                <ArrowRight className="h-4 w-4" />
+                            </Button>
+                        </Link>
+                    </motion.div>
+                </div>
+            </section>
+        </div>
     );
 }

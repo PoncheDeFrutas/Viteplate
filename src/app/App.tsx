@@ -35,7 +35,7 @@ export function App() {
     if (isLoading) {
         return (
             <div className="flex min-h-screen items-center justify-center bg-background">
-                <Spinner size="lg" label="Loading application" />
+                <Spinner size="lg" label="Loading application…" />
             </div>
         );
     }

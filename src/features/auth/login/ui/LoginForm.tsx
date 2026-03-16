@@ -35,7 +35,7 @@ export function LoginForm() {
                 e.preventDefault();
                 void form.handleSubmit();
             }}
-            autoComplete="off"
+            autoComplete="on"
             data-lpignore="true"
             className="mx-auto w-full max-w-sm space-y-6"
         >
@@ -48,16 +48,13 @@ export function LoginForm() {
                             <Label htmlFor={field.name}>Email</Label>
                             <Input
                                 id={field.name}
-                                type="text"
+                                name="email"
+                                type="email"
                                 inputMode="email"
-                                autoComplete="off"
+                                autoComplete="username"
                                 autoCapitalize="none"
                                 autoCorrect="off"
                                 spellCheck={false}
-                                readOnly
-                                onFocus={(e) => {
-                                    e.currentTarget.readOnly = false;
-                                }}
                                 value={field.state.value}
                                 onChange={(e) => field.handleChange(e.target.value)}
                                 onBlur={field.handleBlur}
@@ -82,12 +79,9 @@ export function LoginForm() {
                             <Label htmlFor={field.name}>Password</Label>
                             <Input
                                 id={field.name}
+                                name="password"
                                 type="password"
-                                autoComplete="one-time-code"
-                                readOnly
-                                onFocus={(e) => {
-                                    e.currentTarget.readOnly = false;
-                                }}
+                                autoComplete="current-password"
                                 value={field.state.value}
                                 onChange={(e) => field.handleChange(e.target.value)}
                                 onBlur={field.handleBlur}
@@ -114,7 +108,7 @@ export function LoginForm() {
                         fullWidth
                         loading={isSubmitting || loginMutation.isPending}
                     >
-                        {isSubmitting || loginMutation.isPending ? 'Signing in...' : 'Sign in'}
+                        {isSubmitting || loginMutation.isPending ? 'Signing in…' : 'Sign in'}
                     </Button>
                 )}
             </form.Subscribe>
