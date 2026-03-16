@@ -1,15 +1,8 @@
-import { lazy, Suspense, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { createRouter, RouterProvider as TanStackRouterProvider } from '@tanstack/react-router';
 import { routeTree } from '../../routers';
 import type { RouterContext } from '../../routers';
-
-const RouterDevtools = import.meta.env.DEV
-    ? lazy(() =>
-          import('@tanstack/router-devtools').then((mod) => ({
-              default: mod.TanStackRouterDevtools,
-          })),
-      )
-    : () => null;
+import type { ComponentType } from 'react';
 
 function createAppRouter(context: RouterContext) {
     return createRouter({
@@ -31,6 +24,13 @@ interface AppRouterProviderProps {
     context: RouterContext;
 }
 
+interface RouterDevtoolsProps {
+    router: ReturnType<typeof createAppRouter>;
+    position?: string;
+}
+
+type RouterDevtoolsComponent = ComponentType<RouterDevtoolsProps>;
+
 /**
  * Creates the TanStack Router instance and keeps its context in sync
  * with the current auth state. The router is created once on first render;
@@ -38,17 +38,37 @@ interface AppRouterProviderProps {
  */
 export function AppRouterProvider({ context }: AppRouterProviderProps) {
     const [router] = useState(() => createAppRouter(context));
+    const [RouterDevtools, setRouterDevtools] = useState<RouterDevtoolsComponent | null>(null);
 
     useEffect(() => {
         router.update({ context });
     }, [router, context]);
 
+    useEffect(() => {
+        if (!import.meta.env.DEV) {
+            return;
+        }
+
+        const devtoolsModule = '@tanstack/router-devtools';
+
+        void import(devtoolsModule)
+            .then((mod: unknown) => {
+                const maybeDevtools = (mod as { TanStackRouterDevtools?: RouterDevtoolsComponent })
+                    .TanStackRouterDevtools;
+
+                if (maybeDevtools) {
+                    setRouterDevtools(() => maybeDevtools);
+                }
+            })
+            .catch(() => {
+                setRouterDevtools(null);
+            });
+    }, []);
+
     return (
         <>
             <TanStackRouterProvider router={router} />
-            <Suspense>
-                <RouterDevtools router={router} position="bottom-right" />
-            </Suspense>
+            {RouterDevtools ? <RouterDevtools router={router} position="bottom-right" /> : null}
         </>
     );
 }

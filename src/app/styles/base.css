@@ -120,6 +120,32 @@
         line-height: 1.02;
     }
 
+    .workspace-shell {
+        margin-inline: auto;
+        width: 100%;
+        max-width: 1760px;
+        padding-inline: 1rem;
+    }
+
+    .workspace-grid {
+        display: grid;
+        grid-template-columns: repeat(12, minmax(0, 1fr));
+        gap: 0.9rem;
+    }
+
+    .workspace-panel {
+        border: 1px solid rgb(var(--border));
+        background: rgb(var(--card));
+    }
+
+    .workspace-label {
+        font-family: 'IBM Plex Mono', ui-monospace, monospace;
+        font-size: 0.64rem;
+        letter-spacing: 0.13em;
+        text-transform: uppercase;
+        color: rgb(var(--muted-foreground));
+    }
+
     @media (min-width: 640px) {
         .public-frame {
             padding-inline: 1.5rem;
@@ -127,6 +153,14 @@
 
         .public-grid {
             gap: 1.25rem;
+        }
+
+        .workspace-shell {
+            padding-inline: 1.5rem;
+        }
+
+        .workspace-grid {
+            gap: 1rem;
         }
     }
 
@@ -138,11 +172,23 @@
         .public-grid {
             gap: 1.5rem;
         }
+
+        .workspace-shell {
+            padding-inline: 2rem;
+        }
+
+        .workspace-grid {
+            gap: 1.25rem;
+        }
     }
 
     @media (min-width: 1440px) {
         .public-frame {
             padding-inline: 3.5rem;
+        }
+
+        .workspace-shell {
+            padding-inline: 3rem;
         }
     }
 }
