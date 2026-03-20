@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
 import { createRouter, RouterProvider as TanStackRouterProvider } from '@tanstack/react-router';
-import { routeTree } from '../../routers';
-import type { RouterContext } from '../../routers';
 import type { ComponentType } from 'react';
+import { useEffect, useState } from 'react';
+import type { RouterContext } from '../../routers';
+import { routeTree } from '../../routers';
 
 function createAppRouter(context: RouterContext) {
     return createRouter({
@@ -51,7 +51,7 @@ export function AppRouterProvider({ context }: AppRouterProviderProps) {
 
         const devtoolsModule = '@tanstack/router-devtools';
 
-        void import(devtoolsModule)
+        void import(/* @vite-ignore */ devtoolsModule)
             .then((mod: unknown) => {
                 const maybeDevtools = (mod as { TanStackRouterDevtools?: RouterDevtoolsComponent })
                     .TanStackRouterDevtools;
