@@ -2,28 +2,24 @@
 
 ## Purpose
 
-Viteplate is a scalable React 19 + TypeScript starter built around Feature-Sliced Design (FSD).
-Treat the repo as both production starter code and an architecture reference.
+Viteplate is a production-ready React 19 + TypeScript starter with strict Feature-Sliced Design (FSD). This file is the primary guidance for coding agents in this repository.
 
-## Rule precedence
+## Rule precedence and external instruction files
 
-Primary sources: `AGENTS.md` -> `.github/copilot-instructions.md` -> `.github/agents/*.agent.md`.
-Cursor rules status:
+Apply instructions in this order:
 
-- No `.cursorrules` file found.
-- No `.cursor/rules/` directory found.
-  If guidance conflicts, prioritize architecture, type safety, and security constraints in this file.
+1. `AGENTS.md`
+2. `.github/copilot-instructions.md`
+3. `.github/agents/*.agent.md`
+   Cursor rules status in this repo:
 
-## Stack snapshot
-
-- React 19, TypeScript 5.9, Vite 7, Tailwind CSS v4.
-- TanStack Query/Router/Form, Axios, Zod, Zustand.
-- `clsx`, `tailwind-merge`, `class-variance-authority`.
-- Vitest + jsdom + MSW.
-- ESLint 9, Prettier 3, Husky, lint-staged.
-- Package manager: `pnpm`.
+- `.cursorrules` is not present.
+- `.cursor/rules/` is not present.
+  If guidance conflicts, prioritize architecture boundaries, type safety, and security behavior.
 
 ## Build, lint, and test commands
+
+Run from repository root:
 
 ```bash
 pnpm dev
@@ -33,26 +29,35 @@ pnpm check-types
 pnpm lint
 pnpm format
 pnpm test
-pnpm test -- --run
-pnpm test -- --run test/unit/shared/api/http/client.test.ts
-pnpm test -- --run -t "request interceptor"
 pnpm test:coverage
+```
+
+Single-test commands:
+
+```bash
+# Run all tests once
+pnpm test -- --run
+# Run one test file
+pnpm test -- --run test/unit/shared/api/http/client.test.ts
+# Run tests matching name pattern
+pnpm test -- --run -t "request interceptor"
+# Run one integration test file
+pnpm test -- --run test/integration/auth/login-flow.test.ts
 ```
 
 Testing notes:
 
-- `pnpm test` runs watch mode.
-- `pnpm test -- --run` runs once.
-- Single file: `pnpm test -- --run <test-file-path>`.
-- Single test case by name: `pnpm test -- --run -t "<pattern>"`.
-  Recommended pre-handoff checks:
+- `pnpm test` is watch mode.
+- Prefer `pnpm test -- --run` for pre-handoff checks.
+- Keep test paths under root `test/`.
+  Recommended validation before finishing meaningful changes:
 
 1. `pnpm lint`
 2. `pnpm check-types`
 3. `pnpm build`
 4. `pnpm test -- --run`
 
-## Architecture (FSD)
+## Architecture, imports, and boundaries
 
 Allowed dependency direction:
 
@@ -60,109 +65,111 @@ Allowed dependency direction:
 app -> pages -> widgets -> features -> entities -> shared
 ```
 
-Rules:
+Core FSD rules:
 
 - Never import upward in the layer graph.
-- Cross-slice imports must go through the slice public API (`index.ts`).
-- Do not deep-import another slice internals.
-- Do not add barrel files unless they expose meaningful public API.
-  Layer roles:
-- `app`: bootstrap, providers, router, guards, global setup.
-- `pages`: route-level composition only (thin pages).
-- `widgets`: reusable compositions of lower layers.
-- `features`: user-facing business use cases.
-- `entities`: domain models and domain behavior.
-- `shared`: domain-agnostic infrastructure and primitives.
-
-## Paths and import conventions
-
-Primary aliases:
-
+- Cross-slice imports must go through each slice public API (`index.ts`).
+- Do not deep-import internals of another slice.
+- Keep `pages` thin and composition-focused.
+- Keep `shared` domain-agnostic.
+  Layer responsibilities:
+- `app`: bootstrap/providers/router/guards/global setup
+- `pages`: route-level composition
+- `widgets`: reusable compositions
+- `features`: user-facing business workflows
+- `entities`: domain models and entity-owned logic
+- `shared`: infrastructure, utilities, reusable primitives
+  Path aliases:
 - `@app/*` -> `src/app/*`
+- `@processes/*` -> `src/processes/*`
 - `@pages/*` -> `src/pages/*`
 - `@widgets/*` -> `src/widgets/*`
 - `@features/*` -> `src/features/*`
 - `@entities/*` -> `src/entities/*`
 - `@shared/*` -> `src/shared/*`
-  Import rules:
-- Use aliases for cross-module imports.
-- Use relative imports inside the same module/slice.
-- Use `import type` for type-only imports (`verbatimModuleSyntax` enabled).
-- Keep exports explicit: `export { ... }` and `export type { ... }`.
-- No default exports; use named exports only.
-- Preferred order: third-party, aliases, relative.
+  Import/export conventions:
+- Use aliases for cross-slice imports.
+- Use relative imports inside a slice/module.
+- Use `import type` for type-only imports (`verbatimModuleSyntax` is enabled).
+- Prefer grouping order: third-party, aliases, relative.
+- Use explicit named exports and `export type`.
+- Avoid default exports.
 
-## Formatting and linting
+## Formatting, linting, and TypeScript policy
 
-Prettier (`.prettierrc`) rules:
+Prettier (`.prettierrc`) is canonical:
 
-- 4 spaces, no tabs.
-- Single quotes, semicolons.
-- Trailing commas `all`.
-- Print width 100.
-- Arrow parens always.
-- LF line endings.
-  Additional style enforcement:
-- Tailwind classes sorted by `prettier-plugin-tailwindcss`.
-- Pre-commit hook runs `pnpm format`.
-- ESLint uses JS + TypeScript + React Hooks + React Refresh recommended configs.
+- 4 spaces, no tabs
+- single quotes and semicolons
+- trailing commas: `all`
+- print width: 100
+- arrow parens: `always`
+- line endings: LF
+  Lint/format behavior:
+- ESLint flat config uses JS + TS + React Hooks + React Refresh recommended rules.
+- Tailwind classes are sorted by `prettier-plugin-tailwindcss`.
+- Husky pre-commit hook runs `pnpm format`.
+  TypeScript strictness from `tsconfig.app.json`:
+- `strict`, `noImplicitAny`, `strictNullChecks`
+- `noUnusedLocals`, `noUnusedParameters`
+- `noFallthroughCasesInSwitch`, `noUncheckedSideEffectImports`
+- `moduleResolution: bundler`, `verbatimModuleSyntax: true`
+- `erasableSyntaxOnly: true`
+  Typing rules:
+- Never add explicit `any`.
+- Prefer `unknown` + narrowing at trust boundaries.
+- Keep assertions minimal and justified.
+- Use Zod for runtime validation.
 
-## TypeScript policy
+## Naming, error handling, and security
 
-Strict TS is enforced in `tsconfig.app.json`, including:
+Naming conventions:
 
-- `strict`, `noImplicitAny`, `strictNullChecks`.
-- `noUnusedLocals`, `noUnusedParameters`.
-- `noFallthroughCasesInSwitch`, `noUncheckedSideEffectImports`.
-- `erasableSyntaxOnly`, bundler module resolution.
-  Implementation rules:
-- Never use explicit `any`.
-- Prefer `unknown` + narrowing.
-- Avoid unsafe assertions unless clearly justified.
-- Validate external/runtime inputs with Zod.
-
-## Naming conventions
-
-- Logic files: `kebab-case.ts`.
-- React component files: `PascalCase.tsx`.
-- Directories: `kebab-case`, usually singular.
-- Types/interfaces: `PascalCase`.
-- Functions: `camelCase`, action-oriented names (`get`, `set`, `create`, `parse`, `normalize`, `is`, `handle`).
-- Constants: `UPPER_SNAKE_CASE` for top-level constant maps/objects.
-- Component function names should match file names.
-
-## Error handling and API behavior
-
-- Normalize transport errors through `normalizeApiError()`.
-- Keep failures aligned to shared `ApiError` shape and code conventions.
-- Validate payloads with `parseWithSchema()`.
-- Keep env/config parsing safe; prefer non-throwing parse flows where configured.
-
-## Auth and security guardrails
-
-- Keep JWT attach/refresh/retry/logout behavior centralized in shared HTTP auth modules.
-- Preserve single-flight refresh behavior and bounded retry limits.
+- Directories: `kebab-case` (usually singular)
+- Non-component files: `kebab-case.ts`
+- React component files: `PascalCase.tsx`
+- Types/interfaces: `PascalCase`
+- Functions/variables: `camelCase`
+- Constants (maps/objects): `UPPER_SNAKE_CASE`
+- Component function names should match filenames
+  Prefer action-oriented function names (`get`, `set`, `create`, `parse`, `normalize`, `is`, `handle`).
+  Error/API rules:
+- Use shared HTTP abstractions from `src/shared/api/http/`.
+- Normalize transport failures with `normalizeApiError()`.
+- Keep failures aligned to the shared `ApiError` shape.
+- Parse untrusted payloads with `parseWithSchema()`.
+  Auth/security rules:
+- Keep JWT attach/refresh/retry/logout logic centralized.
+- Preserve single-flight refresh behavior and bounded retries.
 - On unrecoverable refresh failure, clear session state safely.
-- Preserve role-based route protection.
+- Keep auth/role guard logic centralized in `src/app/guards/`.
 - Never log or expose access/refresh tokens.
-
-## UI and shared boundaries
-
-- Keep `src/shared/ui/` domain-agnostic.
+  UI/shared rules:
+- `src/shared/ui/` must remain domain-agnostic and reusable.
 - Use `cn()` for class merging.
-- Use CVA for variant-based styling.
-- Do not move business logic into shared UI primitives.
+- Use CVA for variant APIs when it improves clarity.
+- Do not place business workflows in shared UI primitives.
 
 ## Testing policy
 
-- Store tests in root `test/`, mirroring `src/` structure.
+- Tests live in root `test/`, mirroring `src/`.
 - Unit tests: `test/unit/`; integration tests: `test/integration/`.
-- Use MSW for API mocking (`test/msw/handlers/`, `test/msw/fixtures/`).
-- `test/setup.ts` enables MSW with `onUnhandledRequest: 'error'`.
-- Meaningful logic changes should include or update tests.
+- Use MSW (`test/msw/handlers/`, `test/msw/fixtures/`) for API mocking.
+- `test/setup.ts` uses `onUnhandledRequest: 'error'`.
+- Prefer behavior-focused tests over implementation-detail tests.
+- Meaningful logic changes should include test updates.
 
-## Dependency policy
+## Copilot/agent alignment and dependency policy
 
-- Avoid new dependencies unless architectural benefit is clear.
+Rules in `.github/copilot-instructions.md` and `.github/agents/*.agent.md` reinforce:
+
+- strict FSD boundaries and public API encapsulation
+- thin pages and functional composition
+- centralized auth/session behavior and role protection
+- reusable shared UI and accessibility
+- maintainable MSW-backed tests and architecture-aware review
+  Use those files for task-specific depth, but do not violate this file.
+  Dependency policy:
+- Avoid adding dependencies unless there is clear architectural value.
 - Reuse existing patterns/utilities before introducing alternatives.
-- Keep changes focused, reviewable, and consistent with FSD + security constraints.
+- Keep changes focused, reviewable, and consistent with FSD and security constraints.
