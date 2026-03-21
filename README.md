@@ -1,13 +1,17 @@
 # Viteplate
 
-![Vite logo](https://vitejs.dev/logo.svg)
-
-**A production-ready React 19 starter template built on Feature-Sliced Design.**
-
-[![wakatime](https://wakatime.com/badge/user/dd9cbf79-b76d-4202-aae2-be6bff8a804e/project/f7c0d23e-1665-4282-8c1c-65db47344c21.svg)](https://wakatime.com/badge/user/dd9cbf79-b76d-4202-aae2-be6bff8a804e/project/f7c0d23e-1665-4282-8c1c-65db47344c21)
-
+<p align="center">
+  <img src="https://vitejs.dev/logo.svg" width="80" alt="Vite logo" />
 </p>
-*
+
+<p align="center">
+  A production-ready React 19 starter template built on Feature-Sliced Design.
+</p>
+
+<p align="center">
+  <a href="https://wakatime.com/badge/user/dd9cbf79-b76d-4202-aae2-be6bff8a804e/project/f7c0d23e-1665-4282-8c1c-65db47344c21"><img src="https://wakatime.com/badge/user/dd9cbf79-b76d-4202-aae2-be6bff8a804e/project/f7c0d23e-1665-4282-8c1c-65db47344c21.svg" alt="wakatime"></a>
+</p>
+
 ---
 
 ## Overview
@@ -21,23 +25,23 @@ Rather than being a minimal boilerplate, Viteplate ships with a fully implemente
 ## Table of Contents
 
 - [Viteplate](#viteplate)
-    - [Overview](#overview)
-    - [Table of Contents](#table-of-contents)
-    - [Tech Stack](#tech-stack)
-        - [Core](#core)
-        - [Routing and Data](#routing-and-data)
-        - [UI and Styling](#ui-and-styling)
-        - [Development and Testing](#development-and-testing)
-    - [Quick Start](#quick-start)
-    - [Project Structure](#project-structure)
-    - [Architecture](#architecture)
-    - [Available Scripts](#available-scripts)
-        - [Validation Checklist](#validation-checklist)
-    - [Environment Variables](#environment-variables)
-    - [Documentation](#documentation)
-    - [Key Features](#key-features)
-    - [Design System Showcase](#design-system-showcase)
-    - [License](#license)
+  - [Overview](#overview)
+  - [Table of Contents](#table-of-contents)
+  - [Tech Stack](#tech-stack)
+    - [Core](#core)
+    - [Routing and Data](#routing-and-data)
+    - [UI and Styling](#ui-and-styling)
+    - [Development and Testing](#development-and-testing)
+  - [Quick Start](#quick-start)
+  - [Project Structure](#project-structure)
+  - [Architecture](#architecture)
+  - [Available Scripts](#available-scripts)
+    - [Validation Checklist](#validation-checklist)
+  - [Environment Variables](#environment-variables)
+  - [Documentation](#documentation)
+  - [Key Features](#key-features)
+  - [Design System Showcase](#design-system-showcase)
+  - [License](#license)
 
 ---
 
