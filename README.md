@@ -10,6 +10,12 @@
 
 <p align="center">
   <a href="https://wakatime.com/badge/user/dd9cbf79-b76d-4202-aae2-be6bff8a804e/project/f7c0d23e-1665-4282-8c1c-65db47344c21"><img src="https://wakatime.com/badge/user/dd9cbf79-b76d-4202-aae2-be6bff8a804e/project/f7c0d23e-1665-4282-8c1c-65db47344c21.svg" alt="wakatime"></a>
+  <a href="https://github.com/PoncheDeFrutas/viteplate"><img src="https://img.shields.io/github/stars/PoncheDeFrutas/viteplate?style=social" alt="Stars"></a>
+  <a href="https://github.com/PoncheDeFrutas/viteplate"><img src="https://img.shields.io/github/repo-size/PoncheDeFrutas/viteplate" alt="Repo Size"></a>
+  <img src="https://visitor-badge.laobi.icu/badge?page_id=PoncheDeFrutas.viteplate" alt="Visitors">
+</p>
+<p align="center">
+  <img src="https://repobeats.axiom.co/api/embed/7c57b718b2c85966e9de5836056f621fde9a2a54.svg" alt="Repobeats analytics image" />
 </p>
 
 ---
@@ -41,6 +47,8 @@ Rather than being a minimal boilerplate, Viteplate ships with a fully implemente
     - [Documentation](#documentation)
     - [Key Features](#key-features)
     - [Design System Showcase](#design-system-showcase)
+    - [UI Customization Guide](#ui-customization-guide)
+    - [AI Agents / Automation](#ai-agents--automation)
     - [License](#license)
 
 ---
@@ -240,6 +248,8 @@ VITE_ENABLE_DEBUG=true
 | [Creating a Page](docs/guides/creating-a-page.md)                               | Step-by-step guide for route-level pages                           |
 | [Creating a Widget](docs/guides/creating-a-widget.md)                           | Step-by-step guide using navbar as an example                      |
 | [Creating a Shared UI Component](docs/guides/creating-a-shared-ui-component.md) | CVA variant patterns, accessibility, composition                   |
+| **AI & Customization**                                                          |                                                                    |
+| [AI Development Guide](docs/ai-development.md)                                  | Using AI agents, FSD rules, and UI customization                   |
 
 ---
 
@@ -272,6 +282,40 @@ In development mode, navigate to `/design-system` (or click "Design System" in t
 | **Layout**     | Affix, AspectRatio, Card, Collapsible, Container, Grid, ResizablePanels, ScrollArea, Stack                                                                               |
 
 Each section is lazy-loaded via `React.lazy()` + `Suspense`, so only the active tab's code is downloaded. The route and nav link are guarded by `import.meta.env.DEV` and fully tree-shaken from production builds.
+
+---
+
+## UI Customization Guide
+
+Viteplate's shared components (`src/shared/ui`) are designed to be minimal, editable, and variant-based. By maintaining a clean architecture, the template remains entirely unbranded so you can easily adapt it out-of-the-box.
+
+- **Shared UI Philosophy**: Components provide stable API props and `cva` (class-variance-authority) APIs rather than locked-down rigid styles.
+- **Modifying Components**: To change a component's appearance, open its file inside `src/shared/ui`. Adjust the Tailwind utility classes carefully inside the `cva` definition.
+- **Styling Best Practices**: Rely on `cn()` for class overrides. Keep global themes constrained to `src/app/styles/theme.css`. Do not add heavy drop-shadows or highly complex hover logic indiscriminately.
+- **Extend Rather Than Replace**: If you need a completely wildly different button outline, add a `cva` variant (`variant: 'wild'`) rather than deleting existing logic.
+
+---
+
+## AI Agents / Automation
+
+Viteplate heavily relies on Feature-Sliced Design (FSD), making it highly compatible with AI coding agents. Agents can safely generate isolated features or pages without causing global breaking changes because the directory boundaries define exactly where state, UI, and side effects belong.
+
+Always frame prompts emphasizing the structural layer: _"Create a new Widget for a user profile section."_
+
+### Agent Skills Integration
+
+You can integrate external agent skills to bootstrap complex functionality automatically:
+
+- **`frontend-design`**: Trigger an AI to draft distinct, polished component layouts using clean Viteplate FSD-compliant React components. **When to use:** when developing a complex dashboard layout or landing page component. [Learn more](https://skills.sh/anthropics/skills/frontend-design)
+- **`web-design-guidelines`**: Triggers a review of your user interfaces. **When to use:** ask an AI to critique a newly created page for poor accessibility and UX contrasts immediately after authoring. [Learn more](https://skills.sh/vercel-labs/agent-skills/web-design-guidelines)
+
+### Suggested Workflow with AI
+
+1. **"Simplify UI styling"**: Directly ask the agent to pare down `Card.tsx` styles to just border strings and no background modifications to clean inherited components.
+2. **"Create a new component following FSD"**: Scaffolding new workflows. Eg: _"Create an implementation for `user-profile`. Spin up a feature slice at `src/features/user-profile` importing HTTP hooks and leveraging `Card` from `shared/ui/layout`."_
+3. **"Refactor UI without breaking architecture"**: Refactoring cleanly. Eg: _"Refactor `src/pages/dashboard` to be cleaner by moving internal map-loops into separate Widgets stored inside `src/widgets/dashboard-lists`."_
+
+Review the [AI Development Guide](docs/ai-development.md) for full documentation on maximizing agent efficiency inside Viteplate.
 
 ---
 
