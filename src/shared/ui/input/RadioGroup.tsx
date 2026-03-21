@@ -31,10 +31,9 @@ export function RadioGroupItem({ className, ...props }: RadioGroupItemProps) {
         <RadioGroupPrimitive.Item
             className={cn(
                 'aspect-square h-4 w-4 rounded-full border border-input text-primary',
-                'focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none',
+                'focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-none',
                 'disabled:cursor-not-allowed disabled:opacity-50',
                 'data-[state=checked]:border-primary',
-                'transition-colors duration-150',
                 className,
             )}
             {...props}

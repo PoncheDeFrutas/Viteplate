@@ -50,7 +50,7 @@ interface BreadcrumbLinkProps extends HTMLAttributes<HTMLAnchorElement> {
 }
 
 export function BreadcrumbLink({ className, ...props }: BreadcrumbLinkProps) {
-    return <a className={cn('transition-colors hover:text-foreground', className)} {...props} />;
+    return <a className={cn('underline', className)} {...props} />;
 }
 
 // ---------------------------------------------------------------------------

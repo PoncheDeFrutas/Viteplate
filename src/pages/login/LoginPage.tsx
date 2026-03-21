@@ -25,9 +25,9 @@ export function LoginPage() {
                     {...motionFx.reveal({ delay: 0.06 })}
                     className="col-span-12 lg:col-span-5 lg:col-start-8"
                 >
-                    <Card variant="filled" padding="md" className="retro-panel rounded-sm">
+                    <Card variant="filled" padding="md" className="retro-panel">
                         <div className="mb-6 flex items-center gap-3">
-                            <span className="inline-flex rounded-sm border border-border p-2">
+                            <span className="inline-flex border border-border p-2">
                                 <LogIn className="h-4 w-4" />
                             </span>
                             <div>

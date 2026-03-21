@@ -1,4 +1,3 @@
-import { motion } from 'motion/react';
 import { cn } from '@shared/lib/cn';
 import type { ReactNode } from 'react';
 
@@ -28,7 +27,7 @@ interface SegmentedControlProps {
 // ---------------------------------------------------------------------------
 
 /**
- * Segmented toggle control with a sliding indicator.
+ * Segmented toggle control.
  */
 export function SegmentedControl({
     options,
@@ -39,7 +38,10 @@ export function SegmentedControl({
     return (
         <div
             role="radiogroup"
-            className={cn('inline-flex items-center gap-0.5 rounded-lg bg-muted p-1', className)}
+            className={cn(
+                'inline-flex items-center gap-1 border border-border bg-muted p-1',
+                className,
+            )}
         >
             {options.map((option) => {
                 const isSelected = option.value === value;
@@ -52,22 +54,13 @@ export function SegmentedControl({
                         disabled={option.disabled}
                         onClick={() => onValueChange(option.value)}
                         className={cn(
-                            'relative inline-flex items-center justify-center rounded-md px-3 py-1.5 text-sm font-medium transition-colors',
-                            'focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none',
+                            'inline-flex items-center justify-center px-3 py-1.5 text-sm font-medium',
+                            'focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-none',
                             'disabled:pointer-events-none disabled:opacity-50',
-                            isSelected
-                                ? 'text-foreground'
-                                : 'text-muted-foreground hover:text-foreground',
+                            isSelected ? 'bg-background text-foreground' : 'text-muted-foreground',
                         )}
                     >
-                        {isSelected && (
-                            <motion.span
-                                layoutId="segmented-indicator"
-                                className="absolute inset-0 rounded-md bg-background shadow-sm"
-                                transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-                            />
-                        )}
-                        <span className="relative z-10">{option.label}</span>
+                        {option.label}
                     </button>
                 );
             })}

@@ -1,5 +1,4 @@
 import { Command } from 'cmdk';
-import { motion, AnimatePresence } from 'motion/react';
 import { Search, X } from 'lucide-react';
 import { cn } from '@shared/lib/cn';
 import type { ComponentPropsWithoutRef, ReactNode } from 'react';
@@ -35,64 +34,46 @@ export function CommandPalette({
     children,
     className,
 }: CommandPaletteProps) {
-    return (
-        <AnimatePresence>
-            {open && (
-                <>
-                    {/* Backdrop */}
-                    <motion.div
-                        key="backdrop"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.15 }}
-                        className="fixed inset-0 z-50 bg-black/60"
-                        onClick={() => onOpenChange(false)}
-                        aria-hidden
-                    />
+    if (!open) {
+        return null;
+    }
 
-                    {/* Panel */}
-                    <div className="fixed inset-0 z-50 flex items-start justify-center pt-[20vh]">
-                        <motion.div
-                            key="panel"
-                            initial={{ opacity: 0, scale: 0.96, y: -8 }}
-                            animate={{ opacity: 1, scale: 1, y: 0 }}
-                            exit={{ opacity: 0, scale: 0.96, y: -8 }}
-                            transition={{ duration: 0.15 }}
+    return (
+        <>
+            <div
+                className="fixed inset-0 z-50 bg-black/40"
+                onClick={() => onOpenChange(false)}
+                aria-hidden
+            />
+            <div className="fixed inset-0 z-50 flex items-start justify-center pt-[20vh]">
+                <Command
+                    className={cn(
+                        'w-full max-w-lg overflow-hidden border border-border bg-popover',
+                        className,
+                    )}
+                    onKeyDown={(e) => {
+                        if (e.key === 'Escape') onOpenChange(false);
+                    }}
+                >
+                    <div className="flex items-center gap-2 border-b border-border px-3">
+                        <Search className="h-4 w-4 shrink-0 text-muted-foreground" />
+                        <Command.Input
+                            placeholder={placeholder}
+                            className="flex h-10 w-full bg-transparent py-2 text-sm outline-none placeholder:text-muted-foreground"
+                        />
+                        <button
+                            type="button"
+                            onClick={() => onOpenChange(false)}
+                            className="shrink-0 p-1 focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-none"
+                            aria-label="Close"
                         >
-                            <Command
-                                className={cn(
-                                    'w-full max-w-lg overflow-hidden rounded-lg border border-border bg-popover shadow-2xl',
-                                    className,
-                                )}
-                                onKeyDown={(e) => {
-                                    if (e.key === 'Escape') onOpenChange(false);
-                                }}
-                            >
-                                <div className="flex items-center gap-2 border-b border-border px-3">
-                                    <Search className="h-4 w-4 shrink-0 text-muted-foreground" />
-                                    <Command.Input
-                                        placeholder={placeholder}
-                                        className="flex h-11 w-full bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground"
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={() => onOpenChange(false)}
-                                        className="shrink-0 rounded-sm p-1 text-muted-foreground opacity-70 transition-opacity hover:opacity-100 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
-                                        aria-label="Close"
-                                    >
-                                        <X className="h-4 w-4" />
-                                    </button>
-                                </div>
-                                <Command.List className="max-h-80 overflow-y-auto p-2">
-                                    {children}
-                                </Command.List>
-                            </Command>
-                        </motion.div>
+                            <X className="h-4 w-4" />
+                        </button>
                     </div>
-                </>
-            )}
-        </AnimatePresence>
+                    <Command.List className="max-h-80 overflow-y-auto p-1">{children}</Command.List>
+                </Command>
+            </div>
+        </>
     );
 }
 
@@ -121,7 +102,7 @@ export function CommandPaletteItem({ className, ...props }: CommandPaletteItemPr
         <Command.Item
             className={cn(
                 'relative flex cursor-pointer select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none',
-                'data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground',
+                'data-[selected=true]:bg-muted data-[selected=true]:text-foreground',
                 'data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50',
                 className,
             )}

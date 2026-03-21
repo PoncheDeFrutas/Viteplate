@@ -74,13 +74,13 @@ export function NumberInput({
     }, [clamp, onValueChange, step, value]);
 
     const stepperButton =
-        'flex h-full items-center justify-center px-2 text-muted-foreground transition-colors hover:text-foreground disabled:pointer-events-none disabled:opacity-50';
+        'flex h-full items-center justify-center px-2 text-muted-foreground disabled:pointer-events-none disabled:opacity-50';
 
     return (
         <div
             className={cn(
-                'flex h-9 items-center overflow-hidden rounded-md border border-input bg-transparent text-sm',
-                'focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:ring-offset-background',
+                'flex h-9 items-center overflow-hidden border border-input bg-transparent text-sm',
+                'focus-within:ring-1 focus-within:ring-ring',
                 disabled && 'pointer-events-none opacity-50',
                 className,
             )}

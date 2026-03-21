@@ -180,7 +180,7 @@ export function AdminDashboardPage() {
             </section>
 
             <motion.section {...motionFx.reveal({ delay: 0.08 })}>
-                <Banner variant="warning" className="workspace-panel rounded-sm">
+                <Banner variant="warning" className="workspace-panel">
                     <p>
                         Two safeguards triggered in the last cycle. Review access requests and audit
                         events before promoting the next release.
@@ -193,7 +193,7 @@ export function AdminDashboardPage() {
                     {...motionFx.reveal({ delay: 0.1 })}
                     className="col-span-12 xl:col-span-8"
                 >
-                    <Card className="workspace-panel rounded-sm p-5">
+                    <Card className="workspace-panel p-4">
                         <Tabs defaultValue="requests" animated>
                             <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
                                 <div>
@@ -279,7 +279,7 @@ export function AdminDashboardPage() {
                                         <motion.div
                                             key={`${event.event}-${event.time}`}
                                             {...motionFx.sequence(index, 0.04, 0.05)}
-                                            className="rounded-sm border border-border p-4"
+                                            className="border border-border p-4"
                                         >
                                             <div className="flex items-center justify-between gap-2">
                                                 <p className="font-medium text-foreground">
@@ -341,7 +341,7 @@ export function AdminDashboardPage() {
                     {...motionFx.reveal({ delay: 0.12 })}
                     className="col-span-12 space-y-4 xl:col-span-4"
                 >
-                    <Card className="workspace-panel rounded-sm p-5">
+                    <Card className="workspace-panel p-4">
                         <p className="workspace-label">Runtime notes</p>
                         <h3 className="mt-1 text-lg font-semibold text-foreground">
                             Incident timeline
@@ -362,7 +362,7 @@ export function AdminDashboardPage() {
                         </ul>
                     </Card>
 
-                    <Card className="workspace-panel rounded-sm p-5">
+                    <Card className="workspace-panel p-4">
                         <p className="workspace-label">Policy state</p>
                         <h3 className="mt-1 text-lg font-semibold text-foreground">
                             Current controls

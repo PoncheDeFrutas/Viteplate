@@ -10,24 +10,19 @@ import type { VariantProps } from 'class-variance-authority';
 
 const buttonVariants = cva(
     [
-        'inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium tracking-[0.01em]',
-        'transition-[transform,box-shadow] duration-150 ease-out',
-        'hover:shadow-sm active:scale-[0.98]',
-        'focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none',
+        'inline-flex items-center justify-center gap-2 border text-sm',
+        'focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none',
         'disabled:pointer-events-none disabled:opacity-50',
     ],
     {
         variants: {
             variant: {
-                default:
-                    'bg-primary text-primary-foreground shadow-[0_10px_22px_-16px_rgb(var(--primary)/0.9)] hover:bg-primary-hover hover:shadow-[0_16px_24px_-18px_rgb(var(--primary)/0.95)]',
-                secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary-hover',
-                outline:
-                    'border border-input bg-transparent text-foreground hover:border-primary/45 hover:bg-primary/10',
-                ghost: 'text-foreground hover:bg-accent hover:text-accent-foreground',
-                destructive:
-                    'bg-destructive text-destructive-foreground hover:bg-destructive-hover',
-                link: 'text-foreground underline-offset-4 hover:underline',
+                default: 'border-primary bg-primary text-primary-foreground',
+                secondary: 'border-border bg-secondary text-secondary-foreground',
+                outline: 'border-input bg-transparent text-foreground',
+                ghost: 'border-transparent bg-transparent text-foreground',
+                destructive: 'border-destructive bg-destructive text-destructive-foreground',
+                link: 'border-transparent bg-transparent text-foreground underline',
             },
             size: {
                 sm: 'h-8 px-3 text-xs',

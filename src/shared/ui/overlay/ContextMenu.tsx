@@ -24,9 +24,8 @@ export function ContextMenuContent({ className, ...props }: ContextMenuContentPr
     return (
         <ContextMenuPrimitive.Portal>
             <ContextMenuPrimitive.Content
-                data-floating-animate
                 className={cn(
-                    'z-50 min-w-[8rem] overflow-hidden rounded-md border border-border bg-popover p-1 text-popover-foreground shadow-md',
+                    'z-50 min-w-[8rem] overflow-hidden border border-border bg-popover p-1 text-popover-foreground',
                     className,
                 )}
                 {...props}
@@ -47,8 +46,8 @@ export function ContextMenuItem({ className, inset, ...props }: ContextMenuItemP
     return (
         <ContextMenuPrimitive.Item
             className={cn(
-                'relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors',
-                'focus:bg-accent focus:text-accent-foreground',
+                'relative flex cursor-default select-none items-center px-2 py-1.5 text-sm outline-none',
+                'focus:bg-muted focus:text-foreground',
                 'data-disabled:pointer-events-none data-disabled:opacity-50',
                 inset && 'pl-8',
                 className,
@@ -75,8 +74,8 @@ export function ContextMenuCheckboxItem({
     return (
         <ContextMenuPrimitive.CheckboxItem
             className={cn(
-                'relative flex cursor-default select-none items-center rounded-sm py-1.5 pr-2 pl-8 text-sm outline-none transition-colors',
-                'focus:bg-accent focus:text-accent-foreground',
+                'relative flex cursor-default select-none items-center py-1.5 pr-2 pl-8 text-sm outline-none',
+                'focus:bg-muted focus:text-foreground',
                 'data-disabled:pointer-events-none data-disabled:opacity-50',
                 className,
             )}
@@ -103,8 +102,8 @@ export function ContextMenuRadioItem({ className, children, ...props }: ContextM
     return (
         <ContextMenuPrimitive.RadioItem
             className={cn(
-                'relative flex cursor-default select-none items-center rounded-sm py-1.5 pr-2 pl-8 text-sm outline-none transition-colors',
-                'focus:bg-accent focus:text-accent-foreground',
+                'relative flex cursor-default select-none items-center py-1.5 pr-2 pl-8 text-sm outline-none',
+                'focus:bg-muted focus:text-foreground',
                 'data-disabled:pointer-events-none data-disabled:opacity-50',
                 className,
             )}
@@ -190,9 +189,9 @@ export function ContextMenuSubTrigger({
     return (
         <ContextMenuPrimitive.SubTrigger
             className={cn(
-                'flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none',
-                'focus:bg-accent focus:text-accent-foreground',
-                'data-[state=open]:bg-accent data-[state=open]:text-accent-foreground',
+                'flex cursor-default select-none items-center px-2 py-1.5 text-sm outline-none',
+                'focus:bg-muted focus:text-foreground',
+                'data-[state=open]:bg-muted data-[state=open]:text-foreground',
                 inset && 'pl-8',
                 className,
             )}
@@ -213,9 +212,8 @@ type ContextMenuSubContentProps = ComponentPropsWithoutRef<typeof ContextMenuPri
 export function ContextMenuSubContent({ className, ...props }: ContextMenuSubContentProps) {
     return (
         <ContextMenuPrimitive.SubContent
-            data-floating-animate
             className={cn(
-                'z-50 min-w-[8rem] overflow-hidden rounded-md border border-border bg-popover p-1 text-popover-foreground shadow-md',
+                'z-50 min-w-[8rem] overflow-hidden border border-border bg-popover p-1 text-popover-foreground',
                 className,
             )}
             {...props}

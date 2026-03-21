@@ -23,7 +23,7 @@ const indicatorVariants = cva('inline-block shrink-0 rounded-full', {
             lg: 'h-2.5 w-2.5',
         },
         pulse: {
-            true: 'animate-pulse',
+            true: '',
         },
     },
     defaultVariants: {

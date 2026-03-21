@@ -28,9 +28,8 @@ export function HoverCardContent({
         <HoverCardPrimitive.Content
             align={align}
             sideOffset={sideOffset}
-            data-floating-animate
             className={cn(
-                'z-50 w-64 rounded-md border border-border bg-popover p-4 text-popover-foreground shadow-md outline-none',
+                'z-50 w-64 border border-border bg-popover p-3 text-popover-foreground outline-none',
                 className,
             )}
             {...props}

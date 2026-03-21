@@ -36,7 +36,7 @@ export function EmptyState({
             {...props}
         >
             {icon && (
-                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-muted text-muted-foreground">
+                <div className="flex h-10 w-10 items-center justify-center rounded border border-border text-muted-foreground">
                     {icon}
                 </div>
             )}

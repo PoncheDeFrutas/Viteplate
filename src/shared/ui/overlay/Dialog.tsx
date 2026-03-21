@@ -20,8 +20,7 @@ type DialogOverlayProps = ComponentPropsWithoutRef<typeof DialogPrimitive.Overla
 function DialogOverlay({ className, ...props }: DialogOverlayProps) {
     return (
         <DialogPrimitive.Overlay
-            data-overlay-animate
-            className={cn('fixed inset-0 z-50 bg-black/80', className)}
+            className={cn('fixed inset-0 z-50 bg-black/40', className)}
             {...props}
         />
     );
@@ -44,16 +43,15 @@ export function DialogContent({ className, children, hideClose, ...props }: Dial
         <DialogPrimitive.Portal>
             <DialogOverlay />
             <DialogPrimitive.Content
-                data-dialog-animate
                 className={cn(
-                    'fixed top-[50%] left-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border border-border bg-background p-6 shadow-lg sm:rounded-lg',
+                    'fixed top-[50%] left-[50%] z-50 grid w-full max-w-lg -translate-x-1/2 -translate-y-1/2 gap-3 border border-border bg-background p-4',
                     className,
                 )}
                 {...props}
             >
                 {children}
                 {!hideClose && (
-                    <DialogPrimitive.Close className="absolute top-4 right-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:outline-none disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
+                    <DialogPrimitive.Close className="absolute top-3 right-3 p-1 focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-none disabled:pointer-events-none">
                         <X className="h-4 w-4" />
                         <span className="sr-only">Close</span>
                     </DialogPrimitive.Close>

@@ -22,7 +22,7 @@ export function CodeBlock({ className, label, children, ...props }: CodeBlockPro
             {label && <span className="text-xs font-medium text-muted-foreground">{label}</span>}
             <pre
                 className={cn(
-                    'overflow-x-auto rounded-lg border border-border bg-muted p-4',
+                    'overflow-x-auto border border-border bg-muted p-3',
                     'font-mono text-sm leading-relaxed text-foreground',
                     className,
                 )}

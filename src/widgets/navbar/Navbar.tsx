@@ -23,10 +23,8 @@ function NavLink({ item }: { item: NavItem }) {
         <Link
             to={item.to}
             className={cn(
-                'eyebrow-label relative text-[10px] text-muted-foreground transition-colors hover:text-foreground',
-                'after:absolute after:inset-x-0 after:-bottom-1 after:h-px after:origin-left after:scale-x-0 after:bg-foreground after:transition-transform after:duration-200',
-                isActive && 'text-foreground after:scale-x-100',
-                !isActive && 'hover:after:scale-x-100',
+                'eyebrow-label text-[10px] text-muted-foreground',
+                isActive && 'text-foreground',
             )}
         >
             {item.label}
@@ -37,7 +35,7 @@ function NavLink({ item }: { item: NavItem }) {
 function BrandMark() {
     return (
         <Link to="/" className="inline-flex items-center gap-4">
-            <span className="eyebrow-label rounded-sm border border-foreground px-2 py-1 text-[9px] text-foreground">
+            <span className="eyebrow-label border border-foreground px-2 py-1 text-[9px] text-foreground">
                 VP
             </span>
             <span className="leading-tight">
@@ -89,7 +87,7 @@ function ThemeToggle() {
 
 export function PublicNavbar() {
     return (
-        <header className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur-sm">
+        <header className="sticky top-0 z-40 border-b border-border bg-background">
             <div className="public-frame flex h-16 items-center justify-between gap-6">
                 <BrandMark />
 
@@ -115,7 +113,7 @@ export function AuthNavbar() {
     const logoutMutation = useLogout();
 
     return (
-        <header className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur-sm">
+        <header className="sticky top-0 z-40 border-b border-border bg-background">
             <div className="public-frame flex h-16 items-center justify-between gap-6">
                 <div className="flex items-center gap-8">
                     <BrandMark />
@@ -128,7 +126,7 @@ export function AuthNavbar() {
 
                 <div className="flex items-center gap-2">
                     {userName && (
-                        <span className="hidden rounded-sm border border-border px-2 py-1 text-xs text-muted-foreground lg:inline">
+                        <span className="hidden border border-border px-2 py-1 text-xs text-muted-foreground lg:inline">
                             {userName}
                         </span>
                     )}

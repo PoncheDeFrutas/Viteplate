@@ -53,15 +53,15 @@ export function PaginationItem({ className, ...props }: PaginationItemProps) {
 
 const paginationButtonVariants = cva(
     [
-        'inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors',
-        'focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none',
+        'inline-flex items-center justify-center rounded border border-transparent text-sm',
+        'focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-none',
         'disabled:pointer-events-none disabled:opacity-50',
     ],
     {
         variants: {
             variant: {
-                default: 'hover:bg-accent hover:text-accent-foreground',
-                outline: 'border border-input hover:bg-accent hover:text-accent-foreground',
+                default: '',
+                outline: 'border-input',
             },
             size: {
                 sm: 'h-8 w-8',
@@ -70,7 +70,7 @@ const paginationButtonVariants = cva(
                 nav: 'h-9 w-auto shrink-0 gap-1.5 px-3 whitespace-nowrap',
             },
             isActive: {
-                true: 'border border-input bg-accent text-accent-foreground',
+                true: 'border-input bg-muted text-foreground',
             },
         },
         defaultVariants: {

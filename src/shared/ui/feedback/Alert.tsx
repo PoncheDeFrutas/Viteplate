@@ -9,16 +9,16 @@ import type { VariantProps } from 'class-variance-authority';
 // ---------------------------------------------------------------------------
 
 const alertVariants = cva(
-    'relative flex w-full gap-3 rounded-lg border p-4 text-sm [&>svg]:shrink-0',
+    'relative flex w-full gap-3 rounded border p-3 text-sm [&>svg]:shrink-0',
     {
         variants: {
             variant: {
                 default: 'border-border bg-background text-foreground',
-                info: 'border-info/30 bg-info/5 text-info [&>svg]:text-info',
-                success: 'border-success/30 bg-success/5 text-success [&>svg]:text-success',
-                warning: 'border-warning/30 bg-warning/5 text-warning [&>svg]:text-warning',
+                info: 'border-info bg-background text-foreground [&>svg]:text-info',
+                success: 'border-success bg-background text-foreground [&>svg]:text-success',
+                warning: 'border-warning bg-background text-foreground [&>svg]:text-warning',
                 destructive:
-                    'border-destructive/30 bg-destructive/5 text-destructive [&>svg]:text-destructive',
+                    'border-destructive bg-background text-foreground [&>svg]:text-destructive',
             },
         },
         defaultVariants: {
@@ -82,7 +82,7 @@ export function Alert({
                 <button
                     type="button"
                     onClick={onDismiss}
-                    className="absolute top-3 right-3 rounded-md p-0.5 opacity-70 transition-opacity hover:opacity-100 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+                    className="absolute top-3 right-3 rounded p-0.5 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
                     aria-label="Dismiss"
                 >
                     <X className="h-4 w-4" />

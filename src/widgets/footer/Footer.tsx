@@ -1,6 +1,5 @@
 import { Link } from '@tanstack/react-router';
 import { ROUTE_PATHS } from '@shared/config';
-import { Separator } from '@shared/ui';
 
 // ---------------------------------------------------------------------------
 // Component
@@ -18,14 +17,13 @@ export function Footer() {
 
     return (
         <footer className="mt-auto border-t border-border bg-background">
-            <Separator />
             <div className="public-frame grid gap-5 py-8 sm:grid-cols-2 sm:items-end">
                 <nav className="flex flex-wrap items-center gap-4">
                     {FOOTER_LINKS.map((link) => (
                         <Link
                             key={link.to}
                             to={link.to}
-                            className="eyebrow-label text-[10px] text-muted-foreground transition-colors hover:text-foreground"
+                            className="eyebrow-label text-[10px] text-muted-foreground"
                         >
                             {link.label}
                         </Link>

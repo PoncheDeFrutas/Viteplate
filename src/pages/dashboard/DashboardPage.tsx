@@ -196,7 +196,7 @@ export function DashboardPage() {
             </section>
 
             <motion.section {...motionFx.reveal({ delay: 0.08 })}>
-                <Banner variant="info" className="workspace-panel rounded-sm">
+                <Banner variant="info" className="workspace-panel">
                     <p>
                         Signed in as{' '}
                         <span className="font-medium text-foreground">{user?.name}</span> (
@@ -211,7 +211,7 @@ export function DashboardPage() {
                     {...motionFx.reveal({ delay: 0.1 })}
                     className="col-span-12 xl:col-span-8"
                 >
-                    <Card className="workspace-panel rounded-sm p-5">
+                    <Card className="workspace-panel p-4">
                         <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
                             <div>
                                 <p className="workspace-label">Operations board</p>
@@ -373,7 +373,7 @@ export function DashboardPage() {
                     {...motionFx.reveal({ delay: 0.12 })}
                     className="col-span-12 space-y-4 xl:col-span-4"
                 >
-                    <Card className="workspace-panel rounded-sm p-5">
+                    <Card className="workspace-panel p-4">
                         <p className="workspace-label">Readiness</p>
                         <h3 className="mt-1 text-lg font-semibold text-foreground">
                             Release checklist
@@ -394,7 +394,7 @@ export function DashboardPage() {
                         </ul>
                     </Card>
 
-                    <Card className="workspace-panel rounded-sm p-5">
+                    <Card className="workspace-panel p-4">
                         <p className="workspace-label">Account</p>
                         <h3 className="mt-1 text-lg font-semibold text-foreground">
                             Current identity

@@ -1,5 +1,4 @@
 import { useState, useCallback } from 'react';
-import { motion } from 'motion/react';
 import { Star } from 'lucide-react';
 import { cn } from '@shared/lib/cn';
 
@@ -23,7 +22,7 @@ interface RatingProps {
 }
 
 /**
- * Star rating input with spring-animated selection.
+ * Star rating input.
  */
 export function Rating({
     value = 0,
@@ -54,35 +53,29 @@ export function Rating({
             {Array.from({ length: max }, (_, i) => i + 1).map((index) => {
                 const filled = index <= displayValue;
                 return (
-                    <motion.button
+                    <button
                         key={index}
                         type="button"
                         disabled={readOnly}
                         onClick={() => handleClick(index)}
                         onMouseEnter={() => !readOnly && setHovered(index)}
-                        whileTap={readOnly ? undefined : { scale: 0.8 }}
                         className={cn(
-                            'cursor-pointer transition-colors focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-none',
+                            'cursor-pointer focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-none',
                             readOnly && 'cursor-default',
                         )}
                         role="radio"
                         aria-checked={index === value}
                         aria-label={`${index} star${index > 1 ? 's' : ''}`}
                     >
-                        <motion.span
-                            animate={{ scale: filled ? 1 : 0.85 }}
-                            transition={{ type: 'spring', stiffness: 500, damping: 25 }}
-                        >
-                            <Star
-                                style={{ width: size, height: size }}
-                                className={cn(
-                                    filled
-                                        ? 'fill-warning text-warning'
-                                        : 'fill-transparent text-border',
-                                )}
-                            />
-                        </motion.span>
-                    </motion.button>
+                        <Star
+                            style={{ width: size, height: size }}
+                            className={cn(
+                                filled
+                                    ? 'fill-warning text-warning'
+                                    : 'fill-transparent text-border',
+                            )}
+                        />
+                    </button>
                 );
             })}
         </div>

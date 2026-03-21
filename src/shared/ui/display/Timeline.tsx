@@ -1,4 +1,3 @@
-import { motion } from 'motion/react';
 import { cn } from '@shared/lib/cn';
 import type { ReactNode } from 'react';
 
@@ -31,19 +30,13 @@ interface TimelineProps {
 // ---------------------------------------------------------------------------
 
 /**
- * Vertical timeline with staggered entrance animations.
+ * Vertical timeline.
  */
 export function Timeline({ items, className }: TimelineProps) {
     return (
         <ol className={cn('relative space-y-6 border-l-2 border-border pl-6', className)}>
             {items.map((item, i) => (
-                <motion.li
-                    key={i}
-                    initial={{ opacity: 0, x: -12 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.05 + i * 0.06, duration: 0.35, ease: 'easeOut' }}
-                    className="relative"
-                >
+                <li key={i} className="relative">
                     {/* Dot */}
                     <span
                         className={cn(
@@ -63,7 +56,7 @@ export function Timeline({ items, className }: TimelineProps) {
                     {item.description && (
                         <p className="mt-1 text-sm text-muted-foreground">{item.description}</p>
                     )}
-                </motion.li>
+                </li>
             ))}
         </ol>
     );

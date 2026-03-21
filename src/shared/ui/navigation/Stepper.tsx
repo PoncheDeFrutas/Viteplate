@@ -1,5 +1,4 @@
 import { cva } from 'class-variance-authority';
-import { motion } from 'motion/react';
 import { Check } from 'lucide-react';
 import { cn } from '@shared/lib/cn';
 import type { ReactNode } from 'react';
@@ -10,7 +9,7 @@ import type { VariantProps } from 'class-variance-authority';
 // ---------------------------------------------------------------------------
 
 const stepVariants = cva(
-    'flex h-8 w-8 items-center justify-center rounded-full border-2 text-sm font-medium transition-colors',
+    'flex h-8 w-8 items-center justify-center rounded-full border text-sm font-medium',
     {
         variants: {
             state: {
@@ -64,7 +63,7 @@ function getState(index: number, active: number): VariantProps<typeof stepVarian
 // ---------------------------------------------------------------------------
 
 /**
- * Multi-step progress indicator with animated transitions.
+ * Multi-step progress indicator.
  */
 export function Stepper({
     steps,
@@ -99,52 +98,32 @@ export function Stepper({
                         >
                             {!isVertical && i > 0 && (
                                 <div className="h-0.5 flex-1">
-                                    <motion.div
-                                        className="h-full bg-primary"
-                                        initial={{ scaleX: 0 }}
-                                        animate={{
-                                            scaleX: state === 'upcoming' ? 0 : 1,
-                                        }}
-                                        style={{ originX: 0 }}
-                                        transition={{
-                                            duration: 0.3,
-                                            ease: 'easeInOut',
-                                        }}
+                                    <div
+                                        className={cn(
+                                            'h-full',
+                                            state === 'upcoming' ? 'bg-border' : 'bg-primary',
+                                        )}
                                     />
                                 </div>
                             )}
 
-                            <motion.div
-                                className={cn(stepVariants({ state }))}
-                                layout
-                                transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-                            >
+                            <div className={cn(stepVariants({ state }))}>
                                 {state === 'completed' ? (
-                                    <motion.span
-                                        initial={{ scale: 0 }}
-                                        animate={{ scale: 1 }}
-                                        transition={{ type: 'spring', stiffness: 500, damping: 25 }}
-                                    >
+                                    <span>
                                         <Check className="h-4 w-4" />
-                                    </motion.span>
+                                    </span>
                                 ) : (
                                     (step.icon ?? i + 1)
                                 )}
-                            </motion.div>
+                            </div>
 
                             {!isVertical && !isLast && (
                                 <div className="h-0.5 flex-1">
-                                    <motion.div
-                                        className="h-full bg-primary"
-                                        initial={{ scaleX: 0 }}
-                                        animate={{
-                                            scaleX: state === 'completed' ? 1 : 0,
-                                        }}
-                                        style={{ originX: 0 }}
-                                        transition={{
-                                            duration: 0.3,
-                                            ease: 'easeInOut',
-                                        }}
+                                    <div
+                                        className={cn(
+                                            'h-full',
+                                            state === 'completed' ? 'bg-primary' : 'bg-border',
+                                        )}
                                     />
                                 </div>
                             )}
@@ -153,12 +132,11 @@ export function Stepper({
                         {/* Vertical connector */}
                         {isVertical && !isLast && (
                             <div className="ml-[0.9375rem] h-8 w-0.5 bg-border">
-                                <motion.div
-                                    className="h-full w-full bg-primary"
-                                    initial={{ scaleY: 0 }}
-                                    animate={{ scaleY: state === 'completed' ? 1 : 0 }}
-                                    style={{ originY: 0 }}
-                                    transition={{ duration: 0.3, ease: 'easeInOut' }}
+                                <div
+                                    className={cn(
+                                        'h-full w-full',
+                                        state === 'completed' ? 'bg-primary' : 'bg-border',
+                                    )}
                                 />
                             </div>
                         )}

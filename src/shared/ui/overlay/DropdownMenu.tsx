@@ -33,8 +33,8 @@ export function DropdownMenuSubTrigger({
     return (
         <DropdownMenuPrimitive.SubTrigger
             className={cn(
-                'flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none select-none',
-                'focus:bg-accent data-[state=open]:bg-accent',
+                'flex cursor-default items-center gap-2 px-2 py-1.5 text-sm outline-none select-none',
+                'focus:bg-muted data-[state=open]:bg-muted',
                 inset && 'pl-8',
                 className,
             )}
@@ -57,9 +57,8 @@ type DropdownMenuSubContentProps = ComponentPropsWithoutRef<
 export function DropdownMenuSubContent({ className, ...props }: DropdownMenuSubContentProps) {
     return (
         <DropdownMenuPrimitive.SubContent
-            data-floating-animate
             className={cn(
-                'z-50 min-w-8rem overflow-hidden rounded-md border border-border bg-popover p-1 text-popover-foreground shadow-lg',
+                'z-50 min-w-8rem overflow-hidden border border-border bg-popover p-1 text-popover-foreground',
                 className,
             )}
             {...props}
@@ -82,9 +81,8 @@ export function DropdownMenuContent({
         <DropdownMenuPrimitive.Portal>
             <DropdownMenuPrimitive.Content
                 sideOffset={sideOffset}
-                data-floating-animate
                 className={cn(
-                    'z-50 min-w-8rem overflow-hidden rounded-md border border-border bg-popover p-1 text-popover-foreground shadow-md',
+                    'z-50 min-w-8rem overflow-hidden border border-border bg-popover p-1 text-popover-foreground',
                     className,
                 )}
                 {...props}
@@ -107,8 +105,8 @@ export function DropdownMenuItem({ className, inset, ...props }: DropdownMenuIte
     return (
         <DropdownMenuPrimitive.Item
             className={cn(
-                'relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors select-none',
-                'focus:bg-accent focus:text-accent-foreground',
+                'relative flex cursor-default items-center gap-2 px-2 py-1.5 text-sm outline-none select-none',
+                'focus:bg-muted focus:text-foreground',
                 'data-disabled:pointer-events-none data-disabled:opacity-50',
                 '[&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
                 inset && 'pl-8',
@@ -136,8 +134,8 @@ export function DropdownMenuCheckboxItem({
     return (
         <DropdownMenuPrimitive.CheckboxItem
             className={cn(
-                'relative flex cursor-default items-center rounded-sm py-1.5 pr-2 pl-8 text-sm outline-none transition-colors select-none',
-                'focus:bg-accent focus:text-accent-foreground',
+                'relative flex cursor-default items-center py-1.5 pr-2 pl-8 text-sm outline-none select-none',
+                'focus:bg-muted focus:text-foreground',
                 'data-disabled:pointer-events-none data-disabled:opacity-50',
                 className,
             )}
@@ -168,8 +166,8 @@ export function DropdownMenuRadioItem({
     return (
         <DropdownMenuPrimitive.RadioItem
             className={cn(
-                'relative flex cursor-default items-center rounded-sm py-1.5 pr-2 pl-8 text-sm outline-none transition-colors select-none',
-                'focus:bg-accent focus:text-accent-foreground',
+                'relative flex cursor-default items-center py-1.5 pr-2 pl-8 text-sm outline-none select-none',
+                'focus:bg-muted focus:text-foreground',
                 'data-disabled:pointer-events-none data-disabled:opacity-50',
                 className,
             )}

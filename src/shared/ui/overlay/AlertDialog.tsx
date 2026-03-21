@@ -19,8 +19,7 @@ type AlertDialogOverlayProps = ComponentPropsWithoutRef<typeof AlertDialogPrimit
 function AlertDialogOverlay({ className, ...props }: AlertDialogOverlayProps) {
     return (
         <AlertDialogPrimitive.Overlay
-            data-overlay-animate
-            className={cn('fixed inset-0 z-50 bg-black/80', className)}
+            className={cn('fixed inset-0 z-50 bg-black/40', className)}
             {...props}
         />
     );
@@ -41,9 +40,8 @@ export function AlertDialogContent({ className, ...props }: AlertDialogContentPr
         <AlertDialogPrimitive.Portal>
             <AlertDialogOverlay />
             <AlertDialogPrimitive.Content
-                data-dialog-animate
                 className={cn(
-                    'fixed top-[50%] left-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border border-border bg-background p-6 shadow-lg sm:rounded-lg',
+                    'fixed top-[50%] left-[50%] z-50 grid w-full max-w-lg -translate-x-1/2 -translate-y-1/2 gap-3 border border-border bg-background p-4',
                     className,
                 )}
                 {...props}
@@ -106,9 +104,8 @@ export function AlertDialogAction({ className, ...props }: AlertDialogActionProp
     return (
         <AlertDialogPrimitive.Action
             className={cn(
-                'inline-flex h-10 items-center justify-center rounded-md bg-destructive px-4 py-2 text-sm font-medium text-destructive-foreground ring-offset-background transition-colors',
-                'hover:bg-destructive/90',
-                'focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:outline-none',
+                'inline-flex h-9 items-center justify-center border border-destructive bg-destructive px-3 text-sm text-destructive-foreground',
+                'focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-none',
                 'disabled:pointer-events-none disabled:opacity-50',
                 className,
             )}

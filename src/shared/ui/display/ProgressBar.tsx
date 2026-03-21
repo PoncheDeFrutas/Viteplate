@@ -7,7 +7,7 @@ import type { VariantProps } from 'class-variance-authority';
 // Variants
 // ---------------------------------------------------------------------------
 
-const trackVariants = cva('w-full overflow-hidden rounded-full bg-muted', {
+const trackVariants = cva('w-full overflow-hidden bg-muted', {
     variants: {
         size: {
             sm: 'h-1',
@@ -20,7 +20,7 @@ const trackVariants = cva('w-full overflow-hidden rounded-full bg-muted', {
     },
 });
 
-const fillVariants = cva('h-full rounded-full transition-[width] duration-300 ease-out', {
+const fillVariants = cva('h-full', {
     variants: {
         variant: {
             default: 'bg-primary',

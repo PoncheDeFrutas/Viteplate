@@ -1,212 +1,91 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* =========================
-   LIGHT THEME (default)
-   ========================= */
 :root {
-    /* Palette primitives (RGB) – Zinc scale */
-    --zinc-50: 250 250 250;
-    --zinc-100: 244 244 245;
-    --zinc-200: 228 228 231;
-    --zinc-300: 212 212 216;
-    --zinc-400: 161 161 170;
-    --zinc-500: 113 113 122;
-    --zinc-700: 63 63 70;
-    --zinc-800: 39 39 42;
-    --zinc-900: 24 24 27;
-    --zinc-950: 9 9 11;
-
-    /* Monochrome accent palette */
-    --mono-50: 246 247 249;
-    --mono-100: 236 238 242;
-    --mono-200: 216 220 227;
-    --mono-300: 186 192 203;
-    --mono-400: 138 145 160;
-    --mono-500: 99 107 124;
-    --mono-700: 46 51 61;
-    --mono-800: 28 31 38;
-    --mono-900: 16 18 22;
-
-    /* Status palette */
-    --red-500: 239 68 68;
-    --red-600: 220 38 38;
-
-    --amber-500: 245 158 11;
-    --amber-600: 217 119 6;
-
-    --green-500: 34 197 94;
-    --green-600: 22 163 74;
-
-    --blue-500: 59 130 246;
-    --blue-600: 37 99 235;
-
-    /* =========================
-     Semantic tokens
-     ========================= */
-    --background: var(--mono-50);
-    --foreground: var(--mono-900);
-
-    --surface: var(--mono-100);
-    --surface-foreground: var(--mono-900);
-
-    --card: 251 252 254;
-    --card-foreground: var(--mono-900);
-
-    --popover: 251 252 254;
-    --popover-foreground: var(--mono-900);
-
-    --border: var(--mono-200);
-    --input: var(--mono-200);
-    --ring: var(--mono-900);
-
-    --muted: var(--mono-100);
-    --muted-foreground: var(--mono-500);
-
-    --primary: var(--mono-900);
-    --primary-foreground: 255 255 255;
-    --primary-hover: var(--mono-700);
-
-    --secondary: var(--mono-200);
-    --secondary-foreground: var(--mono-900);
-    --secondary-hover: var(--mono-300);
-
-    --accent: var(--mono-900);
-    --accent-foreground: 255 255 255;
-
-    --destructive: var(--red-600);
+    --background: 255 255 255;
+    --foreground: 15 23 42;
+    --card: 255 255 255;
+    --card-foreground: 15 23 42;
+    --popover: 255 255 255;
+    --popover-foreground: 15 23 42;
+    --border: 203 213 225;
+    --input: 203 213 225;
+    --ring: 15 23 42;
+    --primary: 30 41 59;
+    --primary-foreground: 248 250 252;
+    --secondary: 241 245 249;
+    --secondary-foreground: 15 23 42;
+    --muted: 241 245 249;
+    --muted-foreground: 71 85 105;
+    --accent: 241 245 249;
+    --accent-foreground: 15 23 42;
+    --destructive: 220 38 38;
     --destructive-foreground: 255 255 255;
-    --destructive-hover: var(--red-500);
-
-    --success: var(--green-600);
+    --success: 22 163 74;
     --success-foreground: 255 255 255;
-
-    --warning: var(--amber-600);
+    --warning: 217 119 6;
     --warning-foreground: 255 255 255;
-
-    --info: var(--blue-600);
+    --info: 37 99 235;
     --info-foreground: 255 255 255;
-
-    /* Disabled tokens */
-    --disabled: var(--mono-100);
-    --disabled-foreground: var(--mono-400);
-
-    /* Decorative */
-    --dot-grid: var(--mono-300);
-    --atmo-vignette: 0 0 0;
-    --atmo-glow-a: 190 197 209;
-    --atmo-glow-b: 132 141 158;
+    --disabled: 226 232 240;
+    --disabled-foreground: 100 116 139;
 }
 
-/* =========================
-   DARK THEME (black & grayscale)
-   ========================= */
 .dark {
-    /* Backgrounds */
-    --background: 5 5 6;
-    --foreground: 235 236 239;
-
-    --surface: 12 12 14;
-    --surface-foreground: 235 236 239;
-
-    --card: 10 10 12;
-    --card-foreground: 235 236 239;
-
-    --popover: 8 8 10;
-    --popover-foreground: 235 236 239;
-
-    /* Borders & inputs */
-    --border: 46 46 53;
-    --input: 46 46 53;
-    --ring: 229 229 234;
-
-    /* Muted */
-    --muted: 16 16 20;
-    --muted-foreground: 136 139 148;
-
-    /* Brand */
-    --primary: 240 240 242;
-    --primary-foreground: 7 7 8;
-    --primary-hover: 216 217 222;
-
-    --secondary: 29 30 35;
-    --secondary-foreground: 235 236 239;
-    --secondary-hover: 42 44 52;
-
-    --accent: 240 240 242;
-    --accent-foreground: 7 7 8;
-
-    /* Status (tuned for dark backgrounds) */
+    --background: 15 23 42;
+    --foreground: 241 245 249;
+    --card: 15 23 42;
+    --card-foreground: 241 245 249;
+    --popover: 15 23 42;
+    --popover-foreground: 241 245 249;
+    --border: 71 85 105;
+    --input: 71 85 105;
+    --ring: 241 245 249;
+    --primary: 241 245 249;
+    --primary-foreground: 15 23 42;
+    --secondary: 30 41 59;
+    --secondary-foreground: 241 245 249;
+    --muted: 30 41 59;
+    --muted-foreground: 148 163 184;
+    --accent: 30 41 59;
+    --accent-foreground: 241 245 249;
     --destructive: 248 113 113;
-    --destructive-foreground: 9 9 11;
-    --destructive-hover: 239 68 68;
-
+    --destructive-foreground: 15 23 42;
     --success: 134 239 172;
-    --success-foreground: 9 9 11;
-
+    --success-foreground: 15 23 42;
     --warning: 253 224 71;
-    --warning-foreground: 9 9 11;
-
+    --warning-foreground: 15 23 42;
     --info: 147 197 253;
-    --info-foreground: 9 9 11;
-
-    /* Disabled */
-    --disabled: 16 16 20;
-    --disabled-foreground: 76 78 86;
-
-    /* Decorative */
-    --dot-grid: 72 74 84;
-    --atmo-vignette: 0 0 0;
-    --atmo-glow-a: 107 111 124;
-    --atmo-glow-b: 62 66 78;
+    --info-foreground: 15 23 42;
+    --disabled: 51 65 85;
+    --disabled-foreground: 148 163 184;
 }
 
-/* =========================
-   Tailwind mapping
-   ========================= */
 @theme {
     --color-background: rgb(var(--background));
     --color-foreground: rgb(var(--foreground));
-
-    --color-surface: rgb(var(--surface));
-    --color-surface-foreground: rgb(var(--surface-foreground));
-
     --color-card: rgb(var(--card));
     --color-card-foreground: rgb(var(--card-foreground));
-
     --color-popover: rgb(var(--popover));
     --color-popover-foreground: rgb(var(--popover-foreground));
-
     --color-border: rgb(var(--border));
     --color-input: rgb(var(--input));
     --color-ring: rgb(var(--ring));
-
-    --color-muted: rgb(var(--muted));
-    --color-muted-foreground: rgb(var(--muted-foreground));
-
     --color-primary: rgb(var(--primary));
     --color-primary-foreground: rgb(var(--primary-foreground));
-    --color-primary-hover: rgb(var(--primary-hover));
-
     --color-secondary: rgb(var(--secondary));
     --color-secondary-foreground: rgb(var(--secondary-foreground));
-    --color-secondary-hover: rgb(var(--secondary-hover));
-
+    --color-muted: rgb(var(--muted));
+    --color-muted-foreground: rgb(var(--muted-foreground));
     --color-accent: rgb(var(--accent));
     --color-accent-foreground: rgb(var(--accent-foreground));
-
     --color-destructive: rgb(var(--destructive));
     --color-destructive-foreground: rgb(var(--destructive-foreground));
-    --color-destructive-hover: rgb(var(--destructive-hover));
-
     --color-success: rgb(var(--success));
     --color-success-foreground: rgb(var(--success-foreground));
-
     --color-warning: rgb(var(--warning));
     --color-warning-foreground: rgb(var(--warning-foreground));
-
     --color-info: rgb(var(--info));
     --color-info-foreground: rgb(var(--info-foreground));
-
     --color-disabled: rgb(var(--disabled));
     --color-disabled-foreground: rgb(var(--disabled-foreground));
 }

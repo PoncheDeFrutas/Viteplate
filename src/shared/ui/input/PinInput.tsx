@@ -51,15 +51,15 @@ export function PinInputSlot({ char, hasFakeCaret, isActive, className }: PinInp
     return (
         <div
             className={cn(
-                'relative flex h-10 w-10 items-center justify-center rounded-md border border-input text-sm tabular-nums transition-all',
-                isActive && 'z-10 ring-2 ring-ring ring-offset-background',
+                'relative flex h-10 w-10 items-center justify-center border border-input text-sm tabular-nums',
+                isActive && 'z-10 ring-1 ring-ring',
                 className,
             )}
         >
             {char}
             {hasFakeCaret && (
                 <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-                    <div className="h-4 w-px animate-pulse bg-foreground duration-1000" />
+                    <div className="h-4 w-px bg-foreground" />
                 </div>
             )}
         </div>

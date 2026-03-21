@@ -1,5 +1,4 @@
 import { useState, useCallback } from 'react';
-import { motion } from 'motion/react';
 import { Check, Copy } from 'lucide-react';
 import { cn } from '@shared/lib/cn';
 
@@ -17,7 +16,7 @@ interface CopyButtonProps {
 }
 
 /**
- * One-click copy-to-clipboard button with animated feedback.
+ * One-click copy-to-clipboard button.
  */
 export function CopyButton({ value, successDuration = 2000, className }: CopyButtonProps) {
     const [copied, setCopied] = useState(false);
@@ -49,21 +48,13 @@ export function CopyButton({ value, successDuration = 2000, className }: CopyBut
             type="button"
             onClick={handleCopy}
             className={cn(
-                'inline-flex h-8 w-8 items-center justify-center rounded-md border border-border bg-background text-muted-foreground transition-colors',
-                'hover:bg-accent hover:text-foreground',
-                'focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none',
+                'inline-flex h-8 w-8 items-center justify-center border border-border bg-background text-muted-foreground',
+                'focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-none',
                 className,
             )}
             aria-label={copied ? 'Copied' : 'Copy to clipboard'}
         >
-            <motion.span
-                key={copied ? 'check' : 'copy'}
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ type: 'spring', stiffness: 500, damping: 25 }}
-            >
-                {copied ? <Check className="h-4 w-4 text-success" /> : <Copy className="h-4 w-4" />}
-            </motion.span>
+            {copied ? <Check className="h-4 w-4 text-success" /> : <Copy className="h-4 w-4" />}
         </button>
     );
 }

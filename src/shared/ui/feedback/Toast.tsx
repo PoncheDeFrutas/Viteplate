@@ -38,17 +38,16 @@ export function ToastViewport({ className, ...props }: ToastViewportProps) {
 
 const toastVariants = cva(
     [
-        'toast-animate group pointer-events-auto relative flex w-full items-center justify-between gap-4 overflow-hidden rounded-md border p-4 pr-8 shadow-lg transition-all',
-        '--toast-enter-x: 0 --toast-enter-y: 100% --toast-exit-x: 100% --toast-exit-y: 0',
+        'group pointer-events-auto relative flex w-full items-center justify-between gap-4 overflow-hidden rounded border p-4 pr-8',
     ],
     {
         variants: {
             variant: {
                 default: 'border-border bg-background text-foreground',
-                success: 'border-success/30 bg-success/10 text-success',
-                warning: 'border-warning/30 bg-warning/10 text-warning',
-                destructive: 'border-destructive/30 bg-destructive/10 text-destructive',
-                info: 'border-info/30 bg-info/10 text-info',
+                success: 'border-success bg-background text-foreground',
+                warning: 'border-warning bg-background text-foreground',
+                destructive: 'border-destructive bg-background text-foreground',
+                info: 'border-info bg-background text-foreground',
             },
         },
         defaultVariants: {
@@ -81,8 +80,6 @@ export function ToastAction({ className, ...props }: ToastActionProps) {
         <ToastPrimitive.Action
             className={cn(
                 'inline-flex h-8 shrink-0 items-center justify-center rounded-md border bg-transparent px-3 text-sm font-medium',
-                'ring-offset-background transition-colors',
-                'hover:bg-secondary',
                 'focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:outline-none',
                 'disabled:pointer-events-none disabled:opacity-50',
                 className,
@@ -102,9 +99,7 @@ export function ToastClose({ className, ...props }: ToastCloseProps) {
     return (
         <ToastPrimitive.Close
             className={cn(
-                'absolute top-2 right-2 rounded-md p-1 opacity-0 transition-opacity',
-                'hover:opacity-100 focus:opacity-100 focus:ring-2 focus:ring-ring focus:outline-none',
-                'group-hover:opacity-100',
+                'absolute top-2 right-2 rounded p-1 focus:ring-2 focus:ring-ring focus:outline-none',
                 className,
             )}
             toast-close=""

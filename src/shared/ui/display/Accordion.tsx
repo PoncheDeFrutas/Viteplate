@@ -38,16 +38,11 @@ export function AccordionTrigger({ className, children, ...props }: AccordionTri
     return (
         <AccordionPrimitive.Header className="flex">
             <AccordionPrimitive.Trigger
-                className={cn(
-                    'flex flex-1 items-center justify-between py-4 text-sm font-medium transition-all',
-                    'hover:underline',
-                    '[&[data-state=open]>svg]:rotate-180',
-                    className,
-                )}
+                className={cn('flex flex-1 items-center justify-between py-3 text-sm', className)}
                 {...props}
             >
                 {children}
-                <ChevronDown className="h-4 w-4 shrink-0 transition-transform duration-200" />
+                <ChevronDown className="h-4 w-4 shrink-0" />
             </AccordionPrimitive.Trigger>
         </AccordionPrimitive.Header>
     );
@@ -60,16 +55,11 @@ export function AccordionTrigger({ className, children, ...props }: AccordionTri
 type AccordionContentProps = ComponentPropsWithoutRef<typeof AccordionPrimitive.Content>;
 
 /**
- * Animated accordion content panel.
- * CSS animations are defined in `index.css` via `[data-accordion-content]`.
+ * Accordion content panel.
  */
 export function AccordionContent({ className, children, ...props }: AccordionContentProps) {
     return (
-        <AccordionPrimitive.Content
-            data-accordion-content=""
-            className="overflow-hidden text-sm"
-            {...props}
-        >
+        <AccordionPrimitive.Content className="overflow-hidden text-sm" {...props}>
             <div className={cn('pt-0 pb-4', className)}>{children}</div>
         </AccordionPrimitive.Content>
     );

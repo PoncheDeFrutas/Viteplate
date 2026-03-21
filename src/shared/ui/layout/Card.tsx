@@ -7,34 +7,27 @@ import type { VariantProps } from 'class-variance-authority';
 // Variants
 // ---------------------------------------------------------------------------
 
-const cardVariants = cva(
-    [
-        'rounded-lg border border-border text-card-foreground',
-        'bg-linear-to-br from-card/95 via-card/88 to-surface/92',
-        'transition-[box-shadow,border-color,transform,background] duration-200 ease-out',
-    ],
-    {
-        variants: {
-            variant: {
-                default: '',
-                filled: 'bg-card',
-            },
-            padding: {
-                none: '',
-                sm: 'p-4',
-                md: 'p-6',
-            },
-            interactive: {
-                true: 'hover:-translate-y-0.5 hover:border-primary/35 hover:shadow-[0_18px_32px_-24px_rgb(var(--atmo-vignette)/0.9)]',
-            },
+const cardVariants = cva(['border border-border bg-card text-card-foreground'], {
+    variants: {
+        variant: {
+            default: '',
+            filled: 'bg-card',
         },
-        defaultVariants: {
-            variant: 'default',
-            padding: 'md',
-            interactive: false,
+        padding: {
+            none: '',
+            sm: 'p-4',
+            md: 'p-6',
+        },
+        interactive: {
+            true: 'focus-within:ring-1 focus-within:ring-ring',
         },
     },
-);
+    defaultVariants: {
+        variant: 'default',
+        padding: 'md',
+        interactive: false,
+    },
+});
 
 // ---------------------------------------------------------------------------
 // Component
@@ -43,8 +36,7 @@ const cardVariants = cva(
 interface CardProps extends HTMLAttributes<HTMLDivElement>, VariantProps<typeof cardVariants> {}
 
 /**
- * Minimal bordered card with default (transparent) and filled variants.
- * Set `interactive` for hover lift/shadow micro-interaction.
+ * Minimal bordered card with default and filled variants.
  */
 export function Card({ className, variant, padding, interactive, children, ...props }: CardProps) {
     return (

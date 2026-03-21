@@ -1,5 +1,4 @@
 import { cva } from 'class-variance-authority';
-import { motion } from 'motion/react';
 import { AlertCircle, CheckCircle2, Info, TriangleAlert, X } from 'lucide-react';
 import { cn } from '@shared/lib/cn';
 import type { ReactNode } from 'react';
@@ -9,14 +8,14 @@ import type { VariantProps } from 'class-variance-authority';
 // Variants
 // ---------------------------------------------------------------------------
 
-const bannerVariants = cva('relative flex w-full items-start gap-3 rounded-lg border p-4 text-sm', {
+const bannerVariants = cva('relative flex w-full items-start gap-3 rounded border p-3 text-sm', {
     variants: {
         variant: {
             default: 'border-border bg-card text-card-foreground',
-            info: 'border-info/30 bg-info/10 text-foreground',
-            success: 'border-success/30 bg-success/10 text-foreground',
-            warning: 'border-warning/30 bg-warning/10 text-foreground',
-            destructive: 'border-destructive/30 bg-destructive/10 text-foreground',
+            info: 'border-info bg-card text-card-foreground',
+            success: 'border-success bg-card text-card-foreground',
+            warning: 'border-warning bg-card text-card-foreground',
+            destructive: 'border-destructive bg-card text-card-foreground',
         },
     },
     defaultVariants: {
@@ -57,8 +56,7 @@ interface BannerProps extends VariantProps<typeof bannerVariants> {
 
 /**
  * Callout/banner for important contextual messages.
- * Similar to Alert but intended for richer, more prominent notices.
- * Animates in with a subtle fade and slide.
+ * Similar to Alert but intended for wider contextual messages.
  */
 export function Banner({
     className,
@@ -73,13 +71,7 @@ export function Banner({
     const resolvedIcon = icon === null ? null : (icon ?? BANNER_ICONS[resolvedVariant]);
 
     return (
-        <motion.div
-            initial={{ opacity: 0, y: -8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.25, ease: 'easeOut' }}
-            role="status"
-            className={cn(bannerVariants({ variant }), className)}
-        >
+        <div role="status" className={cn(bannerVariants({ variant }), className)}>
             {resolvedIcon && <span className="mt-0.5 shrink-0">{resolvedIcon}</span>}
             <div className="flex-1">
                 {title && <h5 className="mb-1 font-semibold leading-tight">{title}</h5>}
@@ -89,12 +81,12 @@ export function Banner({
                 <button
                     type="button"
                     onClick={onDismiss}
-                    className="shrink-0 rounded-md p-0.5 opacity-70 transition-opacity hover:opacity-100 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+                    className="shrink-0 rounded p-0.5 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
                     aria-label="Dismiss"
                 >
                     <X className="h-4 w-4" />
                 </button>
             )}
-        </motion.div>
+        </div>
     );
 }

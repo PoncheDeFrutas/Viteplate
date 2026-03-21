@@ -11,14 +11,13 @@ interface SkeletonProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 /**
- * Animated placeholder used while content is loading.
- * Uses the `skeleton-shimmer` CSS animation defined in the global stylesheet.
+ * Minimal placeholder used while content is loading.
  */
 export function Skeleton({ className, circle, ...props }: SkeletonProps) {
     return (
         <div
             aria-hidden="true"
-            className={cn('skeleton-shimmer rounded-md', circle && 'rounded-full', className)}
+            className={cn('rounded bg-muted', circle && 'rounded-full', className)}
             {...props}
         />
     );

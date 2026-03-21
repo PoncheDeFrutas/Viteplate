@@ -1,39 +1,35 @@
 import { cva } from 'class-variance-authority';
-import { motion } from 'motion/react';
 import { X } from 'lucide-react';
 import { cn } from '@shared/lib/cn';
-import type { ReactNode } from 'react';
+import type { ReactNode, PropsWithChildren } from 'react';
 import type { VariantProps } from 'class-variance-authority';
 
 // ---------------------------------------------------------------------------
 // Variants
 // ---------------------------------------------------------------------------
 
-const tagVariants = cva(
-    'inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-xs font-medium transition-colors',
-    {
-        variants: {
-            variant: {
-                default: 'bg-primary/10 text-primary',
-                secondary: 'bg-secondary text-secondary-foreground',
-                outline: 'border border-border text-foreground',
-                destructive: 'bg-destructive/10 text-destructive',
-                success: 'bg-success/10 text-success',
-                warning: 'bg-warning/10 text-warning',
-                info: 'bg-info/10 text-info',
-            },
-            size: {
-                sm: 'h-5 text-[0.65rem]',
-                md: 'h-6',
-                lg: 'h-7 text-sm',
-            },
+const tagVariants = cva('inline-flex items-center gap-1 rounded border px-2 py-0.5 text-xs', {
+    variants: {
+        variant: {
+            default: 'border-primary bg-primary text-primary-foreground',
+            secondary: 'border-border bg-secondary text-secondary-foreground',
+            outline: 'border border-border text-foreground',
+            destructive: 'border-destructive bg-destructive text-destructive-foreground',
+            success: 'border-success bg-success text-success-foreground',
+            warning: 'border-warning bg-warning text-warning-foreground',
+            info: 'border-info bg-info text-info-foreground',
         },
-        defaultVariants: {
-            variant: 'default',
-            size: 'md',
+        size: {
+            sm: 'h-5 text-[0.65rem]',
+            md: 'h-6',
+            lg: 'h-7 text-sm',
         },
     },
-);
+    defaultVariants: {
+        variant: 'default',
+        size: 'md',
+    },
+});
 
 // ---------------------------------------------------------------------------
 // Component
@@ -56,32 +52,23 @@ interface TagProps extends VariantProps<typeof tagVariants> {
  */
 export function Tag({ className, variant, size, onRemove, disabled, children }: TagProps) {
     return (
-        <motion.span
-            layout
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.15 } }}
-            transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-            className={cn(tagVariants({ variant, size }), className)}
-        >
+        <span className={cn(tagVariants({ variant, size }), className)}>
             {children}
             {onRemove && (
                 <button
                     type="button"
                     onClick={onRemove}
                     disabled={disabled}
-                    className="ml-0.5 rounded-sm opacity-60 transition-opacity hover:opacity-100 focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-none disabled:pointer-events-none"
+                    className="ml-0.5 p-0.5 focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-none disabled:pointer-events-none"
                     aria-label="Remove"
                 >
                     <X className="h-3 w-3" />
                 </button>
             )}
-        </motion.span>
+        </span>
     );
 }
 
-/**
- * Re-export of `AnimatePresence` from Motion for convenience.
- * Wrap a list of `<Tag>` elements in `<TagGroup>` to animate mount/unmount.
- */
-export { AnimatePresence as TagGroup } from 'motion/react';
+export function TagGroup({ children }: PropsWithChildren) {
+    return <>{children}</>;
+}

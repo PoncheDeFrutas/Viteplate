@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
-import { motion } from 'motion/react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '@shared/lib/cn';
 import type { ReactNode } from 'react';
@@ -37,7 +36,7 @@ interface CarouselProps {
 }
 
 /**
- * Carousel / slider built on Embla Carousel with animated controls.
+ * Carousel / slider built on Embla Carousel.
  */
 export function Carousel({
     children,
@@ -83,7 +82,7 @@ export function Carousel({
     return (
         <div className={cn('relative', className)}>
             {/* Viewport */}
-            <div ref={emblaRef} className="overflow-hidden rounded-lg">
+            <div ref={emblaRef} className="overflow-hidden border border-border">
                 <div className="flex">{children}</div>
             </div>
 
@@ -112,15 +111,12 @@ export function Carousel({
                             type="button"
                             aria-label={`Go to slide ${i + 1}`}
                             onClick={() => emblaApi?.scrollTo(i)}
-                            className="relative h-2 w-2 rounded-full bg-border"
-                        >
-                            {i === selectedIndex && (
-                                <motion.span
-                                    layoutId="carousel-dot"
-                                    className="absolute inset-0 rounded-full bg-primary"
-                                    transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-                                />
+                            className={cn(
+                                'relative h-2 w-2 rounded-full border border-border',
+                                i === selectedIndex && 'bg-primary',
                             )}
+                        >
+                            <span className="sr-only">Slide {i + 1}</span>
                         </button>
                     ))}
                 </div>
@@ -160,8 +156,8 @@ function CarouselButton({ direction, disabled, onClick }: CarouselButtonProps) {
             disabled={disabled}
             onClick={onClick}
             className={cn(
-                'absolute top-1/2 z-10 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-background/80 text-foreground shadow-sm backdrop-blur-sm transition-opacity',
-                'hover:bg-accent disabled:pointer-events-none disabled:opacity-30',
+                'absolute top-1/2 z-10 flex h-8 w-8 -translate-y-1/2 items-center justify-center border border-border bg-background text-foreground',
+                'disabled:pointer-events-none disabled:opacity-30',
                 direction === 'prev' ? 'left-2' : 'right-2',
             )}
             aria-label={direction === 'prev' ? 'Previous slide' : 'Next slide'}

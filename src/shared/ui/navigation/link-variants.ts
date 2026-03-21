@@ -5,13 +5,13 @@ import { cva } from 'class-variance-authority';
 // ---------------------------------------------------------------------------
 
 export const linkVariants = cva(
-    'inline-flex items-center gap-1 transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none',
+    'inline-flex items-center gap-1 focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-none',
     {
         variants: {
             variant: {
-                default: 'text-primary underline-offset-4 hover:underline',
-                muted: 'text-muted-foreground underline-offset-4 hover:text-foreground hover:underline',
-                nav: 'text-foreground/60 hover:text-foreground',
+                default: 'text-primary underline',
+                muted: 'text-muted-foreground underline',
+                nav: 'text-foreground',
             },
             size: {
                 sm: 'text-xs',

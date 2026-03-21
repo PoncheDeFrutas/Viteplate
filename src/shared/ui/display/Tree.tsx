@@ -1,5 +1,4 @@
 import { useState, useCallback } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
 import { ChevronRight, Folder, FileText } from 'lucide-react';
 import { cn } from '@shared/lib/cn';
 import type { ReactNode } from 'react';
@@ -35,7 +34,7 @@ interface TreeProps {
 // ---------------------------------------------------------------------------
 
 /**
- * Recursive tree view with animated expand/collapse.
+ * Recursive tree view.
  */
 export function Tree({ data, onSelect, defaultExpanded, className }: TreeProps) {
     return (
@@ -82,20 +81,16 @@ function TreeItem({ node, level, onSelect, defaultExpanded }: TreeItemProps) {
                 type="button"
                 onClick={toggle}
                 className={cn(
-                    'flex w-full items-center gap-1.5 rounded-sm px-2 py-1 text-left transition-colors',
-                    'hover:bg-accent focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-none',
+                    'flex w-full items-center gap-1.5 rounded-sm px-2 py-1 text-left',
+                    'focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-none',
                 )}
                 style={{ paddingLeft: `${level * 1 + 0.5}rem` }}
             >
                 {/* Chevron */}
                 {isBranch ? (
-                    <motion.span
-                        animate={{ rotate: expanded ? 90 : 0 }}
-                        transition={{ duration: 0.15 }}
-                        className="shrink-0"
-                    >
+                    <span className={cn('shrink-0', expanded && 'rotate-90')}>
                         <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" />
-                    </motion.span>
+                    </span>
                 ) : (
                     <span className="w-3.5" />
                 )}
@@ -115,28 +110,19 @@ function TreeItem({ node, level, onSelect, defaultExpanded }: TreeItemProps) {
             </button>
 
             {/* Children */}
-            <AnimatePresence initial={false}>
-                {isBranch && expanded && (
-                    <motion.ul
-                        role="group"
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: 'auto', opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.2, ease: 'easeInOut' }}
-                        className="overflow-hidden"
-                    >
-                        {node.children?.map((child) => (
-                            <TreeItem
-                                key={child.id}
-                                node={child}
-                                level={level + 1}
-                                onSelect={onSelect}
-                                defaultExpanded={defaultExpanded}
-                            />
-                        ))}
-                    </motion.ul>
-                )}
-            </AnimatePresence>
+            {isBranch && expanded && (
+                <ul role="group" className="overflow-hidden">
+                    {node.children?.map((child) => (
+                        <TreeItem
+                            key={child.id}
+                            node={child}
+                            level={level + 1}
+                            onSelect={onSelect}
+                            defaultExpanded={defaultExpanded}
+                        />
+                    ))}
+                </ul>
+            )}
         </li>
     );
 }

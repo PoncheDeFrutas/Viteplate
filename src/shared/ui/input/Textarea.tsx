@@ -9,10 +9,10 @@ import type { VariantProps } from 'class-variance-authority';
 
 const textareaVariants = cva(
     [
-        'flex min-h-[80px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm text-foreground',
+        'flex min-h-[80px] w-full border border-input bg-transparent px-2 py-1 text-sm',
         'placeholder:text-muted-foreground',
         'focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-none',
-        'disabled:cursor-not-allowed disabled:opacity-50',
+        'disabled:opacity-50',
     ],
     {
         variants: {

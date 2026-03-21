@@ -61,18 +61,17 @@ export function NavigationMenuTrigger({
     return (
         <NavMenuPrimitive.Trigger
             className={cn(
-                'group inline-flex h-9 w-max items-center justify-center rounded-md bg-transparent px-4 py-2 text-sm font-medium transition-colors',
-                'hover:bg-accent hover:text-accent-foreground',
-                'focus:bg-accent focus:text-accent-foreground focus:outline-none',
+                'group inline-flex h-9 w-max items-center justify-center rounded border border-transparent bg-transparent px-3 py-1 text-sm',
+                'focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-none',
                 'disabled:pointer-events-none disabled:opacity-50',
-                'data-[state=open]:bg-accent/50',
+                'data-[state=open]:border-border',
                 className,
             )}
             {...props}
         >
             {children}
             <svg
-                className="relative top-px ml-1 h-3 w-3 transition-transform duration-200 group-data-[state=open]:rotate-180"
+                className="ml-1 h-3 w-3"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 12 12"
                 fill="none"
@@ -99,10 +98,7 @@ type NavigationMenuContentProps = ComponentPropsWithoutRef<typeof NavMenuPrimiti
 export function NavigationMenuContent({ className, ...props }: NavigationMenuContentProps) {
     return (
         <NavMenuPrimitive.Content
-            className={cn(
-                'left-0 top-0 w-full data-[motion^=from-]:animate-in data-[motion^=to-]:animate-out data-[motion^=from-]:fade-in data-[motion^=to-]:fade-out data-[motion=from-end]:slide-in-from-right-52 data-[motion=from-start]:slide-in-from-left-52 data-[motion=to-end]:slide-out-to-right-52 data-[motion=to-start]:slide-out-to-left-52 md:absolute md:w-auto',
-                className,
-            )}
+            className={cn('left-0 top-0 w-full md:absolute md:w-auto', className)}
             {...props}
         />
     );
@@ -118,9 +114,8 @@ export function NavigationMenuLink({ className, ...props }: NavigationMenuLinkPr
     return (
         <NavMenuPrimitive.Link
             className={cn(
-                'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors',
-                'hover:bg-accent hover:text-accent-foreground',
-                'focus:bg-accent focus:text-accent-foreground',
+                'block select-none rounded border border-transparent p-2 leading-none no-underline outline-none',
+                'focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-none',
                 className,
             )}
             {...props}
@@ -137,9 +132,7 @@ function NavigationMenuViewport() {
         <div className="absolute left-0 top-full flex justify-center">
             <NavMenuPrimitive.Viewport
                 className={cn(
-                    'origin-top-center relative mt-1.5 h-(--radix-navigation-menu-viewport-height) w-full overflow-hidden rounded-md border border-border bg-popover text-popover-foreground shadow-lg',
-                    'data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-90',
-                    'data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95',
+                    'relative mt-1.5 h-(--radix-navigation-menu-viewport-height) w-full overflow-hidden border border-border bg-popover text-popover-foreground',
                     'md:w-[var(--radix-navigation-menu-viewport-width)]',
                 )}
             />
@@ -158,13 +151,11 @@ export function NavigationMenuIndicator({ className, ...props }: NavigationMenuI
         <NavMenuPrimitive.Indicator
             className={cn(
                 'top-full z-1 flex h-1.5 items-end justify-center overflow-hidden',
-                'data-[state=visible]:animate-in data-[state=visible]:fade-in',
-                'data-[state=hidden]:animate-out data-[state=hidden]:fade-out',
                 className,
             )}
             {...props}
         >
-            <div className="relative top-[60%] h-2 w-2 rotate-45 rounded-tl-sm bg-border shadow-md" />
+            <div className="relative top-[60%] h-2 w-2 rotate-45 bg-border" />
         </NavMenuPrimitive.Indicator>
     );
 }

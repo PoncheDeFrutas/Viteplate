@@ -77,7 +77,7 @@ export function StackPage() {
                     <div className="col-span-12 self-end lg:col-span-4">
                         <motion.div
                             {...motionFx.reveal({ delay: 0.12 })}
-                            className="retro-panel rounded-sm p-5"
+                            className="retro-panel p-5"
                         >
                             <p className="public-kicker">Package Manager</p>
                             <p className="mt-2 text-xl font-semibold text-foreground">pnpm</p>
@@ -109,7 +109,7 @@ export function StackPage() {
                             <motion.article
                                 key={group.title}
                                 {...motionFx.sequence(index, 0.08, 0.06)}
-                                className="retro-panel rounded-sm p-5"
+                                className="retro-panel p-5"
                             >
                                 <h3 className="text-base font-semibold text-foreground">
                                     {group.title}
@@ -123,7 +123,7 @@ export function StackPage() {
                 </div>
             </section>
 
-            <section className="public-band bg-card/40 py-12 sm:py-14 lg:py-16">
+            <section className="public-band py-12 sm:py-14 lg:py-16">
                 <div className="public-frame public-grid">
                     <div className="col-span-12 lg:col-span-4">
                         <motion.p {...motionFx.reveal()} className="public-kicker">
@@ -142,7 +142,7 @@ export function StackPage() {
                             <motion.div
                                 key={rule}
                                 {...motionFx.sequence(index, 0.08, 0.06)}
-                                className="retro-panel flex items-start gap-3 rounded-sm p-4"
+                                className="retro-panel flex items-start gap-3 p-4"
                             >
                                 <GitBranch className="mt-0.5 h-4 w-4 shrink-0" />
                                 <p className="text-sm leading-relaxed text-foreground">{rule}</p>
@@ -155,10 +155,7 @@ export function StackPage() {
             <section className="public-band py-12 sm:py-14 lg:py-16">
                 <div className="public-frame public-grid">
                     <div className="col-span-12 grid gap-4 lg:col-span-7">
-                        <motion.article
-                            {...motionFx.reveal()}
-                            className="retro-panel rounded-sm p-5"
-                        >
+                        <motion.article {...motionFx.reveal()} className="retro-panel p-5">
                             <div className="mb-3 flex items-center gap-2">
                                 <Shield className="h-4 w-4" />
                                 <p className="text-sm font-semibold text-foreground">
@@ -183,7 +180,7 @@ export function StackPage() {
                     <div className="col-span-12 grid gap-3 lg:col-span-5">
                         <motion.article
                             {...motionFx.reveal({ delay: 0.05 })}
-                            className="retro-panel rounded-sm p-5"
+                            className="retro-panel p-5"
                         >
                             <div className="mb-3 flex items-center gap-2">
                                 <Braces className="h-4 w-4" />
@@ -209,7 +206,7 @@ export function StackPage() {
 
                         <motion.article
                             {...motionFx.reveal({ delay: 0.1 })}
-                            className="retro-panel rounded-sm p-5"
+                            className="retro-panel p-5"
                         >
                             <div className="mb-2 flex items-center gap-2">
                                 <FlaskConical className="h-4 w-4" />

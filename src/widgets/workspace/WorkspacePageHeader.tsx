@@ -25,7 +25,7 @@ export function WorkspacePageHeader({
                 </motion.p>
                 <motion.h1
                     {...motionFx.reveal({ delay: 0.05 })}
-                    className="public-heading max-w-5xl text-3xl font-semibold text-foreground sm:text-4xl xl:text-5xl"
+                    className="public-heading max-w-5xl text-3xl font-semibold sm:text-4xl xl:text-5xl"
                 >
                     {title}
                 </motion.h1>

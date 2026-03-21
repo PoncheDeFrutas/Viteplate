@@ -92,7 +92,7 @@ export function HomePage() {
                                 <motion.div
                                     key={item.label}
                                     {...motionFx.sequence(index, 0.12, 0.06)}
-                                    className="retro-panel rounded-sm p-4"
+                                    className="retro-panel p-4"
                                 >
                                     <div className="mb-3 inline-flex rounded-sm border border-border p-2">
                                         <Icon className="h-4 w-4" />
@@ -107,7 +107,7 @@ export function HomePage() {
                 </div>
             </section>
 
-            <section className="public-band bg-card/40 py-12 sm:py-14 lg:py-16">
+            <section className="public-band py-12 sm:py-14 lg:py-16">
                 <div className="public-frame public-grid">
                     <div className="col-span-12 lg:col-span-4">
                         <motion.p {...motionFx.reveal()} className="public-kicker">
@@ -126,7 +126,7 @@ export function HomePage() {
                             <motion.div
                                 key={item}
                                 {...motionFx.sequence(index, 0.08, 0.06)}
-                                className="retro-panel flex items-start gap-3 rounded-sm p-4"
+                                className="retro-panel flex items-start gap-3 p-4"
                             >
                                 <Check className="mt-0.5 h-4 w-4 shrink-0" />
                                 <p className="text-sm leading-relaxed text-foreground">{item}</p>
@@ -162,7 +162,7 @@ export function HomePage() {
                             <motion.article
                                 key={phase.id}
                                 {...motionFx.sequence(index, 0.1, 0.07)}
-                                className="retro-panel rounded-sm p-5"
+                                className="retro-panel p-5"
                             >
                                 <Badge variant="outline" className="mb-3">
                                     {phase.id}

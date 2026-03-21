@@ -100,14 +100,14 @@ export function AdminSettingsPage() {
 
             <motion.section {...motionFx.reveal({ delay: 0.05 })}>
                 {hasDraftChanges ? (
-                    <Banner variant="warning" className="workspace-panel rounded-sm">
+                    <Banner variant="warning" className="workspace-panel">
                         <p>
                             You have unsaved configuration changes. Save to apply policy updates to
                             this workspace.
                         </p>
                     </Banner>
                 ) : (
-                    <Banner variant="success" className="workspace-panel rounded-sm">
+                    <Banner variant="success" className="workspace-panel">
                         <p>All changes are synced. Last saved at {savedAt}.</p>
                     </Banner>
                 )}
@@ -118,7 +118,7 @@ export function AdminSettingsPage() {
                     {...motionFx.reveal({ delay: 0.08 })}
                     className="col-span-12 space-y-3 xl:col-span-3"
                 >
-                    <Card className="workspace-panel rounded-sm p-4">
+                    <Card className="workspace-panel p-3">
                         <p className="workspace-label">Sections</p>
                         <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
                             <li className="flex items-center gap-2">
@@ -133,7 +133,7 @@ export function AdminSettingsPage() {
                         </ul>
                     </Card>
 
-                    <Card className="workspace-panel rounded-sm p-4">
+                    <Card className="workspace-panel p-3">
                         <p className="workspace-label">Policy state</p>
                         <ul className="mt-3 space-y-2 text-sm">
                             <li className="flex items-center justify-between gap-2">
@@ -162,7 +162,7 @@ export function AdminSettingsPage() {
                     {...motionFx.reveal({ delay: 0.1 })}
                     className="col-span-12 xl:col-span-9"
                 >
-                    <Card className="workspace-panel rounded-sm p-5">
+                    <Card className="workspace-panel p-4">
                         <Tabs defaultValue="workspace" animated>
                             <TabsList>
                                 <TabsTrigger value="workspace">Workspace</TabsTrigger>
@@ -231,7 +231,7 @@ export function AdminSettingsPage() {
                                     />
                                 </div>
 
-                                <div className="flex items-center justify-between rounded-sm border border-border p-3">
+                                <div className="flex items-center justify-between border border-border p-3">
                                     <div>
                                         <p className="text-sm font-medium text-foreground">
                                             Preview links
@@ -254,7 +254,7 @@ export function AdminSettingsPage() {
                             </TabsContent>
 
                             <TabsContent value="security" className="mt-4 space-y-4">
-                                <div className="flex items-center justify-between rounded-sm border border-border p-3">
+                                <div className="flex items-center justify-between border border-border p-3">
                                     <div>
                                         <p className="text-sm font-medium text-foreground">
                                             Require MFA for admins
@@ -292,7 +292,7 @@ export function AdminSettingsPage() {
                                     />
                                 </div>
 
-                                <label className="flex items-start gap-3 rounded-sm border border-border p-3">
+                                <label className="flex items-start gap-3 border border-border p-3">
                                     <Checkbox
                                         checked={security.strictRoleReview}
                                         onCheckedChange={(checked) => {
@@ -314,7 +314,7 @@ export function AdminSettingsPage() {
                                     </span>
                                 </label>
 
-                                <div className="rounded-sm border border-border p-3">
+                                <div className="border border-border p-3">
                                     <p className="flex items-center gap-2 text-sm font-medium text-foreground">
                                         <LockKeyhole className="h-4 w-4" />
                                         Security recommendation
@@ -365,7 +365,7 @@ export function AdminSettingsPage() {
                                     </Select>
                                 </div>
 
-                                <div className="flex items-center justify-between rounded-sm border border-border p-3">
+                                <div className="flex items-center justify-between border border-border p-3">
                                     <div>
                                         <p className="text-sm font-medium text-foreground">
                                             Failure notifications
@@ -386,7 +386,7 @@ export function AdminSettingsPage() {
                                     />
                                 </div>
 
-                                <div className="rounded-sm border border-border p-3">
+                                <div className="border border-border p-3">
                                     <p className="flex items-center gap-2 text-sm font-medium text-foreground">
                                         <AlertTriangle className="h-4 w-4" />
                                         Deployment caution
@@ -403,7 +403,7 @@ export function AdminSettingsPage() {
             </section>
 
             <motion.section {...motionFx.reveal({ delay: 0.12 })}>
-                <Card className="workspace-panel rounded-sm p-4">
+                <Card className="workspace-panel p-3">
                     <div className="flex flex-wrap items-center justify-between gap-3">
                         <p className="text-sm text-muted-foreground">
                             Settings are versioned as part of your workspace policy baseline.

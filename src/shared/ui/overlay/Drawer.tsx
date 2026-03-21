@@ -23,8 +23,7 @@ function DrawerOverlay({
 }: ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay>) {
     return (
         <DialogPrimitive.Overlay
-            data-overlay-animate
-            className={cn('fixed inset-0 z-50 bg-black/80', className)}
+            className={cn('fixed inset-0 z-50 bg-black/40', className)}
             {...props}
         />
     );
@@ -34,22 +33,19 @@ function DrawerOverlay({
 // Content variants
 // ---------------------------------------------------------------------------
 
-const drawerContentVariants = cva(
-    'fixed z-50 gap-4 border border-border bg-background p-6 shadow-lg',
-    {
-        variants: {
-            side: {
-                right: 'inset-y-0 right-0 h-full w-3/4 max-w-sm',
-                left: 'inset-y-0 left-0 h-full w-3/4 max-w-sm',
-                top: 'inset-x-0 top-0',
-                bottom: 'inset-x-0 bottom-0',
-            },
-        },
-        defaultVariants: {
-            side: 'right',
+const drawerContentVariants = cva('fixed z-50 gap-3 border border-border bg-background p-4', {
+    variants: {
+        side: {
+            right: 'inset-y-0 right-0 h-full w-3/4 max-w-sm',
+            left: 'inset-y-0 left-0 h-full w-3/4 max-w-sm',
+            top: 'inset-x-0 top-0',
+            bottom: 'inset-x-0 bottom-0',
         },
     },
-);
+    defaultVariants: {
+        side: 'right',
+    },
+});
 
 // ---------------------------------------------------------------------------
 // Content
@@ -78,13 +74,12 @@ export function DrawerContent({
         <DialogPrimitive.Portal>
             <DrawerOverlay />
             <DialogPrimitive.Content
-                data-drawer-animate={side ?? 'right'}
                 className={cn(drawerContentVariants({ side }), className)}
                 {...props}
             >
                 {children}
                 {!hideClose && (
-                    <DialogPrimitive.Close className="absolute top-4 right-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:outline-none disabled:pointer-events-none">
+                    <DialogPrimitive.Close className="absolute top-3 right-3 p-1 focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-none disabled:pointer-events-none">
                         <X className="h-4 w-4" />
                         <span className="sr-only">Close</span>
                     </DialogPrimitive.Close>

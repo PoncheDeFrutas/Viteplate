@@ -130,7 +130,7 @@ export function ViewerDashboardPage() {
             </section>
 
             <motion.section {...motionFx.reveal({ delay: 0.08 })}>
-                <Banner variant="default" className="workspace-panel rounded-sm">
+                <Banner variant="default" className="workspace-panel">
                     <p>
                         Signed in as{' '}
                         <span className="font-medium text-foreground">{user?.name}</span>. This role
@@ -145,7 +145,7 @@ export function ViewerDashboardPage() {
                     {...motionFx.reveal({ delay: 0.1 })}
                     className="col-span-12 xl:col-span-8"
                 >
-                    <Card className="workspace-panel rounded-sm p-5">
+                    <Card className="workspace-panel p-4">
                         <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
                             <div>
                                 <p className="workspace-label">Reference library</p>
@@ -209,7 +209,7 @@ export function ViewerDashboardPage() {
                     {...motionFx.reveal({ delay: 0.12 })}
                     className="col-span-12 space-y-4 xl:col-span-4"
                 >
-                    <Card className="workspace-panel rounded-sm p-5">
+                    <Card className="workspace-panel p-4">
                         <p className="workspace-label">Recent events</p>
                         <h3 className="mt-1 text-lg font-semibold text-foreground">Audit stream</h3>
                         <Timeline
@@ -222,7 +222,7 @@ export function ViewerDashboardPage() {
                         />
                     </Card>
 
-                    <Card className="workspace-panel rounded-sm p-5">
+                    <Card className="workspace-panel p-4">
                         <p className="workspace-label">Role scope</p>
                         <h3 className="mt-1 text-lg font-semibold text-foreground">
                             Allowed operations

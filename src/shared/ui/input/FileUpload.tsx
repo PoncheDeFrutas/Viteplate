@@ -1,5 +1,4 @@
 import { useCallback, useRef, useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
 import { Upload, X, File } from 'lucide-react';
 import { cn } from '@shared/lib/cn';
 import type { DragEvent, InputHTMLAttributes } from 'react';
@@ -25,7 +24,7 @@ interface FileUploadProps extends Omit<
 }
 
 /**
- * Drag-and-drop file upload zone with animated file list.
+ * Drag-and-drop file upload zone.
  */
 export function FileUpload({
     className,
@@ -104,10 +103,9 @@ export function FileUpload({
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
                 className={cn(
-                    'flex min-h-[8rem] cursor-pointer flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed border-input p-6 text-sm text-muted-foreground transition-colors',
-                    'hover:border-primary/50 hover:bg-accent/50',
-                    'focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none',
-                    isDragging && 'border-primary bg-primary/5',
+                    'flex min-h-[8rem] cursor-pointer flex-col items-center justify-center gap-2 border border-dashed border-input p-4 text-sm text-muted-foreground',
+                    'focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-none',
+                    isDragging && 'border-primary bg-muted',
                     disabled && 'pointer-events-none opacity-50',
                 )}
             >
@@ -132,29 +130,23 @@ export function FileUpload({
 
             {showFileList && files.length > 0 && (
                 <ul className="space-y-1">
-                    <AnimatePresence mode="popLayout">
-                        {files.map((file, i) => (
-                            <motion.li
-                                key={`${file.name}-${file.size}`}
-                                layout
-                                initial={{ opacity: 0, height: 0 }}
-                                animate={{ opacity: 1, height: 'auto' }}
-                                exit={{ opacity: 0, height: 0 }}
-                                className="flex items-center gap-2 rounded-md border border-border px-3 py-2 text-sm"
+                    {files.map((file, i) => (
+                        <li
+                            key={`${file.name}-${file.size}`}
+                            className="flex items-center gap-2 border border-border px-3 py-2 text-sm"
+                        >
+                            <File className="h-4 w-4 shrink-0 text-muted-foreground" />
+                            <span className="flex-1 truncate">{file.name}</span>
+                            <button
+                                type="button"
+                                onClick={() => removeFile(i)}
+                                className="p-0.5 text-muted-foreground focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-none"
+                                aria-label={`Remove ${file.name}`}
                             >
-                                <File className="h-4 w-4 shrink-0 text-muted-foreground" />
-                                <span className="flex-1 truncate">{file.name}</span>
-                                <button
-                                    type="button"
-                                    onClick={() => removeFile(i)}
-                                    className="rounded-sm p-0.5 text-muted-foreground transition-colors hover:text-foreground"
-                                    aria-label={`Remove ${file.name}`}
-                                >
-                                    <X className="h-3.5 w-3.5" />
-                                </button>
-                            </motion.li>
-                        ))}
-                    </AnimatePresence>
+                                <X className="h-3.5 w-3.5" />
+                            </button>
+                        </li>
+                    ))}
                 </ul>
             )}
         </div>
