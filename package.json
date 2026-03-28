@@ -15,6 +15,9 @@
         "prepare": "husky",
         "lint-staged": "lint-staged"
     },
+    "lint-staged": {
+        "*": "prettier --write --ignore-unknown"
+    },
     "dependencies": {
         "@tailwindcss/vite": "^4.2.1",
         "@tanstack/react-form": "^1.28.4",
