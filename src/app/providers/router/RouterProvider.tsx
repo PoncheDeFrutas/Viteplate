@@ -2,11 +2,9 @@ import { createRouter, RouterProvider as TanStackRouterProvider } from '@tanstac
 import type { ComponentType } from 'react';
 import { useEffect, useState } from 'react';
 import type { RouterContext } from '../../routers';
-import { routeTree } from '../../routers';
 
 function createAppRouter(context: RouterContext) {
     return createRouter({
-        routeTree,
         context,
         defaultPreload: 'intent',
         scrollRestoration: true,

@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
 import { useSession } from '@entities/session';
 import { useRefreshSession } from '@features/auth/refresh-session';
-import { Spinner } from '@shared/ui';
 import { QueryProvider } from './providers/query';
 import { AppRouterProvider } from './providers/router';
 import { ThemeProvider } from './providers/theme';
@@ -35,7 +34,6 @@ export function App() {
     if (isLoading) {
         return (
             <div className="flex min-h-screen items-center justify-center bg-background">
-                <Spinner size="lg" label="Loading application…" />
             </div>
         );
     }

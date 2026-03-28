@@ -1,7 +1,6 @@
 import { render } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createMemoryHistory, createRouter, RouterProvider } from '@tanstack/react-router';
-import { routeTree } from '@app/routers/route-tree';
 import { ThemeProvider } from '@app/providers/theme';
 import { TestRouterSync } from './TestRouterSync';
 import type { RouterContext } from '@app/routers';
@@ -45,7 +44,6 @@ export function createTestRouter(options?: CreateTestRouterOptions) {
     });
 
     return createRouter({
-        routeTree,
         context,
         history: memoryHistory,
     });

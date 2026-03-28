@@ -1,6 +1,4 @@
 import { Outlet } from '@tanstack/react-router';
-import { PublicNavbar } from '@widgets/navbar';
-import { Footer } from '@widgets/footer';
 
 export function PublicLayout() {
     return (
@@ -11,11 +9,9 @@ export function PublicLayout() {
             >
                 Skip to content
             </a>
-            <PublicNavbar />
             <main id="main-content" className="flex-1">
                 <Outlet />
             </main>
-            <Footer />
         </div>
     );
 }

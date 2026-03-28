@@ -1,5 +1,4 @@
 import { Outlet } from '@tanstack/react-router';
-import { AuthNavbar } from '@widgets/navbar';
 
 export function ProtectedLayout() {
     return (
@@ -10,7 +9,6 @@ export function ProtectedLayout() {
             >
                 Skip to content
             </a>
-            <AuthNavbar />
             <main id="main-content" className="flex-1 py-6 sm:py-8 lg:py-10">
                 <Outlet />
             </main>
