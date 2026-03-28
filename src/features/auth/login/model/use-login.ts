@@ -23,7 +23,6 @@ export function useLogin() {
 
             const user = mapUserMeResponseToUser(userDto);
             sessionStore.getState().setUser(user);
-
         },
     });
 }
