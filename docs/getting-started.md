@@ -19,13 +19,14 @@ This guide covers everything needed to set up and run Viteplate locally.
 
 ## Prerequisites
 
-| Requirement | Minimum Version | Notes                                              |
-| ----------- | --------------- | -------------------------------------------------- |
-| Node.js     | 18.x            | LTS recommended                                    |
-| pnpm        | 10.x            | [Installation guide](https://pnpm.io/installation) |
-| Git         | 2.x             | For cloning and hooks                              |
+| Requirement | Minimum Version | Notes                                                         |
+| ----------- | --------------- | ------------------------------------------------------------- |
+| Node.js     | 18.x            | LTS recommended                                               |
+| pnpm        | 10.x            | Optional ([installation guide](https://pnpm.io/installation)) |
+| npm         | 10.x            | Optional (bundled with Node.js)                               |
+| Git         | 2.x             | For cloning and hooks                                         |
 
-Viteplate uses **pnpm** exclusively as its package manager. Do not use npm or yarn -- the lockfile format and workspace features are pnpm-specific.
+You can run Viteplate with either **pnpm** or **npm**. All scripts in `package.json` work with both package managers.
 
 ---
 
@@ -36,11 +37,13 @@ Viteplate uses **pnpm** exclusively as its package manager. Do not use npm or ya
 git clone https://github.com/PoncheDeFrutas/frontend-fsd-vite.git
 cd viteplate
 
-# Install all dependencies
+# Install all dependencies (choose one)
 pnpm install
+# or
+npm install
 ```
 
-The `pnpm install` step also sets up Husky git hooks via the `prepare` script, which enables automatic formatting on pre-commit.
+The install step also sets up Husky git hooks via the `prepare` script, which enables automatic formatting on pre-commit.
 
 ---
 
@@ -95,6 +98,8 @@ Each variable is individually validated with `safeParse`. If validation fails or
 
 ```bash
 pnpm dev
+# or
+npm run dev
 ```
 
 The Vite development server starts at `http://localhost:5173` with:
@@ -113,34 +118,34 @@ When MSW is enabled (the default), the browser service worker intercepts all API
 
 ### Development
 
-| Command        | Description                                       |
-| -------------- | ------------------------------------------------- |
-| `pnpm dev`     | Start the Vite dev server with HMR                |
-| `pnpm preview` | Serve the production build locally for inspection |
+| Command                            | Description                                       |
+| ---------------------------------- | ------------------------------------------------- |
+| `pnpm dev` / `npm run dev`         | Start the Vite dev server with HMR                |
+| `pnpm preview` / `npm run preview` | Serve the production build locally for inspection |
 
 ### Building
 
-| Command            | Description                                                      |
-| ------------------ | ---------------------------------------------------------------- |
-| `pnpm build`       | Type-check (`tsc -b`) then produce an optimized production build |
-| `pnpm check-types` | Run TypeScript type checking without emitting                    |
+| Command                                    | Description                                                      |
+| ------------------------------------------ | ---------------------------------------------------------------- |
+| `pnpm build` / `npm run build`             | Type-check (`tsc -b`) then produce an optimized production build |
+| `pnpm check-types` / `npm run check-types` | Run TypeScript type checking without emitting                    |
 
 ### Code Quality
 
-| Command       | Description                          |
-| ------------- | ------------------------------------ |
-| `pnpm lint`   | Run ESLint across the entire project |
-| `pnpm format` | Run Prettier write mode on all files |
+| Command                          | Description                          |
+| -------------------------------- | ------------------------------------ |
+| `pnpm lint` / `npm run lint`     | Run ESLint across the entire project |
+| `pnpm format` / `npm run format` | Run Prettier write mode on all files |
 
 ### Testing
 
-| Command                                   | Description                                        |
-| ----------------------------------------- | -------------------------------------------------- |
-| `pnpm test`                               | Run Vitest in watch mode (re-runs on file changes) |
-| `pnpm test -- --run`                      | Run all tests once and exit (suitable for CI)      |
-| `pnpm test -- --run path/to/file.test.ts` | Run a single test file                             |
-| `pnpm test -- --run -t "pattern"`         | Run tests matching a name pattern                  |
-| `pnpm test:coverage`                      | Run tests with coverage reporting                  |
+| Command                                                                                  | Description                                        |
+| ---------------------------------------------------------------------------------------- | -------------------------------------------------- |
+| `pnpm test` / `npm run test`                                                             | Run Vitest in watch mode (re-runs on file changes) |
+| `pnpm test -- --run` / `npm run test -- --run`                                           | Run all tests once and exit (suitable for CI)      |
+| `pnpm test -- --run path/to/file.test.ts` / `npm run test -- --run path/to/file.test.ts` | Run a single test file                             |
+| `pnpm test -- --run -t "pattern"` / `npm run test -- --run -t "pattern"`                 | Run tests matching a name pattern                  |
+| `pnpm test:coverage` / `npm run test:coverage`                                           | Run tests with coverage reporting                  |
 
 ---
 
@@ -153,6 +158,12 @@ pnpm lint            # Ensure no linting violations
 pnpm check-types     # Verify TypeScript compiles cleanly
 pnpm build           # Confirm production build succeeds
 pnpm test -- --run   # Run all tests (21 tests across 4 suites)
+
+# npm equivalents
+npm run lint
+npm run check-types
+npm run build
+npm run test -- --run
 ```
 
 All four must pass with zero errors.

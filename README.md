@@ -101,18 +101,22 @@ Rather than being a minimal boilerplate, Viteplate ships with a fully implemente
 
 ## Quick Start
 
-**Prerequisites:** Node.js >= 18 and [pnpm](https://pnpm.io) >= 10.
+**Prerequisites:** Node.js >= 18 and either [pnpm](https://pnpm.io) >= 10 or npm >= 10.
 
 ```bash
 # Clone the repository
 git clone https://github.com/PoncheDeFrutas/frontend-fsd-vite.git
 cd viteplate
 
-# Install dependencies
+# Install dependencies (choose one)
 pnpm install
+# or
+npm install
 
-# Start the development server
+# Start the development server (choose one)
 pnpm dev
+# or
+npm run dev
 ```
 
 The dev server starts at `http://localhost:5173` by default.
@@ -182,17 +186,17 @@ For a comprehensive architecture guide, see [Architecture](docs/architecture.md)
 
 ## Available Scripts
 
-| Command              | Description                                     |
-| -------------------- | ----------------------------------------------- |
-| `pnpm dev`           | Start the Vite development server               |
-| `pnpm build`         | Type-check with `tsc` then build for production |
-| `pnpm check-types`   | Run TypeScript type checking only               |
-| `pnpm lint`          | Lint the entire project with ESLint             |
-| `pnpm format`        | Format all files with Prettier                  |
-| `pnpm test`          | Run tests in watch mode                         |
-| `pnpm test -- --run` | Run all tests once (CI mode)                    |
-| `pnpm test:coverage` | Run tests with coverage report                  |
-| `pnpm preview`       | Preview the production build locally            |
+| Command                                        | Description                                     |
+| ---------------------------------------------- | ----------------------------------------------- |
+| `pnpm dev` / `npm run dev`                     | Start the Vite development server               |
+| `pnpm build` / `npm run build`                 | Type-check with `tsc` then build for production |
+| `pnpm check-types` / `npm run check-types`     | Run TypeScript type checking only               |
+| `pnpm lint` / `npm run lint`                   | Lint the entire project with ESLint             |
+| `pnpm format` / `npm run format`               | Format all files with Prettier                  |
+| `pnpm test` / `npm run test`                   | Run tests in watch mode                         |
+| `pnpm test -- --run` / `npm run test -- --run` | Run all tests once (CI mode)                    |
+| `pnpm test:coverage` / `npm run test:coverage` | Run tests with coverage report                  |
+| `pnpm preview` / `npm run preview`             | Preview the production build locally            |
 
 ### Validation Checklist
 
@@ -203,6 +207,12 @@ pnpm lint
 pnpm check-types
 pnpm build
 pnpm test -- --run
+
+# npm equivalents
+npm run lint
+npm run check-types
+npm run build
+npm run test -- --run
 ```
 
 ---

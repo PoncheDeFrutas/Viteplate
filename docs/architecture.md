@@ -343,4 +343,4 @@ Formatting is handled by Prettier with the following configuration:
 | Arrow function params  | Always parenthesized |
 | Tailwind class sorting | Enabled (via plugin) |
 
-A pre-commit hook automatically runs `pnpm format` on staged files via Husky and lint-staged.
+A pre-commit hook automatically runs `lint-staged` via Husky, formatting only staged files.
