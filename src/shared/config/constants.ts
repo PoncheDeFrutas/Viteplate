@@ -40,18 +40,3 @@ export const ROUTE_PATHS = {
     unauthorized: '/unauthorized',
     designSystem: '/design-system',
 } as const;
-
-/**
- * Returns the default home path for a given role.
- * Used by guards and redirects to send users to their role-specific page.
- */
-export function getRoleHomePath(role: string | null): string {
-    switch (role) {
-        case 'admin':
-            return ROUTE_PATHS.admin;
-        case 'viewer':
-            return ROUTE_PATHS.overview;
-        default:
-            return ROUTE_PATHS.dashboard;
-    }
-}
