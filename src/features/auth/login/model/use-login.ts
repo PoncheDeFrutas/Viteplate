@@ -1,8 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import { sessionStore } from '@entities/session';
 import { mapUserMeResponseToUser } from '@entities/user';
-import { useNavigate } from '@tanstack/react-router';
-import { getRoleHomePath } from '@shared/config';
 import { login } from '../api';
 import type { LoginRequestDto } from '../api';
 
@@ -18,8 +16,6 @@ import type { LoginRequestDto } from '../api';
  * On failure, the error is available via the standard mutation state.
  */
 export function useLogin() {
-    const navigate = useNavigate();
-
     return useMutation({
         mutationFn: (credentials: LoginRequestDto) => login(credentials),
         onSuccess: ({ accessToken, user: userDto }) => {
@@ -28,7 +24,6 @@ export function useLogin() {
             const user = mapUserMeResponseToUser(userDto);
             sessionStore.getState().setUser(user);
 
-            void navigate({ to: getRoleHomePath(user.role) });
         },
     });
 }

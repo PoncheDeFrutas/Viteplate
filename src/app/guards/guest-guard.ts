@@ -1,5 +1,3 @@
-import { redirect } from '@tanstack/react-router';
-import { getRoleHomePath } from '@shared/config';
 import type { RouterContext } from '../routers/router-context';
 
 /**
@@ -9,6 +7,5 @@ import type { RouterContext } from '../routers/router-context';
  */
 export function guestGuard({ context }: { context: RouterContext }): void {
     if (context.isAuthenticated) {
-        throw redirect({ to: getRoleHomePath(context.role) });
     }
 }
